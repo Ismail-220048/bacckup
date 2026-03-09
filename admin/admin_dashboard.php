@@ -74,7 +74,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    <span class="nav-icon">🚪</span> Logout
+                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
                 </a>
             </div>
         </aside>
@@ -88,6 +88,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <div class="user-info">
                     <span><?php echo htmlspecialchars($adminName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
+                </div>
+            </div>
+
+            <!-- Profile Card Banner -->
+            <div class="profile-card">
+                <div class="profile-avatar"><?php echo $initials; ?></div>
+                <div class="profile-info">
+                    <h3><?php echo htmlspecialchars($adminName); ?> (Administrator)</h3>
+                    <p>System Management and Overview</p>
                 </div>
             </div>
 
@@ -124,28 +133,36 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <a href="manage_complaints.php" class="quick-action-card">
-                    <span class="action-icon">📋</span>
-                    <span class="action-label">All Complaints</span>
-                </a>
-                <a href="manage_complaints.php?status=Pending" class="quick-action-card">
-                    <span class="action-icon">⏳</span>
-                    <span class="action-label">Pending (<?php echo $pendingCount; ?>)</span>
-                </a>
-                <a href="manage_complaints.php?status=In Progress" class="quick-action-card">
-                    <span class="action-icon">🔄</span>
-                    <span class="action-label">In Progress (<?php echo $progressCount; ?>)</span>
-                </a>
-                <a href="manage_users.php" class="quick-action-card">
-                    <span class="action-icon">👥</span>
-                    <span class="action-label">Manage Users</span>
-                </a>
-                <a href="manage_officers.php" class="quick-action-card">
-                    <span class="action-icon">👮</span>
-                    <span class="action-label">Manage Officers</span>
-                </a>
+            <!-- Quick Actions & Highlights -->
+            <div class="dashboard-widgets" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="quick-actions" style="margin-bottom: 0; height: 100%;">
+                    <a href="manage_complaints.php" class="quick-action-card">
+                        <span class="action-icon">📋</span>
+                        <span class="action-label">All Complaints</span>
+                    </a>
+                    <a href="manage_complaints.php?status=Pending" class="quick-action-card">
+                        <span class="action-icon">⏳</span>
+                        <span class="action-label">Pending (<?php echo $pendingCount; ?>)</span>
+                    </a>
+                    <a href="manage_complaints.php?status=In Progress" class="quick-action-card">
+                        <span class="action-icon">🔄</span>
+                        <span class="action-label">In Progress (<?php echo $progressCount; ?>)</span>
+                    </a>
+                    <a href="manage_users.php" class="quick-action-card">
+                        <span class="action-icon">👥</span>
+                        <span class="action-label">Manage Users</span>
+                    </a>
+                    <a href="manage_officers.php" class="quick-action-card">
+                        <span class="action-icon">👮</span>
+                        <span class="action-label">Manage Officers</span>
+                    </a>
+                </div>
+
+                <div class="illustration-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.3s ease;">
+                    <img src="../assets/images/admin-illustration.png" alt="City Administration" style="max-height: 140px; object-fit: contain; margin-bottom: 1rem; filter: drop-shadow(0 10px 15px rgba(6,182,212,0.25)); border-radius: 12px;">
+                     <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--text-white);">City Administration</h3>
+                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">Monitor resolving civic issues and overview complete city data reliably.</p>
+                </div>
             </div>
 
             <!-- Recent Complaints -->

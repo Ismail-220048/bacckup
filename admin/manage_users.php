@@ -77,7 +77,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    <span class="nav-icon">🚪</span> Logout
+                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
                 </a>
             </div>
         </aside>

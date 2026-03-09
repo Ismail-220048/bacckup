@@ -1,0 +1,355 @@
+/* =============================================
+   CivicTrack — Formal Landing Page Styles
+   ============================================= */
+
+/* ---------- Core Overrides for Landing ---------- */
+body.formal-landing {
+    background: #f8fafc;
+    color: #1e293b;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+/* Redefine specific variables for formal page */
+.formal-landing {
+    --primary: #1e3a8a; /* Deep formal blue */
+    --primary-light: #3b82f6;
+    --accent: #0f172a; /* Slate 900 for serious dark accents */
+    --border: #e2e8f0;
+    --bg-card: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-white: #ffffff;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Navigation ---------- */
+.formal-landing .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.25rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.formal-landing .navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 4rem;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+}
+
+.formal-landing .nav-logo h2 {
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.formal-landing .navbar.scrolled .nav-logo h2 {
+    color: var(--primary);
+}
+
+.formal-landing .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.formal-landing .nav-links a.nav-link {
+    color: var(--text-white);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.formal-landing .navbar.scrolled .nav-links a.nav-link {
+    color: var(--text-secondary);
+    text-shadow: none;
+}
+
+.formal-landing .navbar.scrolled .nav-links a.nav-link:hover {
+    color: var(--primary);
+}
+
+.formal-landing .btn-outline {
+    background: transparent;
+    border: 2px solid var(--text-white);
+    color: var(--text-white);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.formal-landing .navbar.scrolled .btn-outline {
+    border-color: var(--primary);
+    color: var(--primary);
+    text-shadow: none;
+}
+.formal-landing .navbar.scrolled .btn-outline:hover {
+    background: var(--primary);
+    color: var(--text-white);
+}
+
+/* ---------- Hero Section ---------- */
+.formal-landing .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 4rem;
+    background: url('../images/formal-hero.png') center/cover no-repeat;
+}
+
+.formal-landing .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 58, 138, 0.6) 100%);
+    z-index: 1;
+}
+
+.formal-landing .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 650px;
+}
+
+.formal-landing .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.formal-landing .hero-subtitle {
+    font-size: 1.15rem;
+    color: #e2e8f0;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    line-height: 1.8;
+}
+
+.formal-landing .hero-actions {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+
+.formal-landing .hero-btn {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.formal-landing .hero-btn-primary {
+    background: var(--primary-light);
+    color: white;
+    border: 2px solid var(--primary-light);
+}
+
+.formal-landing .hero-btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.formal-landing .hero-btn-outline {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.formal-landing .hero-btn-outline:hover {
+    background: white;
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* ---------- About Section ---------- */
+.formal-landing .about-section {
+    padding: 6rem 4rem;
+    background: var(--bg-card);
+    position: relative;
+    border-bottom: 1px solid var(--border);
+}
+
+.formal-landing .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.formal-landing .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.formal-landing .section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.formal-landing .section-header h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    margin: 1rem auto 0;
+    border-radius: 2px;
+}
+
+.formal-landing .section-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.formal-landing .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+
+.formal-landing .feature-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formal-landing .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: #cbd5e1;
+}
+
+.formal-landing .feature-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: #e0e7ff;
+    color: var(--primary);
+}
+
+.formal-landing .feature-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.formal-landing .feature-desc {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* ---------- Footer ---------- */
+.formal-landing .footer {
+    background: var(--accent);
+    padding: 4rem 2rem 2rem;
+    text-align: center;
+    color: #cbd5e1;
+}
+
+.formal-landing .footer-logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.formal-landing .footer-text {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    color: #94a3b8;
+}
+
+.formal-landing .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.formal-landing .footer-links a {
+    color: #cbd5e1;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+}
+
+.formal-landing .footer-links a:hover {
+    color: #ffffff;
+}
+
+.formal-landing .copyright {
+    color: #64748b;
+    font-size: 0.85rem;
+    padding-top: 2rem;
+    border-top: 1px solid #334155;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .formal-landing .navbar { padding: 1rem 2rem; }
+    .formal-landing .navbar.scrolled { padding: 1rem 2rem; }
+    .formal-landing .hero { padding: 0 2rem; }
+    .formal-landing .hero-title { font-size: 2.5rem; }
+    .formal-landing .hero-actions { flex-direction: column; }
+    .formal-landing .nav-links { display: none; }
+    .formal-landing .about-section { padding: 4rem 2rem; }
+}

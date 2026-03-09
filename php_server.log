@@ -1,1462 +1,625 @@
-[Mon Mar  9 11:07:39 2026] PHP 8.4.16 Development Server (http://localhost:8000) started
-[Mon Mar  9 11:07:58 2026] [::1]:45636 Accepted
-[Mon Mar  9 11:07:58 2026] [::1]:45636 [302]: GET /
-[Mon Mar  9 11:07:58 2026] [::1]:45636 Closing
-[Mon Mar  9 11:07:58 2026] [::1]:45640 Accepted
-[Mon Mar  9 11:07:58 2026] [::1]:45640 [200]: GET /login.php
-[Mon Mar  9 11:07:58 2026] [::1]:45640 Closing
-[Mon Mar  9 11:07:58 2026] [::1]:45642 Accepted
-[Mon Mar  9 11:07:59 2026] [::1]:45648 Accepted
-[Mon Mar  9 11:07:59 2026] [::1]:45642 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:07:59 2026] [::1]:45648 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:07:59 2026] [::1]:45642 Closing
-[Mon Mar  9 11:07:59 2026] [::1]:45648 Closing
-[Mon Mar  9 11:07:59 2026] [::1]:45650 Accepted
-[Mon Mar  9 11:07:59 2026] [::1]:45650 [302]: GET /favicon.ico
-[Mon Mar  9 11:07:59 2026] [::1]:45650 Closing
-[Mon Mar  9 11:07:59 2026] [::1]:45664 Accepted
-[Mon Mar  9 11:07:59 2026] [::1]:45664 [200]: GET /login.php
-[Mon Mar  9 11:07:59 2026] [::1]:45664 Closing
-[Mon Mar  9 11:08:23 2026] [::1]:38922 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38922 [302]: POST /api/login.php
-[Mon Mar  9 11:08:24 2026] [::1]:38922 Closing
-[Mon Mar  9 11:08:24 2026] [::1]:38936 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38936 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:08:24 2026] [::1]:38936 Closing
-[Mon Mar  9 11:08:24 2026] [::1]:38950 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38950 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:24 2026] [::1]:38950 Closing
-[Mon Mar  9 11:08:24 2026] [::1]:38956 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38956 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:08:24 2026] [::1]:38956 Closing
-[Mon Mar  9 11:08:24 2026] [::1]:38960 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38960 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:24 2026] [::1]:38960 Closing
-[Mon Mar  9 11:08:24 2026] [::1]:38972 Accepted
-[Mon Mar  9 11:08:24 2026] [::1]:38972 [200]: GET /login.php
-[Mon Mar  9 11:08:24 2026] [::1]:38972 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53178 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53178 [302]: POST /api/login.php
-[Mon Mar  9 11:08:32 2026] [::1]:53178 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53188 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53188 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:08:32 2026] [::1]:53188 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53200 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53200 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:32 2026] [::1]:53200 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53208 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53208 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:08:32 2026] [::1]:53208 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53220 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53220 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:32 2026] [::1]:53220 Closing
-[Mon Mar  9 11:08:32 2026] [::1]:53236 Accepted
-[Mon Mar  9 11:08:32 2026] [::1]:53236 [200]: GET /login.php
-[Mon Mar  9 11:08:32 2026] [::1]:53236 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59200 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59200 [302]: POST /api/login.php
-[Mon Mar  9 11:08:44 2026] [::1]:59200 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59206 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59212 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59206 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:08:44 2026] [::1]:59206 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59212 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:44 2026] [::1]:59212 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59214 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59214 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:08:44 2026] [::1]:59214 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59218 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59218 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:44 2026] [::1]:59218 Closing
-[Mon Mar  9 11:08:44 2026] [::1]:59228 Accepted
-[Mon Mar  9 11:08:44 2026] [::1]:59228 [200]: GET /login.php
-[Mon Mar  9 11:08:44 2026] [::1]:59228 Closing
-[Mon Mar  9 11:08:48 2026] [::1]:59230 Accepted
-[Mon Mar  9 11:08:49 2026] [::1]:59230 [200]: GET /admin/admin_login.php
-[Mon Mar  9 11:08:49 2026] [::1]:59230 Closing
-[Mon Mar  9 11:08:49 2026] [::1]:59234 Accepted
-[Mon Mar  9 11:08:49 2026] [::1]:59244 Accepted
-[Mon Mar  9 11:08:49 2026] [::1]:59234 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:49 2026] [::1]:59234 Closing
-[Mon Mar  9 11:08:49 2026] [::1]:59244 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:49 2026] [::1]:59244 Closing
-[Mon Mar  9 11:08:49 2026] [::1]:59258 Accepted
-[Mon Mar  9 11:08:49 2026] [::1]:59258 [200]: GET /login.php
-[Mon Mar  9 11:08:49 2026] [::1]:59258 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49160 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49160 [302]: POST /admin/admin_login.php
-[Mon Mar  9 11:08:55 2026] [::1]:49160 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49162 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49162 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:08:55 2026] [::1]:49162 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49174 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49188 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49174 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:55 2026] [::1]:49174 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49188 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:08:55 2026] [::1]:49188 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49202 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49202 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:55 2026] [::1]:49202 Closing
-[Mon Mar  9 11:08:55 2026] [::1]:49210 Accepted
-[Mon Mar  9 11:08:55 2026] [::1]:49210 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:08:55 2026] [::1]:49210 Closing
-[Mon Mar  9 11:08:59 2026] [::1]:49226 Accepted
-[Mon Mar  9 11:08:59 2026] [::1]:49226 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:08:59 2026] [::1]:49226 Closing
-[Mon Mar  9 11:08:59 2026] [::1]:49236 Accepted
-[Mon Mar  9 11:08:59 2026] [::1]:49236 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:08:59 2026] [::1]:49236 Closing
-[Mon Mar  9 11:08:59 2026] [::1]:49250 Accepted
-[Mon Mar  9 11:08:59 2026] [::1]:49250 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:08:59 2026] [::1]:49250 Closing
-[Mon Mar  9 11:08:59 2026] [::1]:49258 Accepted
-[Mon Mar  9 11:08:59 2026] [::1]:49258 [302]: GET /favicon.ico
-[Mon Mar  9 11:08:59 2026] [::1]:49258 Closing
-[Mon Mar  9 11:08:59 2026] [::1]:49274 Accepted
-[Mon Mar  9 11:08:59 2026] [::1]:49274 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:08:59 2026] [::1]:49274 Closing
-[Mon Mar  9 11:09:02 2026] [::1]:33276 Accepted
-[Mon Mar  9 11:09:02 2026] [::1]:33276 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:09:02 2026] [::1]:33276 Closing
-[Mon Mar  9 11:09:02 2026] [::1]:33280 Accepted
-[Mon Mar  9 11:09:02 2026] [::1]:33280 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:02 2026] [::1]:33280 Closing
-[Mon Mar  9 11:09:02 2026] [::1]:33284 Accepted
-[Mon Mar  9 11:09:02 2026] [::1]:33284 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:02 2026] [::1]:33284 Closing
-[Mon Mar  9 11:09:02 2026] [::1]:33292 Accepted
-[Mon Mar  9 11:09:02 2026] [::1]:33292 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:02 2026] [::1]:33292 Closing
-[Mon Mar  9 11:09:02 2026] [::1]:33294 Accepted
-[Mon Mar  9 11:09:02 2026] [::1]:33294 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:02 2026] [::1]:33294 Closing
-[Mon Mar  9 11:09:03 2026] [::1]:33300 Accepted
-[Mon Mar  9 11:09:03 2026] [::1]:33300 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:09:03 2026] [::1]:33300 Closing
-[Mon Mar  9 11:09:03 2026] [::1]:33308 Accepted
-[Mon Mar  9 11:09:03 2026] [::1]:33308 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:03 2026] [::1]:33308 Closing
-[Mon Mar  9 11:09:03 2026] [::1]:33322 Accepted
-[Mon Mar  9 11:09:03 2026] [::1]:33322 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:03 2026] [::1]:33322 Closing
-[Mon Mar  9 11:09:03 2026] [::1]:33330 Accepted
-[Mon Mar  9 11:09:03 2026] [::1]:33330 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:03 2026] [::1]:33330 Closing
-[Mon Mar  9 11:09:03 2026] [::1]:33332 Accepted
-[Mon Mar  9 11:09:03 2026] [::1]:33332 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:03 2026] [::1]:33332 Closing
-[Mon Mar  9 11:09:05 2026] [::1]:33346 Accepted
-[Mon Mar  9 11:09:05 2026] [::1]:33346 [200]: GET /admin/manage_officers.php
-[Mon Mar  9 11:09:05 2026] [::1]:33346 Closing
-[Mon Mar  9 11:09:05 2026] [::1]:33360 Accepted
-[Mon Mar  9 11:09:05 2026] [::1]:33360 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:05 2026] [::1]:33376 Accepted
-[Mon Mar  9 11:09:05 2026] [::1]:33360 Closing
-[Mon Mar  9 11:09:05 2026] [::1]:33376 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:05 2026] [::1]:33376 Closing
-[Mon Mar  9 11:09:05 2026] [::1]:33388 Accepted
-[Mon Mar  9 11:09:05 2026] [::1]:33388 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:05 2026] [::1]:33388 Closing
-[Mon Mar  9 11:09:05 2026] [::1]:33402 Accepted
-[Mon Mar  9 11:09:05 2026] [::1]:33402 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:05 2026] [::1]:33402 Closing
-[Mon Mar  9 11:09:10 2026] [::1]:33408 Accepted
-[Mon Mar  9 11:09:10 2026] [::1]:33408 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:10 2026] [::1]:33408 Closing
-[Mon Mar  9 11:09:10 2026] [::1]:33424 Accepted
-[Mon Mar  9 11:09:10 2026] [::1]:33424 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:10 2026] [::1]:33424 Closing
-[Mon Mar  9 11:09:10 2026] [::1]:33428 Accepted
-[Mon Mar  9 11:09:10 2026] [::1]:33428 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:10 2026] [::1]:33428 Closing
-[Mon Mar  9 11:09:10 2026] [::1]:33432 Accepted
-[Mon Mar  9 11:09:10 2026] [::1]:33432 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:10 2026] [::1]:33432 Closing
-[Mon Mar  9 11:09:10 2026] [::1]:33444 Accepted
-[Mon Mar  9 11:09:10 2026] [::1]:33444 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:10 2026] [::1]:33444 Closing
-[Mon Mar  9 11:09:13 2026] [::1]:35152 Accepted
-[Mon Mar  9 11:09:13 2026] [::1]:35152 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:09:13 2026] [::1]:35152 Closing
-[Mon Mar  9 11:09:13 2026] [::1]:35158 Accepted
-[Mon Mar  9 11:09:13 2026] [::1]:35158 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:13 2026] [::1]:35158 Closing
-[Mon Mar  9 11:09:13 2026] [::1]:35168 Accepted
-[Mon Mar  9 11:09:13 2026] [::1]:35168 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:13 2026] [::1]:35168 Closing
-[Mon Mar  9 11:09:13 2026] [::1]:35182 Accepted
-[Mon Mar  9 11:09:13 2026] [::1]:35182 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:13 2026] [::1]:35182 Closing
-[Mon Mar  9 11:09:13 2026] [::1]:35186 Accepted
-[Mon Mar  9 11:09:13 2026] [::1]:35186 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:13 2026] [::1]:35186 Closing
-[Mon Mar  9 11:09:14 2026] [::1]:35196 Accepted
-[Mon Mar  9 11:09:14 2026] [::1]:35196 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:09:14 2026] [::1]:35196 Closing
-[Mon Mar  9 11:09:14 2026] [::1]:35206 Accepted
-[Mon Mar  9 11:09:14 2026] [::1]:35206 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:14 2026] [::1]:35206 Closing
-[Mon Mar  9 11:09:14 2026] [::1]:35208 Accepted
-[Mon Mar  9 11:09:14 2026] [::1]:35208 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:14 2026] [::1]:35208 Closing
-[Mon Mar  9 11:09:14 2026] [::1]:35214 Accepted
-[Mon Mar  9 11:09:14 2026] [::1]:35214 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:14 2026] [::1]:35214 Closing
-[Mon Mar  9 11:09:14 2026] [::1]:35230 Accepted
-[Mon Mar  9 11:09:14 2026] [::1]:35230 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:14 2026] [::1]:35230 Closing
-[Mon Mar  9 11:09:16 2026] [::1]:35238 Accepted
-[Mon Mar  9 11:09:16 2026] [::1]:35238 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:16 2026] [::1]:35238 Closing
-[Mon Mar  9 11:09:16 2026] [::1]:35248 Accepted
-[Mon Mar  9 11:09:16 2026] [::1]:35248 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:16 2026] [::1]:35248 Closing
-[Mon Mar  9 11:09:16 2026] [::1]:35264 Accepted
-[Mon Mar  9 11:09:16 2026] [::1]:35264 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:16 2026] [::1]:35264 Closing
-[Mon Mar  9 11:09:16 2026] [::1]:35272 Accepted
-[Mon Mar  9 11:09:16 2026] [::1]:35272 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:16 2026] [::1]:35272 Closing
-[Mon Mar  9 11:09:16 2026] [::1]:35284 Accepted
-[Mon Mar  9 11:09:16 2026] [::1]:35284 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:16 2026] [::1]:35284 Closing
-[Mon Mar  9 11:09:18 2026] [::1]:35288 Accepted
-[Mon Mar  9 11:09:18 2026] [::1]:35288 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:18 2026] [::1]:35288 Closing
-[Mon Mar  9 11:09:18 2026] [::1]:35300 Accepted
-[Mon Mar  9 11:09:18 2026] [::1]:35300 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:18 2026] [::1]:35304 Accepted
-[Mon Mar  9 11:09:18 2026] [::1]:35300 Closing
-[Mon Mar  9 11:09:18 2026] [::1]:35304 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:18 2026] [::1]:35304 Closing
-[Mon Mar  9 11:09:18 2026] [::1]:35306 Accepted
-[Mon Mar  9 11:09:18 2026] [::1]:35306 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:18 2026] [::1]:35306 Closing
-[Mon Mar  9 11:09:18 2026] [::1]:35322 Accepted
-[Mon Mar  9 11:09:18 2026] [::1]:35322 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:18 2026] [::1]:35322 Closing
-[Mon Mar  9 11:09:21 2026] [::1]:46028 Accepted
-[Mon Mar  9 11:09:21 2026] [::1]:46028 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:09:21 2026] [::1]:46028 Closing
-[Mon Mar  9 11:09:21 2026] [::1]:46038 Accepted
-[Mon Mar  9 11:09:22 2026] [::1]:46038 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:22 2026] [::1]:46038 Closing
-[Mon Mar  9 11:09:22 2026] [::1]:46048 Accepted
-[Mon Mar  9 11:09:22 2026] [::1]:46048 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:22 2026] [::1]:46048 Closing
-[Mon Mar  9 11:09:23 2026] [::1]:46052 Accepted
-[Mon Mar  9 11:09:23 2026] [::1]:46052 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:09:23 2026] [::1]:46052 Closing
-[Mon Mar  9 11:09:23 2026] [::1]:46066 Accepted
-[Mon Mar  9 11:09:23 2026] [::1]:46066 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:23 2026] [::1]:46066 Closing
-[Mon Mar  9 11:09:23 2026] [::1]:46076 Accepted
-[Mon Mar  9 11:09:23 2026] [::1]:46076 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:23 2026] [::1]:46076 Closing
-[Mon Mar  9 11:09:24 2026] [::1]:46086 Accepted
-[Mon Mar  9 11:09:24 2026] [::1]:46086 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:24 2026] [::1]:46086 Closing
-[Mon Mar  9 11:09:24 2026] [::1]:46096 Accepted
-[Mon Mar  9 11:09:24 2026] [::1]:46108 Accepted
-[Mon Mar  9 11:09:24 2026] [::1]:46096 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:24 2026] [::1]:46096 Closing
-[Mon Mar  9 11:09:24 2026] [::1]:46108 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:24 2026] [::1]:46108 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46110 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46110 [200]: GET /admin/manage_officers.php
-[Mon Mar  9 11:09:25 2026] [::1]:46110 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46126 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46126 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:25 2026] [::1]:46126 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46132 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46132 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:25 2026] [::1]:46132 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46134 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46140 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46134 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:09:25 2026] [::1]:46134 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46140 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:25 2026] [::1]:46140 Closing
-[Mon Mar  9 11:09:25 2026] [::1]:46148 Accepted
-[Mon Mar  9 11:09:25 2026] [::1]:46148 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:25 2026] [::1]:46148 Closing
-[Mon Mar  9 11:09:26 2026] [::1]:46152 Accepted
-[Mon Mar  9 11:09:26 2026] [::1]:46152 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:09:26 2026] [::1]:46152 Closing
-[Mon Mar  9 11:09:26 2026] [::1]:46160 Accepted
-[Mon Mar  9 11:09:26 2026] [::1]:46160 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:26 2026] [::1]:46160 Closing
-[Mon Mar  9 11:09:26 2026] [::1]:46168 Accepted
-[Mon Mar  9 11:09:26 2026] [::1]:46168 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:26 2026] [::1]:46168 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46182 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46182 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:27 2026] [::1]:46182 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46194 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46194 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:27 2026] [::1]:46194 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46198 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46198 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:27 2026] [::1]:46198 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46212 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46212 [302]: GET /admin/admin_login.php
-[Mon Mar  9 11:09:27 2026] [::1]:46212 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46224 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46224 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:27 2026] [::1]:46224 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46226 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46226 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:27 2026] [::1]:46226 Closing
-[Mon Mar  9 11:09:27 2026] [::1]:46238 Accepted
-[Mon Mar  9 11:09:27 2026] [::1]:46238 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:27 2026] [::1]:46238 Closing
-[Mon Mar  9 11:09:28 2026] [::1]:46250 Accepted
-[Mon Mar  9 11:09:28 2026] [::1]:46250 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:09:28 2026] [::1]:46250 Closing
-[Mon Mar  9 11:09:28 2026] [::1]:46258 Accepted
-[Mon Mar  9 11:09:28 2026] [::1]:46272 Accepted
-[Mon Mar  9 11:09:28 2026] [::1]:46258 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:28 2026] [::1]:46258 Closing
-[Mon Mar  9 11:09:28 2026] [::1]:46272 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:28 2026] [::1]:46272 Closing
-[Mon Mar  9 11:09:28 2026] [::1]:46286 Accepted
-[Mon Mar  9 11:09:28 2026] [::1]:46286 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:09:28 2026] [::1]:46286 Closing
-[Mon Mar  9 11:09:28 2026] [::1]:46298 Accepted
-[Mon Mar  9 11:09:28 2026] [::1]:46306 Accepted
-[Mon Mar  9 11:09:29 2026] [::1]:46298 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:29 2026] [::1]:46298 Closing
-[Mon Mar  9 11:09:29 2026] [::1]:46306 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:29 2026] [::1]:46306 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39054 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39054 [302]: POST /api/login.php
-[Mon Mar  9 11:09:36 2026] [::1]:39054 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39066 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39066 [200]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:09:36 2026] [::1]:39066 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39082 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39082 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:36 2026] [::1]:39082 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39090 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39090 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:36 2026] [::1]:39090 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39100 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39100 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:36 2026] [::1]:39100 Closing
-[Mon Mar  9 11:09:36 2026] [::1]:39104 Accepted
-[Mon Mar  9 11:09:36 2026] [::1]:39104 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:36 2026] [::1]:39104 Closing
-[Mon Mar  9 11:09:53 2026] [::1]:54572 Accepted
-[Mon Mar  9 11:09:53 2026] [::1]:54572 [200]: GET /register.php
-[Mon Mar  9 11:09:53 2026] [::1]:54572 Closing
-[Mon Mar  9 11:09:53 2026] [::1]:54580 Accepted
-[Mon Mar  9 11:09:53 2026] [::1]:54592 Accepted
-[Mon Mar  9 11:09:53 2026] [::1]:54580 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:09:53 2026] [::1]:54580 Closing
-[Mon Mar  9 11:09:53 2026] [::1]:54592 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:09:53 2026] [::1]:54592 Closing
-[Mon Mar  9 11:09:53 2026] [::1]:54600 Accepted
-[Mon Mar  9 11:09:53 2026] [::1]:54600 [302]: GET /favicon.ico
-[Mon Mar  9 11:09:53 2026] [::1]:54600 Closing
-[Mon Mar  9 11:09:53 2026] [::1]:54608 Accepted
-[Mon Mar  9 11:09:53 2026] [::1]:54608 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:09:53 2026] [::1]:54608 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43356 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43356 [302]: POST /api/register.php
-[Mon Mar  9 11:10:14 2026] [::1]:43356 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43370 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43370 [200]: GET /login.php?registered=1
-[Mon Mar  9 11:10:14 2026] [::1]:43370 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43374 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43374 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:10:14 2026] [::1]:43374 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43378 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43378 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:10:14 2026] [::1]:43378 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43382 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43382 [302]: GET /favicon.ico
-[Mon Mar  9 11:10:14 2026] [::1]:43382 Closing
-[Mon Mar  9 11:10:14 2026] [::1]:43388 Accepted
-[Mon Mar  9 11:10:14 2026] [::1]:43388 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:10:14 2026] [::1]:43388 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36536 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36536 [302]: POST /api/login.php
-[Mon Mar  9 11:10:24 2026] [::1]:36536 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36544 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36544 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:10:24 2026] [::1]:36544 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36560 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36560 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:10:24 2026] [::1]:36560 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36562 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36562 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:10:24 2026] [::1]:36562 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36572 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36572 [302]: GET /favicon.ico
-[Mon Mar  9 11:10:24 2026] [::1]:36572 Closing
-[Mon Mar  9 11:10:24 2026] [::1]:36586 Accepted
-[Mon Mar  9 11:10:24 2026] [::1]:36586 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:10:24 2026] [::1]:36586 Closing
-[Mon Mar  9 11:10:30 2026] [::1]:35690 Accepted
-[Mon Mar  9 11:10:30 2026] [::1]:35690 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:10:30 2026] [::1]:35690 Closing
-[Mon Mar  9 11:10:30 2026] [::1]:35702 Accepted
-[Mon Mar  9 11:10:30 2026] [::1]:35718 Accepted
-[Mon Mar  9 11:10:30 2026] [::1]:35702 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:10:30 2026] [::1]:35702 Closing
-[Mon Mar  9 11:10:30 2026] [::1]:35718 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:10:30 2026] [::1]:35718 Closing
-[Mon Mar  9 11:10:31 2026] [::1]:35726 Accepted
-[Mon Mar  9 11:10:31 2026] [::1]:35726 [302]: GET /favicon.ico
-[Mon Mar  9 11:10:31 2026] [::1]:35726 Closing
-[Mon Mar  9 11:10:31 2026] [::1]:35738 Accepted
-[Mon Mar  9 11:10:31 2026] [::1]:35738 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:10:31 2026] [::1]:35738 Closing
-[Mon Mar  9 11:10:37 2026] [::1]:35742 Accepted
-[Mon Mar  9 11:10:37 2026] [::1]:35742 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:10:37 2026] [::1]:35742 Closing
-[Mon Mar  9 11:10:37 2026] [::1]:35758 Accepted
-[Mon Mar  9 11:10:37 2026] [::1]:35758 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:10:37 2026] [::1]:35758 Closing
-[Mon Mar  9 11:10:37 2026] [::1]:35766 Accepted
-[Mon Mar  9 11:10:37 2026] [::1]:35766 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:10:37 2026] [::1]:35766 Closing
-[Mon Mar  9 11:10:37 2026] [::1]:35772 Accepted
-[Mon Mar  9 11:10:37 2026] [::1]:35772 [302]: GET /favicon.ico
-[Mon Mar  9 11:10:37 2026] [::1]:35772 Closing
-[Mon Mar  9 11:10:37 2026] [::1]:35786 Accepted
-[Mon Mar  9 11:10:37 2026] [::1]:35786 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:10:37 2026] [::1]:35786 Closing
-[Mon Mar  9 11:10:40 2026] [::1]:35800 Accepted
-[Mon Mar  9 11:10:40 2026] [::1]:35800 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:10:40 2026] [::1]:35800 Closing
-[Mon Mar  9 11:10:40 2026] [::1]:47360 Accepted
-[Mon Mar  9 11:10:40 2026] [::1]:47362 Accepted
-[Mon Mar  9 11:10:40 2026] [::1]:47360 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:10:40 2026] [::1]:47360 Closing
-[Mon Mar  9 11:10:40 2026] [::1]:47362 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:10:40 2026] [::1]:47362 Closing
-[Mon Mar  9 11:10:40 2026] [::1]:47370 Accepted
-[Mon Mar  9 11:10:40 2026] [::1]:47370 [302]: GET /favicon.ico
-[Mon Mar  9 11:10:40 2026] [::1]:47370 Closing
-[Mon Mar  9 11:10:40 2026] [::1]:47374 Accepted
-[Mon Mar  9 11:10:40 2026] [::1]:47374 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:10:40 2026] [::1]:47374 Closing
-[Mon Mar  9 11:11:00 2026] [::1]:41226 Accepted
-[Mon Mar  9 11:11:00 2026] [::1]:41226 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:11:00 2026] [::1]:41226 Closing
-[Mon Mar  9 11:11:00 2026] [::1]:41228 Accepted
-[Mon Mar  9 11:11:00 2026] [::1]:41228 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:00 2026] [::1]:41228 Closing
-[Mon Mar  9 11:11:00 2026] [::1]:41244 Accepted
-[Mon Mar  9 11:11:00 2026] [::1]:41244 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:00 2026] [::1]:41244 Closing
-[Mon Mar  9 11:11:00 2026] [::1]:33290 Accepted
-[Mon Mar  9 11:11:00 2026] [::1]:33290 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:00 2026] [::1]:33290 Closing
-[Mon Mar  9 11:11:00 2026] [::1]:33302 Accepted
-[Mon Mar  9 11:11:00 2026] [::1]:33302 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:00 2026] [::1]:33302 Closing
-[Mon Mar  9 11:11:01 2026] [::1]:33316 Accepted
-[Mon Mar  9 11:11:01 2026] [::1]:33316 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:01 2026] [::1]:33316 Closing
-[Mon Mar  9 11:11:01 2026] [::1]:33328 Accepted
-[Mon Mar  9 11:11:01 2026] [::1]:33328 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:01 2026] [::1]:33328 Closing
-[Mon Mar  9 11:11:01 2026] [::1]:33340 Accepted
-[Mon Mar  9 11:11:01 2026] [::1]:33340 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:01 2026] [::1]:33340 Closing
-[Mon Mar  9 11:11:01 2026] [::1]:33346 Accepted
-[Mon Mar  9 11:11:01 2026] [::1]:33346 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:01 2026] [::1]:33346 Closing
-[Mon Mar  9 11:11:01 2026] [::1]:33360 Accepted
-[Mon Mar  9 11:11:01 2026] [::1]:33360 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:01 2026] [::1]:33360 Closing
-[Mon Mar  9 11:11:06 2026] [::1]:33374 Accepted
-[Mon Mar  9 11:11:06 2026] [::1]:33374 [200]: GET /user/my_complaints.php?status=Resolved
-[Mon Mar  9 11:11:06 2026] [::1]:33374 Closing
-[Mon Mar  9 11:11:06 2026] [::1]:33380 Accepted
-[Mon Mar  9 11:11:06 2026] [::1]:33380 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:06 2026] [::1]:33380 Closing
-[Mon Mar  9 11:11:06 2026] [::1]:33384 Accepted
-[Mon Mar  9 11:11:06 2026] [::1]:33384 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:06 2026] [::1]:33384 Closing
-[Mon Mar  9 11:11:06 2026] [::1]:33392 Accepted
-[Mon Mar  9 11:11:06 2026] [::1]:33392 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:06 2026] [::1]:33392 Closing
-[Mon Mar  9 11:11:06 2026] [::1]:33402 Accepted
-[Mon Mar  9 11:11:06 2026] [::1]:33402 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:06 2026] [::1]:33402 Closing
-[Mon Mar  9 11:11:09 2026] [::1]:33404 Accepted
-[Mon Mar  9 11:11:09 2026] [::1]:33404 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:11:09 2026] [::1]:33404 Closing
-[Mon Mar  9 11:11:09 2026] [::1]:33410 Accepted
-[Mon Mar  9 11:11:09 2026] [::1]:33410 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:09 2026] [::1]:33410 Closing
-[Mon Mar  9 11:11:09 2026] [::1]:33426 Accepted
-[Mon Mar  9 11:11:09 2026] [::1]:33426 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:09 2026] [::1]:33426 Closing
-[Mon Mar  9 11:11:09 2026] [::1]:33436 Accepted
-[Mon Mar  9 11:11:09 2026] [::1]:33436 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:09 2026] [::1]:33436 Closing
-[Mon Mar  9 11:11:09 2026] [::1]:33438 Accepted
-[Mon Mar  9 11:11:09 2026] [::1]:33438 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:09 2026] [::1]:33438 Closing
-[Mon Mar  9 11:11:10 2026] [::1]:33452 Accepted
-[Mon Mar  9 11:11:10 2026] [::1]:33452 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:10 2026] [::1]:33452 Closing
-[Mon Mar  9 11:11:10 2026] [::1]:33454 Accepted
-[Mon Mar  9 11:11:10 2026] [::1]:33454 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:10 2026] [::1]:33454 Closing
-[Mon Mar  9 11:11:10 2026] [::1]:33460 Accepted
-[Mon Mar  9 11:11:10 2026] [::1]:33460 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:10 2026] [::1]:33460 Closing
-[Mon Mar  9 11:11:10 2026] [::1]:33472 Accepted
-[Mon Mar  9 11:11:10 2026] [::1]:33472 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:10 2026] [::1]:33472 Closing
-[Mon Mar  9 11:11:10 2026] [::1]:33480 Accepted
-[Mon Mar  9 11:11:10 2026] [::1]:33480 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:10 2026] [::1]:33480 Closing
-[Mon Mar  9 11:11:11 2026] [::1]:47554 Accepted
-[Mon Mar  9 11:11:11 2026] [::1]:47554 [200]: GET /user/my_complaints.php?status=Pending
-[Mon Mar  9 11:11:11 2026] [::1]:47554 Closing
-[Mon Mar  9 11:11:11 2026] [::1]:47568 Accepted
-[Mon Mar  9 11:11:11 2026] [::1]:47574 Accepted
-[Mon Mar  9 11:11:11 2026] [::1]:47568 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:11 2026] [::1]:47568 Closing
-[Mon Mar  9 11:11:11 2026] [::1]:47574 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:11 2026] [::1]:47574 Closing
-[Mon Mar  9 11:11:11 2026] [::1]:47578 Accepted
-[Mon Mar  9 11:11:11 2026] [::1]:47578 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:11 2026] [::1]:47578 Closing
-[Mon Mar  9 11:11:11 2026] [::1]:47590 Accepted
-[Mon Mar  9 11:11:11 2026] [::1]:47590 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:11 2026] [::1]:47590 Closing
-[Mon Mar  9 11:11:17 2026] [::1]:47592 Accepted
-[Mon Mar  9 11:11:17 2026] [::1]:47592 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:11:17 2026] [::1]:47592 Closing
-[Mon Mar  9 11:11:17 2026] [::1]:47596 Accepted
-[Mon Mar  9 11:11:17 2026] [::1]:47602 Accepted
-[Mon Mar  9 11:11:17 2026] [::1]:47596 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:17 2026] [::1]:47596 Closing
-[Mon Mar  9 11:11:17 2026] [::1]:47602 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:17 2026] [::1]:47602 Closing
-[Mon Mar  9 11:11:17 2026] [::1]:47612 Accepted
-[Mon Mar  9 11:11:17 2026] [::1]:47612 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:17 2026] [::1]:47612 Closing
-[Mon Mar  9 11:11:17 2026] [::1]:47620 Accepted
-[Mon Mar  9 11:11:17 2026] [::1]:47620 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:17 2026] [::1]:47620 Closing
-[Mon Mar  9 11:11:46 2026] [::1]:36892 Accepted
-[Mon Mar  9 11:11:46 2026] [::1]:36892 [200]: POST /api/submit_complaint.php
-[Mon Mar  9 11:11:46 2026] [::1]:36892 Closing
-[Mon Mar  9 11:11:47 2026] [::1]:36896 Accepted
-[Mon Mar  9 11:11:47 2026] [::1]:36896 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:11:47 2026] [::1]:36896 Closing
-[Mon Mar  9 11:11:47 2026] [::1]:36904 Accepted
-[Mon Mar  9 11:11:47 2026] [::1]:36904 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:11:47 2026] [::1]:36904 Closing
-[Mon Mar  9 11:11:47 2026] [::1]:36916 Accepted
-[Mon Mar  9 11:11:47 2026] [::1]:36916 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:11:47 2026] [::1]:36916 Closing
-[Mon Mar  9 11:11:47 2026] [::1]:36926 Accepted
-[Mon Mar  9 11:11:47 2026] [::1]:36926 [302]: GET /favicon.ico
-[Mon Mar  9 11:11:47 2026] [::1]:36926 Closing
-[Mon Mar  9 11:11:47 2026] [::1]:36936 Accepted
-[Mon Mar  9 11:11:47 2026] [::1]:36936 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:11:47 2026] [::1]:36936 Closing
-[Mon Mar  9 11:12:00 2026] [::1]:46410 Accepted
-[Mon Mar  9 11:12:00 2026] [::1]:46410 [200]: GET /admin/admin_login.php
-[Mon Mar  9 11:12:00 2026] [::1]:46410 Closing
-[Mon Mar  9 11:12:00 2026] [::1]:46420 Accepted
-[Mon Mar  9 11:12:00 2026] [::1]:46432 Accepted
-[Mon Mar  9 11:12:00 2026] [::1]:46420 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:12:00 2026] [::1]:46420 Closing
-[Mon Mar  9 11:12:00 2026] [::1]:46432 [302]: GET /favicon.ico
-[Mon Mar  9 11:12:00 2026] [::1]:46432 Closing
-[Mon Mar  9 11:12:00 2026] [::1]:46438 Accepted
-[Mon Mar  9 11:12:00 2026] [::1]:46438 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:00 2026] [::1]:46438 Closing
-[Mon Mar  9 11:12:03 2026] [::1]:36184 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36184 [302]: GET /login.php
-[Mon Mar  9 11:12:04 2026] [::1]:36184 Closing
-[Mon Mar  9 11:12:04 2026] [::1]:36196 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36196 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:04 2026] [::1]:36196 Closing
-[Mon Mar  9 11:12:04 2026] [::1]:36212 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36212 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:12:04 2026] [::1]:36212 Closing
-[Mon Mar  9 11:12:04 2026] [::1]:36220 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36220 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:12:04 2026] [::1]:36220 Closing
-[Mon Mar  9 11:12:04 2026] [::1]:36224 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36224 [302]: GET /favicon.ico
-[Mon Mar  9 11:12:04 2026] [::1]:36224 Closing
-[Mon Mar  9 11:12:04 2026] [::1]:36226 Accepted
-[Mon Mar  9 11:12:04 2026] [::1]:36226 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:04 2026] [::1]:36226 Closing
-[Mon Mar  9 11:12:29 2026] [::1]:45540 Accepted
-[Mon Mar  9 11:12:29 2026] [::1]:45540 [200]: GET /uploads/complaints/complaint_69ae5d9a445e24.87944513.png
-[Mon Mar  9 11:12:29 2026] [::1]:45540 Closing
-[Mon Mar  9 11:12:29 2026] [::1]:45556 Accepted
-[Mon Mar  9 11:12:29 2026] [::1]:45560 Accepted
-[Mon Mar  9 11:12:29 2026] [::1]:45556 [302]: GET /favicon.ico
-[Mon Mar  9 11:12:29 2026] [::1]:45556 Closing
-[Mon Mar  9 11:12:29 2026] [::1]:45560 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:29 2026] [::1]:45560 Closing
-[Mon Mar  9 11:12:57 2026] [::1]:59608 Accepted
-[Mon Mar  9 11:12:57 2026] [::1]:59608 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:57 2026] [::1]:59608 Closing
-[Mon Mar  9 11:12:57 2026] [::1]:59616 Accepted
-[Mon Mar  9 11:12:57 2026] [::1]:59616 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:12:57 2026] [::1]:59616 Closing
-[Mon Mar  9 11:12:57 2026] [::1]:59618 Accepted
-[Mon Mar  9 11:12:57 2026] [::1]:59618 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:12:57 2026] [::1]:59618 Closing
-[Mon Mar  9 11:12:57 2026] [::1]:59626 Accepted
-[Mon Mar  9 11:12:57 2026] [::1]:59626 [302]: GET /favicon.ico
-[Mon Mar  9 11:12:57 2026] [::1]:59626 Closing
-[Mon Mar  9 11:12:57 2026] [::1]:59634 Accepted
-[Mon Mar  9 11:12:57 2026] [::1]:59634 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:12:57 2026] [::1]:59634 Closing
-[Mon Mar  9 11:13:03 2026] [::1]:45960 Accepted
-[Mon Mar  9 11:13:03 2026] [::1]:45960 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:13:03 2026] [::1]:45960 Closing
-[Mon Mar  9 11:13:03 2026] [::1]:45964 Accepted
-[Mon Mar  9 11:13:03 2026] [::1]:45964 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:13:03 2026] [::1]:45964 Closing
-[Mon Mar  9 11:13:03 2026] [::1]:45980 Accepted
-[Mon Mar  9 11:13:03 2026] [::1]:45980 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:13:03 2026] [::1]:45980 Closing
-[Mon Mar  9 11:13:03 2026] [::1]:45992 Accepted
-[Mon Mar  9 11:13:03 2026] [::1]:45992 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:03 2026] [::1]:45992 Closing
-[Mon Mar  9 11:13:03 2026] [::1]:46004 Accepted
-[Mon Mar  9 11:13:03 2026] [::1]:46004 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:03 2026] [::1]:46004 Closing
-[Mon Mar  9 11:13:21 2026] [::1]:56146 Accepted
-[Mon Mar  9 11:13:21 2026] [::1]:56146 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:21 2026] [::1]:56146 Closing
-[Mon Mar  9 11:13:21 2026] [::1]:56154 Accepted
-[Mon Mar  9 11:13:21 2026] [::1]:56154 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:21 2026] [::1]:56154 Closing
-[Mon Mar  9 11:13:21 2026] [::1]:56156 Accepted
-[Mon Mar  9 11:13:21 2026] [::1]:56156 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:21 2026] [::1]:56156 Closing
-[Mon Mar  9 11:13:21 2026] [::1]:56170 Accepted
-[Mon Mar  9 11:13:21 2026] [::1]:56170 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:13:21 2026] [::1]:56170 Closing
-[Mon Mar  9 11:13:21 2026] [::1]:56184 Accepted
-[Mon Mar  9 11:13:22 2026] [::1]:56184 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:22 2026] [::1]:56184 Closing
-[Mon Mar  9 11:13:22 2026] [::1]:56198 Accepted
-[Mon Mar  9 11:13:22 2026] [::1]:56198 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:22 2026] [::1]:56198 Closing
-[Mon Mar  9 11:13:22 2026] [::1]:56206 Accepted
-[Mon Mar  9 11:13:22 2026] [::1]:56206 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:13:22 2026] [::1]:56206 Closing
-[Mon Mar  9 11:13:22 2026] [::1]:56216 Accepted
-[Mon Mar  9 11:13:22 2026] [::1]:56216 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:22 2026] [::1]:56216 Closing
-[Mon Mar  9 11:13:22 2026] [::1]:56230 Accepted
-[Mon Mar  9 11:13:22 2026] [::1]:56230 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:22 2026] [::1]:56230 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56240 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56240 [200]: GET /user/my_complaints.php?status=Pending
-[Mon Mar  9 11:13:23 2026] [::1]:56240 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56246 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56246 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:23 2026] [::1]:56246 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56258 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56258 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:23 2026] [::1]:56258 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56274 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56274 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:23 2026] [::1]:56274 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56282 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56282 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:23 2026] [::1]:56282 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56290 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56290 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:23 2026] [::1]:56290 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56302 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56302 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:13:23 2026] [::1]:56302 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56308 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56308 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:23 2026] [::1]:56308 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56324 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56324 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:23 2026] [::1]:56324 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56340 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56340 [200]: GET /user/my_complaints.php?status=Resolved
-[Mon Mar  9 11:13:23 2026] [::1]:56340 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56346 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56346 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:23 2026] [::1]:56346 Closing
-[Mon Mar  9 11:13:23 2026] [::1]:56360 Accepted
-[Mon Mar  9 11:13:23 2026] [::1]:56360 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:23 2026] [::1]:56360 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56362 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56362 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:24 2026] [::1]:56362 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56372 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56372 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:24 2026] [::1]:56372 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56386 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56386 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:24 2026] [::1]:56386 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56396 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56396 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:13:24 2026] [::1]:56396 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56406 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56406 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:24 2026] [::1]:56406 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56412 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56412 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:24 2026] [::1]:56412 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56418 Accepted
-[Mon Mar  9 11:13:24 2026] [::1]:56418 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:13:24 2026] [::1]:56418 Closing
-[Mon Mar  9 11:13:24 2026] [::1]:56422 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56422 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:25 2026] [::1]:56422 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56428 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56428 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:25 2026] [::1]:56428 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56436 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56436 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:13:25 2026] [::1]:56436 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56448 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56448 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:25 2026] [::1]:56448 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56462 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56462 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:25 2026] [::1]:56462 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56472 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56472 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:13:25 2026] [::1]:56472 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56476 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56486 Accepted
-[Mon Mar  9 11:13:25 2026] [::1]:56476 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:25 2026] [::1]:56476 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56486 [302]: GET /login.php?registered=1
-[Mon Mar  9 11:13:25 2026] [::1]:56486 Closing
-[Mon Mar  9 11:13:25 2026] [::1]:56492 Accepted
-[Mon Mar  9 11:13:26 2026] [::1]:56492 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:26 2026] [::1]:56492 Closing
-[Mon Mar  9 11:13:26 2026] [::1]:56498 Accepted
-[Mon Mar  9 11:13:26 2026] [::1]:56498 [302]: GET /register.php
-[Mon Mar  9 11:13:26 2026] [::1]:56498 Closing
-[Mon Mar  9 11:13:26 2026] [::1]:56514 Accepted
-[Mon Mar  9 11:13:26 2026] [::1]:56514 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:26 2026] [::1]:56514 Closing
-[Mon Mar  9 11:13:26 2026] [::1]:56522 Accepted
-[Mon Mar  9 11:13:26 2026] [::1]:56522 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:26 2026] [::1]:56522 Closing
-[Mon Mar  9 11:13:26 2026] [::1]:56538 Accepted
-[Mon Mar  9 11:13:26 2026] [::1]:56538 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:26 2026] [::1]:56538 Closing
-[Mon Mar  9 11:13:27 2026] [::1]:56544 Accepted
-[Mon Mar  9 11:13:27 2026] [::1]:56544 [302]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:13:27 2026] [::1]:56544 Closing
-[Mon Mar  9 11:13:27 2026] [::1]:56552 Accepted
-[Mon Mar  9 11:13:27 2026] [::1]:56568 Accepted
-[Mon Mar  9 11:13:27 2026] [::1]:56552 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:27 2026] [::1]:56552 Closing
-[Mon Mar  9 11:13:27 2026] [::1]:56568 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:27 2026] [::1]:56568 Closing
-[Mon Mar  9 11:13:27 2026] [::1]:56574 Accepted
-[Mon Mar  9 11:13:27 2026] [::1]:56574 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:27 2026] [::1]:56574 Closing
-[Mon Mar  9 11:13:28 2026] [::1]:56584 Accepted
-[Mon Mar  9 11:13:28 2026] [::1]:56586 Accepted
-[Mon Mar  9 11:13:28 2026] [::1]:56584 [302]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:13:28 2026] [::1]:56584 Closing
-[Mon Mar  9 11:13:28 2026] [::1]:56586 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:28 2026] [::1]:56586 Closing
-[Mon Mar  9 11:13:28 2026] [::1]:56602 Accepted
-[Mon Mar  9 11:13:28 2026] [::1]:56602 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:28 2026] [::1]:56602 Closing
-[Mon Mar  9 11:13:28 2026] [::1]:56612 Accepted
-[Mon Mar  9 11:13:28 2026] [::1]:56612 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:28 2026] [::1]:56612 Closing
-[Mon Mar  9 11:13:29 2026] [::1]:56628 Accepted
-[Mon Mar  9 11:13:29 2026] [::1]:56628 [302]: GET /login.php?error=Invalid+email+or+password.
-[Mon Mar  9 11:13:29 2026] [::1]:56628 Closing
-[Mon Mar  9 11:13:29 2026] [::1]:56634 Accepted
-[Mon Mar  9 11:13:29 2026] [::1]:56648 Accepted
-[Mon Mar  9 11:13:29 2026] [::1]:56634 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:29 2026] [::1]:56634 Closing
-[Mon Mar  9 11:13:29 2026] [::1]:56648 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:29 2026] [::1]:56648 Closing
-[Mon Mar  9 11:13:29 2026] [::1]:56656 Accepted
-[Mon Mar  9 11:13:29 2026] [::1]:56656 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:13:29 2026] [::1]:56656 Closing
-[Mon Mar  9 11:13:30 2026] [::1]:36314 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36314 [302]: GET /logout.php
-[Mon Mar  9 11:13:31 2026] [::1]:36314 Closing
-[Mon Mar  9 11:13:31 2026] [::1]:36324 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36324 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:13:31 2026] [::1]:36324 Closing
-[Mon Mar  9 11:13:31 2026] [::1]:36336 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36336 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:13:31 2026] [::1]:36336 Closing
-[Mon Mar  9 11:13:31 2026] [::1]:36346 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36346 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:13:31 2026] [::1]:36346 Closing
-[Mon Mar  9 11:13:31 2026] [::1]:36354 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36354 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:31 2026] [::1]:36354 Closing
-[Mon Mar  9 11:13:31 2026] [::1]:36370 Accepted
-[Mon Mar  9 11:13:31 2026] [::1]:36370 [200]: GET /login.php
-[Mon Mar  9 11:13:31 2026] [::1]:36370 Closing
-[Mon Mar  9 11:13:33 2026] [::1]:36384 Accepted
-[Mon Mar  9 11:13:34 2026] [::1]:36384 [200]: GET /admin/admin_login.php
-[Mon Mar  9 11:13:34 2026] [::1]:36384 Closing
-[Mon Mar  9 11:13:34 2026] [::1]:36396 Accepted
-[Mon Mar  9 11:13:34 2026] [::1]:36408 Accepted
-[Mon Mar  9 11:13:34 2026] [::1]:36396 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:13:34 2026] [::1]:36396 Closing
-[Mon Mar  9 11:13:34 2026] [::1]:36408 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:34 2026] [::1]:36408 Closing
-[Mon Mar  9 11:13:34 2026] [::1]:36410 Accepted
-[Mon Mar  9 11:13:34 2026] [::1]:36410 [200]: GET /login.php
-[Mon Mar  9 11:13:34 2026] [::1]:36410 Closing
-[Mon Mar  9 11:13:40 2026] [::1]:36426 Accepted
-[Mon Mar  9 11:13:40 2026] [::1]:36426 [302]: POST /admin/admin_login.php
-[Mon Mar  9 11:13:40 2026] [::1]:36426 Closing
-[Mon Mar  9 11:13:40 2026] [::1]:36434 Accepted
-[Mon Mar  9 11:13:40 2026] [::1]:36434 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:13:40 2026] [::1]:36434 Closing
-[Mon Mar  9 11:13:40 2026] [::1]:48818 Accepted
-[Mon Mar  9 11:13:40 2026] [::1]:48818 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:13:40 2026] [::1]:48818 Closing
-[Mon Mar  9 11:13:40 2026] [::1]:48820 Accepted
-[Mon Mar  9 11:13:40 2026] [::1]:48820 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:13:40 2026] [::1]:48820 Closing
-[Mon Mar  9 11:13:41 2026] [::1]:48834 Accepted
-[Mon Mar  9 11:13:41 2026] [::1]:48834 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:41 2026] [::1]:48834 Closing
-[Mon Mar  9 11:13:41 2026] [::1]:48844 Accepted
-[Mon Mar  9 11:13:41 2026] [::1]:48844 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:13:41 2026] [::1]:48844 Closing
-[Mon Mar  9 11:13:55 2026] [::1]:46898 Accepted
-[Mon Mar  9 11:13:55 2026] [::1]:46898 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:13:55 2026] [::1]:46898 Closing
-[Mon Mar  9 11:13:55 2026] [::1]:46914 Accepted
-[Mon Mar  9 11:13:55 2026] [::1]:46914 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:13:55 2026] [::1]:46914 Closing
-[Mon Mar  9 11:13:55 2026] [::1]:46930 Accepted
-[Mon Mar  9 11:13:55 2026] [::1]:46930 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:13:55 2026] [::1]:46930 Closing
-[Mon Mar  9 11:13:55 2026] [::1]:46934 Accepted
-[Mon Mar  9 11:13:55 2026] [::1]:46934 [302]: GET /favicon.ico
-[Mon Mar  9 11:13:55 2026] [::1]:46934 Closing
-[Mon Mar  9 11:13:55 2026] [::1]:46936 Accepted
-[Mon Mar  9 11:13:55 2026] [::1]:46936 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:13:55 2026] [::1]:46936 Closing
-[Mon Mar  9 11:14:05 2026] [::1]:49110 Accepted
-[Mon Mar  9 11:14:05 2026] [::1]:49110 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:14:05 2026] [::1]:49110 Closing
-[Mon Mar  9 11:14:05 2026] [::1]:49120 Accepted
-[Mon Mar  9 11:14:05 2026] [::1]:49120 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:14:05 2026] [::1]:49120 Closing
-[Mon Mar  9 11:14:05 2026] [::1]:49130 Accepted
-[Mon Mar  9 11:14:05 2026] [::1]:49130 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:14:05 2026] [::1]:49130 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49142 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49142 [302]: GET /favicon.ico
-[Mon Mar  9 11:14:06 2026] [::1]:49142 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49158 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49158 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:14:06 2026] [::1]:49158 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49162 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49162 [200]: GET /admin/manage_officers.php
-[Mon Mar  9 11:14:06 2026] [::1]:49162 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49168 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49168 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:14:06 2026] [::1]:49168 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49170 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49170 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:14:06 2026] [::1]:49170 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49174 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49174 [302]: GET /favicon.ico
-[Mon Mar  9 11:14:06 2026] [::1]:49174 Closing
-[Mon Mar  9 11:14:06 2026] [::1]:49184 Accepted
-[Mon Mar  9 11:14:06 2026] [::1]:49184 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:14:06 2026] [::1]:49184 Closing
-[Mon Mar  9 11:14:31 2026] [::1]:57396 Accepted
-[Mon Mar  9 11:14:32 2026] [::1]:57396 [200]: POST /api/manage_officers.php
-[Mon Mar  9 11:14:32 2026] [::1]:57396 Closing
-[Mon Mar  9 11:14:33 2026] [::1]:57400 Accepted
-[Mon Mar  9 11:14:33 2026] [::1]:57400 [200]: GET /admin/manage_officers.php
-[Mon Mar  9 11:14:33 2026] [::1]:57400 Closing
-[Mon Mar  9 11:14:33 2026] [::1]:57406 Accepted
-[Mon Mar  9 11:14:33 2026] [::1]:57406 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:14:33 2026] [::1]:57406 Closing
-[Mon Mar  9 11:14:33 2026] [::1]:57420 Accepted
-[Mon Mar  9 11:14:33 2026] [::1]:57420 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:14:33 2026] [::1]:57420 Closing
-[Mon Mar  9 11:14:33 2026] [::1]:57428 Accepted
-[Mon Mar  9 11:14:33 2026] [::1]:57428 [302]: GET /favicon.ico
-[Mon Mar  9 11:14:33 2026] [::1]:57428 Closing
-[Mon Mar  9 11:14:33 2026] [::1]:57432 Accepted
-[Mon Mar  9 11:14:33 2026] [::1]:57432 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:14:33 2026] [::1]:57432 Closing
-[Mon Mar  9 11:14:37 2026] [::1]:57438 Accepted
-[Mon Mar  9 11:14:37 2026] [::1]:57438 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:14:37 2026] [::1]:57438 Closing
-[Mon Mar  9 11:14:37 2026] [::1]:57452 Accepted
-[Mon Mar  9 11:14:37 2026] [::1]:57452 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:14:37 2026] [::1]:57452 Closing
-[Mon Mar  9 11:14:37 2026] [::1]:57460 Accepted
-[Mon Mar  9 11:14:37 2026] [::1]:57460 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:14:37 2026] [::1]:57460 Closing
-[Mon Mar  9 11:14:37 2026] [::1]:57476 Accepted
-[Mon Mar  9 11:14:37 2026] [::1]:57476 [302]: GET /favicon.ico
-[Mon Mar  9 11:14:37 2026] [::1]:57476 Closing
-[Mon Mar  9 11:14:37 2026] [::1]:57480 Accepted
-[Mon Mar  9 11:14:37 2026] [::1]:57480 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:14:37 2026] [::1]:57480 Closing
-[Mon Mar  9 11:14:40 2026] [::1]:54642 Accepted
-[Mon Mar  9 11:14:40 2026] [::1]:54642 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:14:40 2026] [::1]:54642 Closing
-[Mon Mar  9 11:14:40 2026] [::1]:54652 Accepted
-[Mon Mar  9 11:14:40 2026] [::1]:54652 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:14:40 2026] [::1]:54652 Closing
-[Mon Mar  9 11:14:40 2026] [::1]:54656 Accepted
-[Mon Mar  9 11:14:40 2026] [::1]:54656 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:14:40 2026] [::1]:54656 Closing
-[Mon Mar  9 11:14:41 2026] [::1]:54660 Accepted
-[Mon Mar  9 11:14:41 2026] [::1]:54660 [302]: GET /favicon.ico
-[Mon Mar  9 11:14:41 2026] [::1]:54660 Closing
-[Mon Mar  9 11:14:41 2026] [::1]:54670 Accepted
-[Mon Mar  9 11:14:41 2026] [::1]:54670 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:14:41 2026] [::1]:54670 Closing
-[Mon Mar  9 11:15:00 2026] [::1]:55740 Accepted
-[Mon Mar  9 11:15:00 2026] [::1]:55740 [200]: POST /api/update_status.php
-[Mon Mar  9 11:15:00 2026] [::1]:55740 Closing
-[Mon Mar  9 11:15:01 2026] [::1]:39288 Accepted
-[Mon Mar  9 11:15:01 2026] [::1]:39288 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:15:01 2026] [::1]:39288 Closing
-[Mon Mar  9 11:15:01 2026] [::1]:39302 Accepted
-[Mon Mar  9 11:15:01 2026] [::1]:39302 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:15:01 2026] [::1]:39302 Closing
-[Mon Mar  9 11:15:01 2026] [::1]:39304 Accepted
-[Mon Mar  9 11:15:01 2026] [::1]:39304 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:15:01 2026] [::1]:39304 Closing
-[Mon Mar  9 11:15:01 2026] [::1]:39312 Accepted
-[Mon Mar  9 11:15:01 2026] [::1]:39312 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:01 2026] [::1]:39312 Closing
-[Mon Mar  9 11:15:01 2026] [::1]:39322 Accepted
-[Mon Mar  9 11:15:01 2026] [::1]:39322 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:15:01 2026] [::1]:39322 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39332 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39332 [302]: GET /logout.php
-[Mon Mar  9 11:15:10 2026] [::1]:39332 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39338 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39340 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39338 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:15:10 2026] [::1]:39338 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39340 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:15:10 2026] [::1]:39346 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39340 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39346 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:15:10 2026] [::1]:39346 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39362 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39362 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:10 2026] [::1]:39362 Closing
-[Mon Mar  9 11:15:10 2026] [::1]:39372 Accepted
-[Mon Mar  9 11:15:10 2026] [::1]:39372 [200]: GET /login.php
-[Mon Mar  9 11:15:10 2026] [::1]:39372 Closing
-[Mon Mar  9 11:15:15 2026] [::1]:42702 Accepted
-[Mon Mar  9 11:15:15 2026] [::1]:42702 [200]: GET /officer/officer_login.php
-[Mon Mar  9 11:15:15 2026] [::1]:42702 Closing
-[Mon Mar  9 11:15:15 2026] [::1]:42706 Accepted
-[Mon Mar  9 11:15:15 2026] [::1]:42706 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:15:15 2026] [::1]:42706 Closing
-[Mon Mar  9 11:15:15 2026] [::1]:42718 Accepted
-[Mon Mar  9 11:15:15 2026] [::1]:42718 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:15 2026] [::1]:42718 Closing
-[Mon Mar  9 11:15:15 2026] [::1]:42724 Accepted
-[Mon Mar  9 11:15:15 2026] [::1]:42724 [200]: GET /login.php
-[Mon Mar  9 11:15:15 2026] [::1]:42724 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56904 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56904 [302]: POST /officer/officer_login.php
-[Mon Mar  9 11:15:24 2026] [::1]:56904 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56908 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56908 [200]: GET /officer/officer_dashboard.php
-[Mon Mar  9 11:15:24 2026] [::1]:56908 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56910 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56924 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56910 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:15:24 2026] [::1]:56924 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:15:24 2026] [::1]:56910 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56924 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56926 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56926 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:24 2026] [::1]:56926 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56936 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56936 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:15:24 2026] [::1]:56936 Closing
-[Mon Mar  9 11:15:24 2026] [::1]:56944 Accepted
-[Mon Mar  9 11:15:24 2026] [::1]:56944 [200]: GET /login.php
-[Mon Mar  9 11:15:24 2026] [::1]:56944 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56956 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56956 [200]: GET /officer/my_assignments.php
-[Mon Mar  9 11:15:29 2026] [::1]:56956 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56962 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56962 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:15:29 2026] [::1]:56962 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56976 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56976 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:15:29 2026] [::1]:56976 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56982 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56982 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:29 2026] [::1]:56982 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56994 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56994 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:15:29 2026] [::1]:56994 Closing
-[Mon Mar  9 11:15:29 2026] [::1]:56996 Accepted
-[Mon Mar  9 11:15:29 2026] [::1]:56996 [200]: GET /login.php
-[Mon Mar  9 11:15:29 2026] [::1]:56996 Closing
-[Mon Mar  9 11:15:34 2026] [::1]:59270 Accepted
-[Mon Mar  9 11:15:34 2026] [::1]:59270 [200]: GET /uploads/complaints/complaint_69ae5d9a445e24.87944513.png
-[Mon Mar  9 11:15:34 2026] [::1]:59270 Closing
-[Mon Mar  9 11:15:34 2026] [::1]:59276 Accepted
-[Mon Mar  9 11:15:34 2026] [::1]:59278 Accepted
-[Mon Mar  9 11:15:34 2026] [::1]:59276 [302]: GET /favicon.ico
-[Mon Mar  9 11:15:34 2026] [::1]:59276 Closing
-[Mon Mar  9 11:15:34 2026] [::1]:59278 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:15:34 2026] [::1]:59278 Closing
-[Mon Mar  9 11:15:34 2026] [::1]:59294 Accepted
-[Mon Mar  9 11:15:34 2026] [::1]:59294 [200]: GET /login.php
-[Mon Mar  9 11:15:34 2026] [::1]:59294 Closing
-[Mon Mar  9 11:15:38 2026] [::1]:59302 Accepted
-[Mon Mar  9 11:15:38 2026] [::1]:59302 [200]: GET /uploads/complaints/complaint_69ae5d9a445e24.87944513.png
-[Mon Mar  9 11:15:38 2026] [::1]:59302 Closing
-[Mon Mar  9 11:16:17 2026] [::1]:56884 Accepted
-[Mon Mar  9 11:16:17 2026] [::1]:56884 [200]: GET /officer/officer_dashboard.php
-[Mon Mar  9 11:16:17 2026] [::1]:56884 Closing
-[Mon Mar  9 11:16:17 2026] [::1]:56898 Accepted
-[Mon Mar  9 11:16:18 2026] [::1]:56898 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:18 2026] [::1]:56898 Closing
-[Mon Mar  9 11:16:18 2026] [::1]:56906 Accepted
-[Mon Mar  9 11:16:18 2026] [::1]:56906 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:18 2026] [::1]:56906 Closing
-[Mon Mar  9 11:16:18 2026] [::1]:56908 Accepted
-[Mon Mar  9 11:16:18 2026] [::1]:56908 [302]: GET /favicon.ico
-[Mon Mar  9 11:16:18 2026] [::1]:56908 Closing
-[Mon Mar  9 11:16:18 2026] [::1]:56916 Accepted
-[Mon Mar  9 11:16:18 2026] [::1]:56916 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:16:18 2026] [::1]:56916 Closing
-[Mon Mar  9 11:16:18 2026] [::1]:56920 Accepted
-[Mon Mar  9 11:16:18 2026] [::1]:56920 [200]: GET /login.php
-[Mon Mar  9 11:16:18 2026] [::1]:56920 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52064 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52064 [200]: GET /officer/my_assignments.php
-[Mon Mar  9 11:16:24 2026] [::1]:52064 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52076 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52076 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:24 2026] [::1]:52076 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52080 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52080 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:24 2026] [::1]:52080 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52090 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52090 [302]: GET /favicon.ico
-[Mon Mar  9 11:16:24 2026] [::1]:52090 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52092 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52092 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:16:24 2026] [::1]:52092 Closing
-[Mon Mar  9 11:16:24 2026] [::1]:52098 Accepted
-[Mon Mar  9 11:16:24 2026] [::1]:52098 [200]: GET /login.php
-[Mon Mar  9 11:16:24 2026] [::1]:52098 Closing
-[Mon Mar  9 11:16:42 2026] [::1]:50616 Accepted
-[Mon Mar  9 11:16:42 2026] [::1]:50616 [200]: POST /api/update_status.php
-[Mon Mar  9 11:16:42 2026] [::1]:50616 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50624 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50624 [200]: GET /officer/my_assignments.php
-[Mon Mar  9 11:16:43 2026] [::1]:50624 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50628 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50628 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:43 2026] [::1]:50634 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50628 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50634 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:43 2026] [::1]:50634 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50636 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50636 [302]: GET /favicon.ico
-[Mon Mar  9 11:16:43 2026] [::1]:50636 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50652 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50652 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:16:43 2026] [::1]:50652 Closing
-[Mon Mar  9 11:16:43 2026] [::1]:50656 Accepted
-[Mon Mar  9 11:16:43 2026] [::1]:50656 [200]: GET /login.php
-[Mon Mar  9 11:16:43 2026] [::1]:50656 Closing
-[Mon Mar  9 11:16:45 2026] [::1]:50664 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50664 [302]: GET /logout.php
-[Mon Mar  9 11:16:46 2026] [::1]:50664 Closing
-[Mon Mar  9 11:16:46 2026] [::1]:50670 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50670 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:16:46 2026] [::1]:50670 Closing
-[Mon Mar  9 11:16:46 2026] [::1]:50678 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50678 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:46 2026] [::1]:50678 Closing
-[Mon Mar  9 11:16:46 2026] [::1]:50686 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50686 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:46 2026] [::1]:50686 Closing
-[Mon Mar  9 11:16:46 2026] [::1]:50690 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50690 [302]: GET /favicon.ico
-[Mon Mar  9 11:16:46 2026] [::1]:50690 Closing
-[Mon Mar  9 11:16:46 2026] [::1]:50700 Accepted
-[Mon Mar  9 11:16:46 2026] [::1]:50700 [200]: GET /login.php
-[Mon Mar  9 11:16:46 2026] [::1]:50700 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52154 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52154 [302]: POST /api/login.php
-[Mon Mar  9 11:16:57 2026] [::1]:52154 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52164 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52164 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:16:57 2026] [::1]:52164 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52166 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52166 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:57 2026] [::1]:52166 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52170 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52170 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:57 2026] [::1]:52170 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52176 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52176 [302]: GET /favicon.ico
-[Mon Mar  9 11:16:57 2026] [::1]:52176 Closing
-[Mon Mar  9 11:16:57 2026] [::1]:52190 Accepted
-[Mon Mar  9 11:16:57 2026] [::1]:52190 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:16:57 2026] [::1]:52190 Closing
-[Mon Mar  9 11:16:59 2026] [::1]:52196 Accepted
-[Mon Mar  9 11:16:59 2026] [::1]:52196 [200]: GET /user/submit_complaint.php
-[Mon Mar  9 11:16:59 2026] [::1]:52196 Closing
-[Mon Mar  9 11:16:59 2026] [::1]:52200 Accepted
-[Mon Mar  9 11:16:59 2026] [::1]:52204 Accepted
-[Mon Mar  9 11:16:59 2026] [::1]:52200 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:16:59 2026] [::1]:52200 Closing
-[Mon Mar  9 11:16:59 2026] [::1]:52204 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:16:59 2026] [::1]:52204 Closing
-[Mon Mar  9 11:17:00 2026] [::1]:52214 Accepted
-[Mon Mar  9 11:17:00 2026] [::1]:52214 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:00 2026] [::1]:52214 Closing
-[Mon Mar  9 11:17:00 2026] [::1]:52222 Accepted
-[Mon Mar  9 11:17:00 2026] [::1]:52222 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:17:00 2026] [::1]:52222 Closing
-[Mon Mar  9 11:17:00 2026] [::1]:54726 Accepted
-[Mon Mar  9 11:17:00 2026] [::1]:54726 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:17:00 2026] [::1]:54726 Closing
-[Mon Mar  9 11:17:00 2026] [::1]:54738 Accepted
-[Mon Mar  9 11:17:00 2026] [::1]:54738 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:00 2026] [::1]:54738 Closing
-[Mon Mar  9 11:17:00 2026] [::1]:54754 Accepted
-[Mon Mar  9 11:17:00 2026] [::1]:54754 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:00 2026] [::1]:54754 Closing
-[Mon Mar  9 11:17:01 2026] [::1]:54764 Accepted
-[Mon Mar  9 11:17:01 2026] [::1]:54764 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:01 2026] [::1]:54764 Closing
-[Mon Mar  9 11:17:01 2026] [::1]:54780 Accepted
-[Mon Mar  9 11:17:01 2026] [::1]:54780 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:17:01 2026] [::1]:54780 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53780 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53780 [302]: GET /logout.php
-[Mon Mar  9 11:17:17 2026] [::1]:53780 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53796 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53806 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53796 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:17:17 2026] [::1]:53796 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53806 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:17 2026] [::1]:53806 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53812 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53812 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:17 2026] [::1]:53812 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53826 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53826 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:17 2026] [::1]:53826 Closing
-[Mon Mar  9 11:17:17 2026] [::1]:53836 Accepted
-[Mon Mar  9 11:17:17 2026] [::1]:53836 [200]: GET /login.php
-[Mon Mar  9 11:17:17 2026] [::1]:53836 Closing
-[Mon Mar  9 11:17:20 2026] [::1]:53842 Accepted
-[Mon Mar  9 11:17:20 2026] [::1]:53842 [200]: GET /officer/officer_login.php
-[Mon Mar  9 11:17:20 2026] [::1]:53842 Closing
-[Mon Mar  9 11:17:20 2026] [::1]:53848 Accepted
-[Mon Mar  9 11:17:20 2026] [::1]:53854 Accepted
-[Mon Mar  9 11:17:20 2026] [::1]:53848 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:20 2026] [::1]:53848 Closing
-[Mon Mar  9 11:17:20 2026] [::1]:53854 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:20 2026] [::1]:53854 Closing
-[Mon Mar  9 11:17:20 2026] [::1]:53858 Accepted
-[Mon Mar  9 11:17:20 2026] [::1]:53858 [200]: GET /login.php
-[Mon Mar  9 11:17:20 2026] [::1]:53858 Closing
-[Mon Mar  9 11:17:27 2026] [::1]:58054 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58054 [302]: POST /officer/officer_login.php
-[Mon Mar  9 11:17:28 2026] [::1]:58054 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58058 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58058 [200]: GET /officer/officer_dashboard.php
-[Mon Mar  9 11:17:28 2026] [::1]:58058 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58066 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58072 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58066 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:28 2026] [::1]:58066 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58072 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:28 2026] [::1]:58072 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58074 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58074 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:28 2026] [::1]:58074 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58080 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58080 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:17:28 2026] [::1]:58080 Closing
-[Mon Mar  9 11:17:28 2026] [::1]:58090 Accepted
-[Mon Mar  9 11:17:28 2026] [::1]:58090 [200]: GET /login.php
-[Mon Mar  9 11:17:28 2026] [::1]:58090 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58900 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58900 [200]: GET /officer/my_assignments.php
-[Mon Mar  9 11:17:31 2026] [::1]:58900 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58910 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58910 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:31 2026] [::1]:58910 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58918 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58918 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:31 2026] [::1]:58918 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58926 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58926 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:31 2026] [::1]:58926 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58934 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58934 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:17:31 2026] [::1]:58934 Closing
-[Mon Mar  9 11:17:31 2026] [::1]:58936 Accepted
-[Mon Mar  9 11:17:31 2026] [::1]:58936 [200]: GET /login.php
-[Mon Mar  9 11:17:31 2026] [::1]:58936 Closing
-[Mon Mar  9 11:17:48 2026] [::1]:43656 Accepted
-[Mon Mar  9 11:17:48 2026] [::1]:43656 [200]: POST /api/update_status.php
-[Mon Mar  9 11:17:48 2026] [::1]:43656 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43668 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43668 [200]: GET /officer/my_assignments.php
-[Mon Mar  9 11:17:49 2026] [::1]:43668 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43678 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43678 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:49 2026] [::1]:43678 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43682 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43682 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:49 2026] [::1]:43682 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43692 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43692 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:49 2026] [::1]:43692 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43700 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43700 [302]: GET /user/dashboard.php
-[Mon Mar  9 11:17:49 2026] [::1]:43700 Closing
-[Mon Mar  9 11:17:49 2026] [::1]:43704 Accepted
-[Mon Mar  9 11:17:49 2026] [::1]:43704 [200]: GET /login.php
-[Mon Mar  9 11:17:49 2026] [::1]:43704 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58722 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58722 [302]: GET /logout.php
-[Mon Mar  9 11:17:53 2026] [::1]:58722 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58738 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58742 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58738 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:17:53 2026] [::1]:58738 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58742 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:17:53 2026] [::1]:58742 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58746 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58746 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:17:53 2026] [::1]:58746 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58762 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58762 [302]: GET /favicon.ico
-[Mon Mar  9 11:17:53 2026] [::1]:58762 Closing
-[Mon Mar  9 11:17:53 2026] [::1]:58774 Accepted
-[Mon Mar  9 11:17:53 2026] [::1]:58774 [200]: GET /login.php
-[Mon Mar  9 11:17:53 2026] [::1]:58774 Closing
-[Mon Mar  9 11:18:05 2026] [::1]:38784 Accepted
-[Mon Mar  9 11:18:05 2026] [::1]:38784 [302]: POST /api/login.php
-[Mon Mar  9 11:18:05 2026] [::1]:38784 Closing
-[Mon Mar  9 11:18:05 2026] [::1]:38788 Accepted
-[Mon Mar  9 11:18:05 2026] [::1]:38788 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:18:05 2026] [::1]:38788 Closing
-[Mon Mar  9 11:18:05 2026] [::1]:38796 Accepted
-[Mon Mar  9 11:18:05 2026] [::1]:38796 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:05 2026] [::1]:38802 Accepted
-[Mon Mar  9 11:18:05 2026] [::1]:38802 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:18:05 2026] [::1]:38796 Closing
-[Mon Mar  9 11:18:05 2026] [::1]:38802 Closing
-[Mon Mar  9 11:18:06 2026] [::1]:38818 Accepted
-[Mon Mar  9 11:18:06 2026] [::1]:38818 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:06 2026] [::1]:38818 Closing
-[Mon Mar  9 11:18:06 2026] [::1]:38820 Accepted
-[Mon Mar  9 11:18:06 2026] [::1]:38820 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:18:06 2026] [::1]:38820 Closing
-[Mon Mar  9 11:18:07 2026] [::1]:38832 Accepted
-[Mon Mar  9 11:18:07 2026] [::1]:38832 [200]: GET /user/my_complaints.php
-[Mon Mar  9 11:18:07 2026] [::1]:38832 Closing
-[Mon Mar  9 11:18:07 2026] [::1]:38842 Accepted
-[Mon Mar  9 11:18:07 2026] [::1]:38844 Accepted
-[Mon Mar  9 11:18:07 2026] [::1]:38842 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:07 2026] [::1]:38842 Closing
-[Mon Mar  9 11:18:07 2026] [::1]:38844 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:18:07 2026] [::1]:38844 Closing
-[Mon Mar  9 11:18:08 2026] [::1]:38856 Accepted
-[Mon Mar  9 11:18:08 2026] [::1]:38856 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:08 2026] [::1]:38856 Closing
-[Mon Mar  9 11:18:08 2026] [::1]:38866 Accepted
-[Mon Mar  9 11:18:08 2026] [::1]:38866 [200]: GET /user/dashboard.php
-[Mon Mar  9 11:18:08 2026] [::1]:38866 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44254 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44254 [302]: GET /logout.php
-[Mon Mar  9 11:18:39 2026] [::1]:44254 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44256 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44256 [200]: GET /login.php?logout=1
-[Mon Mar  9 11:18:39 2026] [::1]:44256 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44260 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44264 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44260 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:39 2026] [::1]:44260 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44264 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:18:39 2026] [::1]:44264 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44266 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44266 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:39 2026] [::1]:44266 Closing
-[Mon Mar  9 11:18:39 2026] [::1]:44280 Accepted
-[Mon Mar  9 11:18:39 2026] [::1]:44280 [200]: GET /login.php
-[Mon Mar  9 11:18:39 2026] [::1]:44280 Closing
-[Mon Mar  9 11:18:42 2026] [::1]:37596 Accepted
-[Mon Mar  9 11:18:42 2026] [::1]:37596 [200]: GET /admin/admin_login.php
-[Mon Mar  9 11:18:42 2026] [::1]:37596 Closing
-[Mon Mar  9 11:18:42 2026] [::1]:37606 Accepted
-[Mon Mar  9 11:18:42 2026] [::1]:37622 Accepted
-[Mon Mar  9 11:18:42 2026] [::1]:37606 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:42 2026] [::1]:37606 Closing
-[Mon Mar  9 11:18:42 2026] [::1]:37622 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:42 2026] [::1]:37622 Closing
-[Mon Mar  9 11:18:42 2026] [::1]:37638 Accepted
-[Mon Mar  9 11:18:42 2026] [::1]:37638 [200]: GET /login.php
-[Mon Mar  9 11:18:42 2026] [::1]:37638 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37640 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37640 [302]: POST /admin/admin_login.php
-[Mon Mar  9 11:18:49 2026] [::1]:37640 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37646 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37646 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:18:49 2026] [::1]:37646 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37660 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37674 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37660 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:49 2026] [::1]:37674 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:18:49 2026] [::1]:37660 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37674 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37686 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37686 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:49 2026] [::1]:37686 Closing
-[Mon Mar  9 11:18:49 2026] [::1]:37690 Accepted
-[Mon Mar  9 11:18:49 2026] [::1]:37690 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:18:49 2026] [::1]:37690 Closing
-[Mon Mar  9 11:18:52 2026] [::1]:53636 Accepted
-[Mon Mar  9 11:18:52 2026] [::1]:53636 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:18:52 2026] [::1]:53636 Closing
-[Mon Mar  9 11:18:52 2026] [::1]:53640 Accepted
-[Mon Mar  9 11:18:52 2026] [::1]:53640 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:18:52 2026] [::1]:53640 Closing
-[Mon Mar  9 11:18:52 2026] [::1]:53646 Accepted
-[Mon Mar  9 11:18:52 2026] [::1]:53646 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:18:52 2026] [::1]:53646 Closing
-[Mon Mar  9 11:18:53 2026] [::1]:53648 Accepted
-[Mon Mar  9 11:18:53 2026] [::1]:53648 [302]: GET /favicon.ico
-[Mon Mar  9 11:18:53 2026] [::1]:53648 Closing
-[Mon Mar  9 11:18:53 2026] [::1]:53650 Accepted
-[Mon Mar  9 11:18:53 2026] [::1]:53650 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:18:53 2026] [::1]:53650 Closing
-[Mon Mar  9 11:19:00 2026] [::1]:53658 Accepted
-[Mon Mar  9 11:19:00 2026] [::1]:53658 [200]: POST /api/update_status.php
-[Mon Mar  9 11:19:00 2026] [::1]:53658 Closing
-[Mon Mar  9 11:19:01 2026] [::1]:59830 Accepted
-[Mon Mar  9 11:19:01 2026] [::1]:59830 [200]: GET /admin/manage_complaints.php
-[Mon Mar  9 11:19:01 2026] [::1]:59830 Closing
-[Mon Mar  9 11:19:01 2026] [::1]:59846 Accepted
-[Mon Mar  9 11:19:01 2026] [::1]:59846 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:19:01 2026] [::1]:59846 Closing
-[Mon Mar  9 11:19:01 2026] [::1]:59852 Accepted
-[Mon Mar  9 11:19:01 2026] [::1]:59852 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:19:01 2026] [::1]:59852 Closing
-[Mon Mar  9 11:19:01 2026] [::1]:59868 Accepted
-[Mon Mar  9 11:19:01 2026] [::1]:59868 [302]: GET /favicon.ico
-[Mon Mar  9 11:19:01 2026] [::1]:59868 Closing
-[Mon Mar  9 11:19:01 2026] [::1]:59870 Accepted
-[Mon Mar  9 11:19:01 2026] [::1]:59870 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:01 2026] [::1]:59870 Closing
-[Mon Mar  9 11:19:06 2026] [::1]:59886 Accepted
-[Mon Mar  9 11:19:06 2026] [::1]:59886 [200]: GET /admin/manage_officers.php
-[Mon Mar  9 11:19:06 2026] [::1]:59886 Closing
-[Mon Mar  9 11:19:06 2026] [::1]:59900 Accepted
-[Mon Mar  9 11:19:06 2026] [::1]:59900 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:19:06 2026] [::1]:59900 Closing
-[Mon Mar  9 11:19:06 2026] [::1]:59912 Accepted
-[Mon Mar  9 11:19:06 2026] [::1]:59912 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:19:06 2026] [::1]:59912 Closing
-[Mon Mar  9 11:19:06 2026] [::1]:59918 Accepted
-[Mon Mar  9 11:19:06 2026] [::1]:59918 [302]: GET /favicon.ico
-[Mon Mar  9 11:19:06 2026] [::1]:59918 Closing
-[Mon Mar  9 11:19:06 2026] [::1]:59932 Accepted
-[Mon Mar  9 11:19:06 2026] [::1]:59932 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:06 2026] [::1]:59932 Closing
-[Mon Mar  9 11:19:31 2026] [::1]:44168 Accepted
-[Mon Mar  9 11:19:31 2026] [::1]:44168 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:31 2026] [::1]:44168 Closing
-[Mon Mar  9 11:19:31 2026] [::1]:44178 Accepted
-[Mon Mar  9 11:19:31 2026] [::1]:44178 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:19:31 2026] [::1]:44178 Closing
-[Mon Mar  9 11:19:31 2026] [::1]:44194 Accepted
-[Mon Mar  9 11:19:31 2026] [::1]:44194 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:19:31 2026] [::1]:44194 Closing
-[Mon Mar  9 11:19:31 2026] [::1]:44206 Accepted
-[Mon Mar  9 11:19:31 2026] [::1]:44206 [302]: GET /favicon.ico
-[Mon Mar  9 11:19:31 2026] [::1]:44206 Closing
-[Mon Mar  9 11:19:31 2026] [::1]:44218 Accepted
-[Mon Mar  9 11:19:31 2026] [::1]:44218 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:31 2026] [::1]:44218 Closing
-[Mon Mar  9 11:19:37 2026] [::1]:44222 Accepted
-[Mon Mar  9 11:19:37 2026] [::1]:44222 [200]: GET /admin/manage_users.php
-[Mon Mar  9 11:19:37 2026] [::1]:44222 Closing
-[Mon Mar  9 11:19:37 2026] [::1]:44230 Accepted
-[Mon Mar  9 11:19:37 2026] [::1]:44230 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:19:37 2026] [::1]:44230 Closing
-[Mon Mar  9 11:19:37 2026] [::1]:44242 Accepted
-[Mon Mar  9 11:19:37 2026] [::1]:44242 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:19:37 2026] [::1]:44242 Closing
-[Mon Mar  9 11:19:38 2026] [::1]:44254 Accepted
-[Mon Mar  9 11:19:38 2026] [::1]:44254 [302]: GET /favicon.ico
-[Mon Mar  9 11:19:38 2026] [::1]:44254 Closing
-[Mon Mar  9 11:19:38 2026] [::1]:44256 Accepted
-[Mon Mar  9 11:19:38 2026] [::1]:44256 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:38 2026] [::1]:44256 Closing
-[Mon Mar  9 11:19:55 2026] [::1]:33290 Accepted
-[Mon Mar  9 11:19:55 2026] [::1]:33290 [200]: GET /admin/manage_complaints.php?user_id=69ae5d3e3aa9e144f109a444
-[Mon Mar  9 11:19:55 2026] [::1]:33290 Closing
-[Mon Mar  9 11:19:55 2026] [::1]:33306 Accepted
-[Mon Mar  9 11:19:55 2026] [::1]:33306 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:19:55 2026] [::1]:33306 Closing
-[Mon Mar  9 11:19:55 2026] [::1]:33320 Accepted
-[Mon Mar  9 11:19:55 2026] [::1]:33320 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:19:55 2026] [::1]:33320 Closing
-[Mon Mar  9 11:19:55 2026] [::1]:33336 Accepted
-[Mon Mar  9 11:19:55 2026] [::1]:33336 [302]: GET /favicon.ico
-[Mon Mar  9 11:19:55 2026] [::1]:33336 Closing
-[Mon Mar  9 11:19:55 2026] [::1]:33352 Accepted
-[Mon Mar  9 11:19:55 2026] [::1]:33352 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:19:55 2026] [::1]:33352 Closing
-[Mon Mar  9 11:20:08 2026] [::1]:57626 Accepted
-[Mon Mar  9 11:20:08 2026] [::1]:57626 [200]: GET /uploads/complaints/complaint_69ae5d9a445e24.87944513.png
-[Mon Mar  9 11:20:08 2026] [::1]:57626 Closing
-[Mon Mar  9 11:20:36 2026] [::1]:55628 Accepted
-[Mon Mar  9 11:20:36 2026] [::1]:55628 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:20:36 2026] [::1]:55628 Closing
-[Mon Mar  9 11:20:36 2026] [::1]:55642 Accepted
-[Mon Mar  9 11:20:36 2026] [::1]:55642 [200]: GET /assets/css/style.css
-[Mon Mar  9 11:20:36 2026] [::1]:55642 Closing
-[Mon Mar  9 11:20:36 2026] [::1]:55656 Accepted
-[Mon Mar  9 11:20:36 2026] [::1]:55656 [200]: GET /assets/js/main.js
-[Mon Mar  9 11:20:36 2026] [::1]:55656 Closing
-[Mon Mar  9 11:20:36 2026] [::1]:55666 Accepted
-[Mon Mar  9 11:20:36 2026] [::1]:55666 [302]: GET /favicon.ico
-[Mon Mar  9 11:20:36 2026] [::1]:55666 Closing
-[Mon Mar  9 11:20:36 2026] [::1]:55682 Accepted
-[Mon Mar  9 11:20:36 2026] [::1]:55682 [200]: GET /admin/admin_dashboard.php
-[Mon Mar  9 11:20:36 2026] [::1]:55682 Closing
+[Mon Mar  9 16:09:00 2026] PHP 8.4.16 Development Server (http://localhost:8000) started
+[Mon Mar  9 16:09:35 2026] [::1]:58532 Accepted
+[Mon Mar  9 16:09:35 2026] [::1]:58532 [200]: GET /FRONT-END/login.html
+[Mon Mar  9 16:09:35 2026] [::1]:58532 Closing
+[Mon Mar  9 16:09:35 2026] [::1]:58548 Accepted
+[Mon Mar  9 16:09:35 2026] [::1]:58552 Accepted
+[Mon Mar  9 16:09:35 2026] [::1]:58548 [200]: GET /FRONT-END/assets/css/style.css
+[Mon Mar  9 16:09:35 2026] [::1]:58548 Closing
+[Mon Mar  9 16:09:35 2026] [::1]:58552 [200]: GET /FRONT-END/assets/css/landing.css
+[Mon Mar  9 16:09:35 2026] [::1]:58552 Closing
+[Mon Mar  9 16:09:35 2026] [::1]:58556 Accepted
+[Mon Mar  9 16:09:35 2026] [::1]:58556 [200]: GET /favicon.ico
+[Mon Mar  9 16:09:35 2026] [::1]:58556 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58568 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58568 [200]: GET /FRONT-END/login.html
+[Mon Mar  9 16:09:36 2026] [::1]:58568 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58576 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58576 [200]: GET /FRONT-END/assets/css/style.css
+[Mon Mar  9 16:09:36 2026] [::1]:58576 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58586 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58586 [200]: GET /FRONT-END/assets/css/landing.css
+[Mon Mar  9 16:09:36 2026] [::1]:58586 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58596 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58596 [200]: GET /favicon.ico
+[Mon Mar  9 16:09:36 2026] [::1]:58596 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58610 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58610 [200]: GET /FRONT-END/login.html
+[Mon Mar  9 16:09:36 2026] [::1]:58610 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58618 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58622 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58618 [200]: GET /FRONT-END/assets/css/style.css
+[Mon Mar  9 16:09:36 2026] [::1]:58618 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58622 [200]: GET /FRONT-END/assets/css/landing.css
+[Mon Mar  9 16:09:36 2026] [::1]:58622 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58628 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58628 [200]: GET /favicon.ico
+[Mon Mar  9 16:09:36 2026] [::1]:58628 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58630 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58630 [200]: GET /FRONT-END/login.html
+[Mon Mar  9 16:09:36 2026] [::1]:58630 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58640 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58644 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58640 [200]: GET /FRONT-END/assets/css/style.css
+[Mon Mar  9 16:09:36 2026] [::1]:58640 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58644 [200]: GET /FRONT-END/assets/css/landing.css
+[Mon Mar  9 16:09:36 2026] [::1]:58644 Closing
+[Mon Mar  9 16:09:36 2026] [::1]:58646 Accepted
+[Mon Mar  9 16:09:36 2026] [::1]:58646 [200]: GET /favicon.ico
+[Mon Mar  9 16:09:36 2026] [::1]:58646 Closing
+[Mon Mar  9 16:16:08 2026] [::1]:48752 Accepted
+[Mon Mar  9 16:16:08 2026] [::1]:48752 [200]: GET /
+[Mon Mar  9 16:16:08 2026] [::1]:48752 Closing
+[Mon Mar  9 16:16:08 2026] [::1]:48764 Accepted
+[Mon Mar  9 16:16:08 2026] [::1]:48774 Accepted
+[Mon Mar  9 16:16:08 2026] [::1]:48764 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:16:08 2026] [::1]:48774 [200]: GET /assets/css/landing.css
+[Mon Mar  9 16:16:08 2026] [::1]:48764 Closing
+[Mon Mar  9 16:16:08 2026] [::1]:48774 Closing
+[Mon Mar  9 16:16:08 2026] [::1]:48776 Accepted
+[Mon Mar  9 16:16:08 2026] [::1]:48776 [200]: GET /favicon.ico
+[Mon Mar  9 16:16:08 2026] [::1]:48776 Closing
+[Mon Mar  9 16:16:19 2026] [::1]:36500 Accepted
+[Mon Mar  9 16:16:20 2026] [::1]:36500 [200]: GET /login.php
+[Mon Mar  9 16:16:20 2026] [::1]:36500 Closing
+[Mon Mar  9 16:16:20 2026] [::1]:36510 Accepted
+[Mon Mar  9 16:16:20 2026] [::1]:36510 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:16:20 2026] [::1]:36510 Closing
+[Mon Mar  9 16:16:20 2026] [::1]:36518 Accepted
+[Mon Mar  9 16:16:20 2026] [::1]:36518 [200]: GET /assets/js/main.js
+[Mon Mar  9 16:16:20 2026] [::1]:36518 Closing
+[Mon Mar  9 16:16:20 2026] [::1]:36522 Accepted
+[Mon Mar  9 16:16:20 2026] [::1]:36522 [200]: GET /favicon.ico
+[Mon Mar  9 16:16:20 2026] [::1]:36522 Closing
+[Mon Mar  9 16:16:22 2026] [::1]:56460 Accepted
+[Mon Mar  9 16:16:22 2026] [::1]:56460 [200]: GET /
+[Mon Mar  9 16:16:22 2026] [::1]:56460 Closing
+[Mon Mar  9 16:16:22 2026] [::1]:56462 Accepted
+[Mon Mar  9 16:16:22 2026] [::1]:56468 Accepted
+[Mon Mar  9 16:16:22 2026] [::1]:56462 [200]: GET /favicon.ico
+[Mon Mar  9 16:16:22 2026] [::1]:56462 Closing
+[Mon Mar  9 16:16:26 2026] [::1]:56468 [200]: GET /register.php
+[Mon Mar  9 16:16:26 2026] [::1]:56468 Closing
+[Mon Mar  9 16:16:26 2026] [::1]:56472 Accepted
+[Mon Mar  9 16:16:26 2026] [::1]:56472 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:16:26 2026] [::1]:56472 Closing
+[Mon Mar  9 16:16:26 2026] [::1]:56486 Accepted
+[Mon Mar  9 16:16:26 2026] [::1]:56486 [200]: GET /assets/js/main.js
+[Mon Mar  9 16:16:26 2026] [::1]:56486 Closing
+[Mon Mar  9 16:16:26 2026] [::1]:56494 Accepted
+[Mon Mar  9 16:16:26 2026] [::1]:56494 [200]: GET /favicon.ico
+[Mon Mar  9 16:16:26 2026] [::1]:56494 Closing
+[Mon Mar  9 16:16:28 2026] [::1]:56506 Accepted
+[Mon Mar  9 16:16:28 2026] [::1]:56506 [200]: GET /
+[Mon Mar  9 16:16:28 2026] [::1]:56506 Closing
+[Mon Mar  9 16:16:28 2026] [::1]:56508 Accepted
+[Mon Mar  9 16:16:28 2026] [::1]:56512 Accepted
+[Mon Mar  9 16:16:28 2026] [::1]:56508 [200]: GET /favicon.ico
+[Mon Mar  9 16:16:28 2026] [::1]:56508 Closing
+[Mon Mar  9 16:21:08 2026] [::1]:56512 Closed without sending a request; it was probably just an unused speculative preconnection
+[Mon Mar  9 16:21:08 2026] [::1]:56512 Closing
+[Mon Mar  9 16:24:37 2026] [::1]:51510 Accepted
+[Mon Mar  9 16:24:37 2026] [::1]:51510 [200]: GET /
+[Mon Mar  9 16:24:37 2026] [::1]:51510 Closing
+[Mon Mar  9 16:24:37 2026] [::1]:51514 Accepted
+[Mon Mar  9 16:24:37 2026] [::1]:51522 Accepted
+[Mon Mar  9 16:24:37 2026] [::1]:51514 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:24:37 2026] [::1]:51514 Closing
+[Mon Mar  9 16:24:37 2026] [::1]:51522 [200]: GET /assets/css/landing.css
+[Mon Mar  9 16:24:37 2026] [::1]:51522 Closing
+[Mon Mar  9 16:24:37 2026] [::1]:51538 Accepted
+[Mon Mar  9 16:24:37 2026] [::1]:51538 [200]: GET /favicon.ico
+[Mon Mar  9 16:24:37 2026] [::1]:51538 Closing
+[Mon Mar  9 16:24:42 2026] [::1]:46598 Accepted
+[Mon Mar  9 16:24:42 2026] [::1]:46598 [200]: GET /login.php
+[Mon Mar  9 16:24:42 2026] [::1]:46598 Closing
+[Mon Mar  9 16:24:42 2026] [::1]:46604 Accepted
+[Mon Mar  9 16:24:42 2026] [::1]:46604 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:24:42 2026] [::1]:46604 Closing
+[Mon Mar  9 16:24:42 2026] [::1]:46618 Accepted
+[Mon Mar  9 16:24:42 2026] [::1]:46618 [200]: GET /assets/js/main.js
+[Mon Mar  9 16:24:42 2026] [::1]:46618 Closing
+[Mon Mar  9 16:24:42 2026] [::1]:46624 Accepted
+[Mon Mar  9 16:24:42 2026] [::1]:46624 [200]: GET /favicon.ico
+[Mon Mar  9 16:24:42 2026] [::1]:46624 Closing
+[Mon Mar  9 16:24:44 2026] [::1]:46632 Accepted
+[Mon Mar  9 16:24:44 2026] [::1]:46632 [200]: GET /admin/admin_login.php
+[Mon Mar  9 16:24:44 2026] [::1]:46632 Closing
+[Mon Mar  9 16:24:44 2026] [::1]:46638 Accepted
+[Mon Mar  9 16:24:44 2026] [::1]:46638 [200]: GET /assets/css/style.css
+[Mon Mar  9 16:24:44 2026] [::1]:46638 Closing
+[Mon Mar  9 16:24:44 2026] [::1]:46648 Accepted
+[Mon Mar  9 16:24:44 2026] [::1]:46648 [200]: GET /favicon.ico
+[Mon Mar  9 16:24:44 2026] [::1]:46648 Closing
+[Mon Mar  9 16:24:59 2026] [::1]:36296 Accepted
+[Mon Mar  9 16:24:59 2026] PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/admin/admin_login.php(26): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 16:24:59 2026] [::1]:36296 [500]: POST /admin/admin_login.php - Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/admin/admin_login.php(26): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 16:24:59 2026] [::1]:36296 Closing
+[Mon Mar  9 16:24:59 2026] [::1]:36302 Accepted
+[Mon Mar  9 16:27:08 2026] [::1]:36302 Closed without sending a request; it was probably just an unused speculative preconnection
+[Mon Mar  9 16:27:08 2026] [::1]:36302 Closing
+[Mon Mar  9 22:09:26 2026] [::1]:36874 Accepted
+[Mon Mar  9 22:09:26 2026] [::1]:36874 [302]: GET /user/submit_complaint.php
+[Mon Mar  9 22:09:26 2026] [::1]:36874 Closing
+[Mon Mar  9 22:09:26 2026] [::1]:36880 Accepted
+[Mon Mar  9 22:09:26 2026] [::1]:36880 [200]: GET /login.php
+[Mon Mar  9 22:09:26 2026] [::1]:36880 Closing
+[Mon Mar  9 22:09:26 2026] [::1]:36882 Accepted
+[Mon Mar  9 22:09:26 2026] [::1]:36882 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:09:26 2026] [::1]:36884 Accepted
+[Mon Mar  9 22:09:26 2026] [::1]:36882 Closing
+[Mon Mar  9 22:09:26 2026] [::1]:36884 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:09:26 2026] [::1]:36884 Closing
+[Mon Mar  9 22:09:50 2026] [::1]:47408 Accepted
+[Mon Mar  9 22:09:50 2026] PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/api/login.php(30): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 22:09:50 2026] [::1]:47408 [500]: POST /api/login.php - Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/api/login.php(30): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 22:09:50 2026] [::1]:47408 Closing
+[Mon Mar  9 22:10:04 2026] [::1]:43576 Accepted
+[Mon Mar  9 22:10:04 2026] PHP Fatal error:  Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/api/login.php(30): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 22:10:04 2026] [::1]:43576 [500]: POST /api/login.php - Uncaught MongoDB\Driver\Exception\ConnectionTimeoutException: No servers yet eligible for rescan. Topology type: Single in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php:600
+Stack trace:
+#0 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php(600): MongoDB\Driver\Manager->selectServer()
+#1 /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/Collection.php(676): MongoDB\select_server()
+#2 /home/ismail/Desktop/antigraviti/civictrack/api/login.php(30): MongoDB\Collection->findOne()
+#3 {main}
+  thrown in /home/ismail/Desktop/antigraviti/civictrack/vendor/mongodb/mongodb/src/functions.php on line 600
+[Mon Mar  9 22:10:04 2026] [::1]:43576 Closing
+[Mon Mar  9 22:11:28 2026] [::1]:55712 Accepted
+[Mon Mar  9 22:11:28 2026] [::1]:55712 [200]: GET /index.php
+[Mon Mar  9 22:11:28 2026] [::1]:55712 Closing
+[Mon Mar  9 22:11:28 2026] [::1]:55724 Accepted
+[Mon Mar  9 22:11:28 2026] [::1]:55740 Accepted
+[Mon Mar  9 22:11:28 2026] [::1]:55724 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:11:28 2026] [::1]:55740 [200]: GET /assets/css/landing.css
+[Mon Mar  9 22:11:28 2026] [::1]:55724 Closing
+[Mon Mar  9 22:11:28 2026] [::1]:55740 Closing
+[Mon Mar  9 22:11:29 2026] [::1]:55752 Accepted
+[Mon Mar  9 22:11:29 2026] [::1]:55752 [200]: GET /assets/images/formal-hero.png
+[Mon Mar  9 22:11:29 2026] [::1]:55752 Closing
+[Mon Mar  9 22:11:29 2026] [::1]:55766 Accepted
+[Mon Mar  9 22:11:29 2026] [::1]:55766 [200]: GET /favicon.ico
+[Mon Mar  9 22:11:29 2026] [::1]:55766 Closing
+[Mon Mar  9 22:12:02 2026] [::1]:60682 Accepted
+[Mon Mar  9 22:12:02 2026] [::1]:60682 [200]: GET /login.php
+[Mon Mar  9 22:12:02 2026] [::1]:60682 Closing
+[Mon Mar  9 22:12:02 2026] [::1]:60698 Accepted
+[Mon Mar  9 22:12:02 2026] [::1]:60706 Accepted
+[Mon Mar  9 22:12:02 2026] [::1]:60698 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:12:02 2026] [::1]:60698 Closing
+[Mon Mar  9 22:12:02 2026] [::1]:60706 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:12:02 2026] [::1]:60706 Closing
+[Mon Mar  9 22:12:02 2026] [::1]:60720 Accepted
+[Mon Mar  9 22:12:02 2026] [::1]:60720 [200]: GET /favicon.ico
+[Mon Mar  9 22:12:02 2026] [::1]:60720 Closing
+[Mon Mar  9 22:12:09 2026] [::1]:60724 Accepted
+[Mon Mar  9 22:12:09 2026] [::1]:60724 [200]: GET /index.php
+[Mon Mar  9 22:12:09 2026] [::1]:60724 Closing
+[Mon Mar  9 22:12:09 2026] [::1]:60726 Accepted
+[Mon Mar  9 22:12:09 2026] [::1]:60740 Accepted
+[Mon Mar  9 22:12:09 2026] [::1]:60726 [200]: GET /favicon.ico
+[Mon Mar  9 22:12:09 2026] [::1]:60726 Closing
+[Mon Mar  9 22:12:10 2026] [::1]:60740 Closed without sending a request; it was probably just an unused speculative preconnection
+[Mon Mar  9 22:12:10 2026] [::1]:60740 Closing
+[Mon Mar  9 22:12:26 2026] [::1]:38038 Accepted
+[Mon Mar  9 22:12:26 2026] [::1]:38038 [200]: GET /login.php
+[Mon Mar  9 22:12:26 2026] [::1]:38038 Closing
+[Mon Mar  9 22:12:26 2026] [::1]:38054 Accepted
+[Mon Mar  9 22:12:26 2026] [::1]:38056 Accepted
+[Mon Mar  9 22:12:26 2026] [::1]:38054 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:12:26 2026] [::1]:38054 Closing
+[Mon Mar  9 22:12:26 2026] [::1]:38056 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:12:26 2026] [::1]:38056 Closing
+[Mon Mar  9 22:12:26 2026] [::1]:38066 Accepted
+[Mon Mar  9 22:12:26 2026] [::1]:38066 [200]: GET /favicon.ico
+[Mon Mar  9 22:12:26 2026] [::1]:38066 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49190 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49190 [302]: POST /api/login.php
+[Mon Mar  9 22:12:35 2026] [::1]:49190 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49200 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49200 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:12:35 2026] [::1]:49200 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49204 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49220 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49204 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:12:35 2026] [::1]:49222 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49204 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49220 [200]: GET /assets/images/abstract-reports.png
+[Mon Mar  9 22:12:35 2026] [::1]:49220 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49222 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:12:35 2026] [::1]:49222 Closing
+[Mon Mar  9 22:12:35 2026] [::1]:49238 Accepted
+[Mon Mar  9 22:12:35 2026] [::1]:49238 [200]: GET /assets/images/dashboard-banner.png
+[Mon Mar  9 22:12:36 2026] [::1]:49238 Closing
+[Mon Mar  9 22:12:36 2026] [::1]:49250 Accepted
+[Mon Mar  9 22:12:36 2026] [::1]:49250 [302]: GET /favicon.ico
+[Mon Mar  9 22:12:36 2026] [::1]:49250 Closing
+[Mon Mar  9 22:12:36 2026] [::1]:49260 Accepted
+[Mon Mar  9 22:12:36 2026] [::1]:49260 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:12:36 2026] [::1]:49260 Closing
+[Mon Mar  9 22:12:42 2026] [::1]:41702 Accepted
+[Mon Mar  9 22:12:42 2026] [::1]:41702 [200]: GET /user/my_complaints.php?status=Resolved
+[Mon Mar  9 22:12:42 2026] [::1]:41702 Closing
+[Mon Mar  9 22:12:42 2026] [::1]:41710 Accepted
+[Mon Mar  9 22:12:42 2026] [::1]:41712 Accepted
+[Mon Mar  9 22:12:42 2026] [::1]:41710 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:12:42 2026] [::1]:41712 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:12:42 2026] [::1]:41710 Closing
+[Mon Mar  9 22:12:42 2026] [::1]:41712 Closing
+[Mon Mar  9 22:12:42 2026] [::1]:41714 Accepted
+[Mon Mar  9 22:12:42 2026] [::1]:41714 [302]: GET /favicon.ico
+[Mon Mar  9 22:12:42 2026] [::1]:41714 Closing
+[Mon Mar  9 22:12:42 2026] [::1]:41718 Accepted
+[Mon Mar  9 22:12:42 2026] [::1]:41718 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:12:42 2026] [::1]:41718 Closing
+[Mon Mar  9 22:12:45 2026] [::1]:41730 Accepted
+[Mon Mar  9 22:12:45 2026] [::1]:41730 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:12:45 2026] [::1]:41730 Closing
+[Mon Mar  9 22:12:45 2026] [::1]:41740 Accepted
+[Mon Mar  9 22:12:45 2026] [::1]:41742 Accepted
+[Mon Mar  9 22:12:45 2026] [::1]:41740 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:12:45 2026] [::1]:41740 Closing
+[Mon Mar  9 22:12:45 2026] [::1]:41742 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:12:45 2026] [::1]:41742 Closing
+[Mon Mar  9 22:12:45 2026] [::1]:41746 Accepted
+[Mon Mar  9 22:12:45 2026] [::1]:41746 [302]: GET /favicon.ico
+[Mon Mar  9 22:12:45 2026] [::1]:41746 Closing
+[Mon Mar  9 22:12:45 2026] [::1]:41758 Accepted
+[Mon Mar  9 22:12:45 2026] [::1]:41758 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:12:45 2026] [::1]:41758 Closing
+[Mon Mar  9 22:13:45 2026] [::1]:45348 Accepted
+[Mon Mar  9 22:13:45 2026] [::1]:45348 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:13:45 2026] [::1]:45348 Closing
+[Mon Mar  9 22:13:45 2026] [::1]:45364 Accepted
+[Mon Mar  9 22:13:45 2026] [::1]:45370 Accepted
+[Mon Mar  9 22:13:45 2026] [::1]:45364 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:13:45 2026] [::1]:45370 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:13:45 2026] [::1]:45364 Closing
+[Mon Mar  9 22:13:45 2026] [::1]:45370 Closing
+[Mon Mar  9 22:13:45 2026] [::1]:45386 Accepted
+[Mon Mar  9 22:13:45 2026] [::1]:45386 [302]: GET /favicon.ico
+[Mon Mar  9 22:13:45 2026] [::1]:45386 Closing
+[Mon Mar  9 22:13:45 2026] [::1]:45398 Accepted
+[Mon Mar  9 22:13:45 2026] [::1]:45398 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:13:45 2026] [::1]:45398 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45404 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45404 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:13:47 2026] [::1]:45404 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45420 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45420 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:13:47 2026] [::1]:45420 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45422 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45436 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45422 [200]: GET /assets/images/abstract-reports.png
+[Mon Mar  9 22:13:47 2026] [::1]:45422 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45436 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:13:47 2026] [::1]:45436 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45452 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45452 [200]: GET /assets/images/dashboard-banner.png
+[Mon Mar  9 22:13:47 2026] [::1]:45452 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45458 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45458 [302]: GET /favicon.ico
+[Mon Mar  9 22:13:47 2026] [::1]:45458 Closing
+[Mon Mar  9 22:13:47 2026] [::1]:45474 Accepted
+[Mon Mar  9 22:13:47 2026] [::1]:45474 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:13:47 2026] [::1]:45474 Closing
+[Mon Mar  9 22:13:56 2026] [::1]:47692 Accepted
+[Mon Mar  9 22:13:57 2026] [::1]:47692 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:13:57 2026] [::1]:47692 Closing
+[Mon Mar  9 22:13:57 2026] [::1]:47706 Accepted
+[Mon Mar  9 22:13:57 2026] [::1]:47710 Accepted
+[Mon Mar  9 22:13:57 2026] [::1]:47706 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:13:57 2026] [::1]:47710 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:13:57 2026] [::1]:47706 Closing
+[Mon Mar  9 22:13:57 2026] [::1]:47710 Closing
+[Mon Mar  9 22:13:57 2026] [::1]:47718 Accepted
+[Mon Mar  9 22:13:57 2026] [::1]:47718 [302]: GET /favicon.ico
+[Mon Mar  9 22:13:57 2026] [::1]:47718 Closing
+[Mon Mar  9 22:13:57 2026] [::1]:47734 Accepted
+[Mon Mar  9 22:13:57 2026] [::1]:47734 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:13:57 2026] [::1]:47734 Closing
+[Mon Mar  9 22:14:48 2026] [::1]:50146 Accepted
+[Mon Mar  9 22:14:48 2026] [::1]:50146 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:14:48 2026] [::1]:50146 Closing
+[Mon Mar  9 22:14:48 2026] [::1]:50156 Accepted
+[Mon Mar  9 22:14:48 2026] [::1]:50156 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:14:48 2026] [::1]:50156 Closing
+[Mon Mar  9 22:14:48 2026] [::1]:50162 Accepted
+[Mon Mar  9 22:14:48 2026] [::1]:50166 Accepted
+[Mon Mar  9 22:14:48 2026] [::1]:50162 [200]: GET /assets/images/abstract-reports.png
+[Mon Mar  9 22:14:48 2026] [::1]:50162 Closing
+[Mon Mar  9 22:14:48 2026] [::1]:50166 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:14:48 2026] [::1]:50166 Closing
+[Mon Mar  9 22:14:48 2026] [::1]:50176 Accepted
+[Mon Mar  9 22:14:48 2026] [::1]:50176 [200]: GET /assets/images/dashboard-banner.png
+[Mon Mar  9 22:14:48 2026] [::1]:50176 Closing
+[Mon Mar  9 22:14:49 2026] [::1]:50192 Accepted
+[Mon Mar  9 22:14:49 2026] [::1]:50192 [302]: GET /favicon.ico
+[Mon Mar  9 22:14:49 2026] [::1]:50192 Closing
+[Mon Mar  9 22:14:49 2026] [::1]:50194 Accepted
+[Mon Mar  9 22:14:49 2026] [::1]:50194 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:14:49 2026] [::1]:50194 Closing
+[Mon Mar  9 22:14:49 2026] [::1]:50196 Accepted
+[Mon Mar  9 22:14:50 2026] [::1]:50196 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:14:50 2026] [::1]:50196 Closing
+[Mon Mar  9 22:14:50 2026] [::1]:50198 Accepted
+[Mon Mar  9 22:14:50 2026] [::1]:50204 Accepted
+[Mon Mar  9 22:14:50 2026] [::1]:50198 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:14:50 2026] [::1]:50198 Closing
+[Mon Mar  9 22:14:50 2026] [::1]:50204 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:14:50 2026] [::1]:50204 Closing
+[Mon Mar  9 22:14:50 2026] [::1]:50212 Accepted
+[Mon Mar  9 22:14:50 2026] [::1]:50212 [302]: GET /favicon.ico
+[Mon Mar  9 22:14:50 2026] [::1]:50212 Closing
+[Mon Mar  9 22:14:50 2026] [::1]:50226 Accepted
+[Mon Mar  9 22:14:50 2026] [::1]:50226 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:14:50 2026] [::1]:50226 Closing
+[Mon Mar  9 22:14:50 2026] [::1]:56746 Accepted
+[Mon Mar  9 22:14:51 2026] [::1]:56746 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:14:51 2026] [::1]:56746 Closing
+[Mon Mar  9 22:14:51 2026] [::1]:56752 Accepted
+[Mon Mar  9 22:14:51 2026] [::1]:56752 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:14:51 2026] [::1]:56752 Closing
+[Mon Mar  9 22:14:51 2026] [::1]:56754 Accepted
+[Mon Mar  9 22:14:51 2026] [::1]:56754 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:14:51 2026] [::1]:56754 Closing
+[Mon Mar  9 22:14:51 2026] [::1]:56768 Accepted
+[Mon Mar  9 22:14:51 2026] [::1]:56768 [302]: GET /favicon.ico
+[Mon Mar  9 22:14:51 2026] [::1]:56768 Closing
+[Mon Mar  9 22:14:51 2026] [::1]:56780 Accepted
+[Mon Mar  9 22:14:51 2026] [::1]:56780 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:14:51 2026] [::1]:56780 Closing
+[Mon Mar  9 22:14:52 2026] [::1]:56794 Accepted
+[Mon Mar  9 22:14:52 2026] [::1]:56794 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:14:52 2026] [::1]:56794 Closing
+[Mon Mar  9 22:14:52 2026] [::1]:56796 Accepted
+[Mon Mar  9 22:14:52 2026] [::1]:56798 Accepted
+[Mon Mar  9 22:14:52 2026] [::1]:56796 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:14:52 2026] [::1]:56796 Closing
+[Mon Mar  9 22:14:52 2026] [::1]:56798 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:14:52 2026] [::1]:56798 Closing
+[Mon Mar  9 22:14:52 2026] [::1]:56814 Accepted
+[Mon Mar  9 22:14:52 2026] [::1]:56814 [302]: GET /favicon.ico
+[Mon Mar  9 22:14:52 2026] [::1]:56814 Closing
+[Mon Mar  9 22:14:52 2026] [::1]:56824 Accepted
+[Mon Mar  9 22:14:52 2026] [::1]:56824 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:14:52 2026] [::1]:56824 Closing
+[Mon Mar  9 22:15:25 2026] [::1]:45332 Accepted
+[Mon Mar  9 22:15:25 2026] [::1]:45332 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:15:25 2026] [::1]:45332 Closing
+[Mon Mar  9 22:15:25 2026] [::1]:45348 Accepted
+[Mon Mar  9 22:15:25 2026] [::1]:45348 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:15:25 2026] [::1]:45348 Closing
+[Mon Mar  9 22:15:25 2026] [::1]:45354 Accepted
+[Mon Mar  9 22:15:25 2026] [::1]:45354 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:15:25 2026] [::1]:45354 Closing
+[Mon Mar  9 22:15:25 2026] [::1]:45366 Accepted
+[Mon Mar  9 22:15:25 2026] [::1]:45366 [302]: GET /favicon.ico
+[Mon Mar  9 22:15:25 2026] [::1]:45366 Closing
+[Mon Mar  9 22:15:25 2026] [::1]:45378 Accepted
+[Mon Mar  9 22:15:25 2026] [::1]:45378 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:15:25 2026] [::1]:45378 Closing
+[Mon Mar  9 22:15:33 2026] [::1]:39680 Accepted
+[Mon Mar  9 22:15:33 2026] [::1]:39680 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:15:33 2026] [::1]:39680 Closing
+[Mon Mar  9 22:15:33 2026] [::1]:39696 Accepted
+[Mon Mar  9 22:15:34 2026] [::1]:39698 Accepted
+[Mon Mar  9 22:15:34 2026] [::1]:39696 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:15:34 2026] [::1]:39696 Closing
+[Mon Mar  9 22:15:34 2026] [::1]:39698 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:15:34 2026] [::1]:39698 Closing
+[Mon Mar  9 22:15:34 2026] [::1]:39704 Accepted
+[Mon Mar  9 22:15:34 2026] [::1]:39704 [302]: GET /favicon.ico
+[Mon Mar  9 22:15:34 2026] [::1]:39704 Closing
+[Mon Mar  9 22:15:34 2026] [::1]:39714 Accepted
+[Mon Mar  9 22:15:34 2026] [::1]:39714 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:15:34 2026] [::1]:39714 Closing
+[Mon Mar  9 22:21:31 2026] [::1]:55284 Accepted
+[Mon Mar  9 22:21:31 2026] [::1]:55284 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:21:31 2026] [::1]:55284 Closing
+[Mon Mar  9 22:21:31 2026] [::1]:55286 Accepted
+[Mon Mar  9 22:21:31 2026] [::1]:55286 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:21:31 2026] [::1]:55286 Closing
+[Mon Mar  9 22:21:31 2026] [::1]:55292 Accepted
+[Mon Mar  9 22:21:31 2026] [::1]:55292 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:21:31 2026] [::1]:55292 Closing
+[Mon Mar  9 22:21:36 2026] [::1]:55294 Accepted
+[Mon Mar  9 22:21:36 2026] [::1]:55294 [302]: GET /favicon.ico
+[Mon Mar  9 22:21:36 2026] [::1]:55294 Closing
+[Mon Mar  9 22:21:36 2026] [::1]:55310 Accepted
+[Mon Mar  9 22:21:36 2026] [::1]:55310 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:21:36 2026] [::1]:55310 Closing
+[Mon Mar  9 22:28:08 2026] [::1]:53842 Accepted
+[Mon Mar  9 22:28:08 2026] [::1]:53842 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:28:08 2026] [::1]:53842 Closing
+[Mon Mar  9 22:28:08 2026] [::1]:53844 Accepted
+[Mon Mar  9 22:28:08 2026] [::1]:53844 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:28:08 2026] [::1]:53844 Closing
+[Mon Mar  9 22:28:08 2026] [::1]:53860 Accepted
+[Mon Mar  9 22:28:08 2026] [::1]:53860 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:28:08 2026] [::1]:53860 Closing
+[Mon Mar  9 22:28:08 2026] [::1]:53872 Accepted
+[Mon Mar  9 22:28:08 2026] [::1]:53872 [302]: GET /favicon.ico
+[Mon Mar  9 22:28:08 2026] [::1]:53872 Closing
+[Mon Mar  9 22:28:08 2026] [::1]:53882 Accepted
+[Mon Mar  9 22:28:08 2026] [::1]:53882 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:28:08 2026] [::1]:53882 Closing
+[Mon Mar  9 22:28:12 2026] [::1]:35340 Accepted
+[Mon Mar  9 22:28:12 2026] [::1]:35340 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:28:12 2026] [::1]:35340 Closing
+[Mon Mar  9 22:28:12 2026] [::1]:35352 Accepted
+[Mon Mar  9 22:28:12 2026] [::1]:35352 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:28:12 2026] [::1]:35352 Closing
+[Mon Mar  9 22:28:12 2026] [::1]:35364 Accepted
+[Mon Mar  9 22:28:12 2026] [::1]:35372 Accepted
+[Mon Mar  9 22:28:12 2026] [::1]:35364 [200]: GET /assets/images/abstract-reports.png
+[Mon Mar  9 22:28:12 2026] [::1]:35372 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:28:12 2026] [::1]:35372 Closing
+[Mon Mar  9 22:28:12 2026] [::1]:35364 Closing
+[Mon Mar  9 22:28:12 2026] [::1]:35374 Accepted
+[Mon Mar  9 22:28:12 2026] [::1]:35374 [200]: GET /assets/images/dashboard-banner.png
+[Mon Mar  9 22:28:12 2026] [::1]:35374 Closing
+[Mon Mar  9 22:28:13 2026] [::1]:35378 Accepted
+[Mon Mar  9 22:28:13 2026] [::1]:35378 [302]: GET /favicon.ico
+[Mon Mar  9 22:28:13 2026] [::1]:35378 Closing
+[Mon Mar  9 22:28:13 2026] [::1]:35384 Accepted
+[Mon Mar  9 22:28:13 2026] [::1]:35384 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:28:13 2026] [::1]:35384 Closing
+[Mon Mar  9 22:28:14 2026] [::1]:35392 Accepted
+[Mon Mar  9 22:28:14 2026] [::1]:35392 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:28:14 2026] [::1]:35392 Closing
+[Mon Mar  9 22:28:14 2026] [::1]:35404 Accepted
+[Mon Mar  9 22:28:14 2026] [::1]:35412 Accepted
+[Mon Mar  9 22:28:14 2026] [::1]:35404 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:28:14 2026] [::1]:35404 Closing
+[Mon Mar  9 22:28:14 2026] [::1]:35412 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:28:14 2026] [::1]:35412 Closing
+[Mon Mar  9 22:28:15 2026] [::1]:35414 Accepted
+[Mon Mar  9 22:28:15 2026] [::1]:35414 [302]: GET /favicon.ico
+[Mon Mar  9 22:28:15 2026] [::1]:35414 Closing
+[Mon Mar  9 22:28:15 2026] [::1]:35422 Accepted
+[Mon Mar  9 22:28:15 2026] [::1]:35422 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:28:15 2026] [::1]:35422 Closing
+[Mon Mar  9 22:32:43 2026] [::1]:42502 Accepted
+[Mon Mar  9 22:32:43 2026] [::1]:42512 Accepted
+[Mon Mar  9 22:32:43 2026] [::1]:42502 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:32:43 2026] [::1]:42502 Closing
+[Mon Mar  9 22:32:43 2026] [::1]:42512 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:32:43 2026] [::1]:42512 Closing
+[Mon Mar  9 22:32:43 2026] [::1]:42514 Accepted
+[Mon Mar  9 22:32:43 2026] [::1]:42514 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:32:43 2026] [::1]:42514 Closing
+[Mon Mar  9 22:32:43 2026] [::1]:42516 Accepted
+[Mon Mar  9 22:32:43 2026] [::1]:42516 [302]: GET /favicon.ico
+[Mon Mar  9 22:32:43 2026] [::1]:42516 Closing
+[Mon Mar  9 22:32:43 2026] [::1]:42524 Accepted
+[Mon Mar  9 22:32:43 2026] [::1]:42524 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:32:43 2026] [::1]:42524 Closing
+[Mon Mar  9 22:34:13 2026] [::1]:32862 Accepted
+[Mon Mar  9 22:34:13 2026] [::1]:32862 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:34:13 2026] [::1]:32862 Closing
+[Mon Mar  9 22:34:13 2026] [::1]:32874 Accepted
+[Mon Mar  9 22:34:13 2026] [::1]:32874 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:34:13 2026] [::1]:32874 Closing
+[Mon Mar  9 22:34:13 2026] [::1]:32880 Accepted
+[Mon Mar  9 22:34:13 2026] [::1]:32880 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:34:13 2026] [::1]:32880 Closing
+[Mon Mar  9 22:34:14 2026] [::1]:32888 Accepted
+[Mon Mar  9 22:34:14 2026] [::1]:32888 [302]: GET /favicon.ico
+[Mon Mar  9 22:34:14 2026] [::1]:32888 Closing
+[Mon Mar  9 22:34:14 2026] [::1]:32902 Accepted
+[Mon Mar  9 22:34:14 2026] [::1]:32902 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:34:14 2026] [::1]:32902 Closing
+[Mon Mar  9 22:34:20 2026] [::1]:51480 Accepted
+[Mon Mar  9 22:34:20 2026] [::1]:51480 [302]: GET /logout.php
+[Mon Mar  9 22:34:20 2026] [::1]:51480 Closing
+[Mon Mar  9 22:34:20 2026] [::1]:51482 Accepted
+[Mon Mar  9 22:34:20 2026] [::1]:51482 [200]: GET /login.php?logout=1
+[Mon Mar  9 22:34:20 2026] [::1]:51482 Closing
+[Mon Mar  9 22:34:20 2026] [::1]:51490 Accepted
+[Mon Mar  9 22:34:20 2026] [::1]:51490 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:34:20 2026] [::1]:51490 Closing
+[Mon Mar  9 22:34:20 2026] [::1]:51492 Accepted
+[Mon Mar  9 22:34:20 2026] [::1]:51492 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:34:20 2026] [::1]:51492 Closing
+[Mon Mar  9 22:34:20 2026] [::1]:51506 Accepted
+[Mon Mar  9 22:34:20 2026] [::1]:51506 [200]: GET /favicon.ico
+[Mon Mar  9 22:34:20 2026] [::1]:51506 Closing
+[Mon Mar  9 22:34:33 2026] [::1]:57988 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:57988 [302]: POST /api/login.php
+[Mon Mar  9 22:34:34 2026] [::1]:57988 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:57992 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:57992 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:34:34 2026] [::1]:57992 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58000 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58000 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:34:34 2026] [::1]:58000 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58012 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58014 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58012 [200]: GET /assets/images/abstract-reports.png
+[Mon Mar  9 22:34:34 2026] [::1]:58012 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58014 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:34:34 2026] [::1]:58014 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58016 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58016 [200]: GET /assets/images/dashboard-banner.png
+[Mon Mar  9 22:34:34 2026] [::1]:58016 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58032 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58032 [302]: GET /favicon.ico
+[Mon Mar  9 22:34:34 2026] [::1]:58032 Closing
+[Mon Mar  9 22:34:34 2026] [::1]:58036 Accepted
+[Mon Mar  9 22:34:34 2026] [::1]:58036 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:34:34 2026] [::1]:58036 Closing
+[Mon Mar  9 22:34:49 2026] [::1]:56116 Accepted
+[Mon Mar  9 22:34:49 2026] [::1]:56116 [200]: GET /user/my_complaints.php
+[Mon Mar  9 22:34:49 2026] [::1]:56116 Closing
+[Mon Mar  9 22:34:49 2026] [::1]:56132 Accepted
+[Mon Mar  9 22:34:49 2026] [::1]:56132 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:34:49 2026] [::1]:56132 Closing
+[Mon Mar  9 22:34:49 2026] [::1]:56138 Accepted
+[Mon Mar  9 22:34:49 2026] [::1]:56138 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:34:49 2026] [::1]:56138 Closing
+[Mon Mar  9 22:34:49 2026] [::1]:56144 Accepted
+[Mon Mar  9 22:34:49 2026] [::1]:56144 [302]: GET /favicon.ico
+[Mon Mar  9 22:34:49 2026] [::1]:56144 Closing
+[Mon Mar  9 22:34:49 2026] [::1]:56152 Accepted
+[Mon Mar  9 22:34:49 2026] [::1]:56152 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:34:49 2026] [::1]:56152 Closing
+[Mon Mar  9 22:34:51 2026] [::1]:56154 Accepted
+[Mon Mar  9 22:34:51 2026] [::1]:56154 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:34:51 2026] [::1]:56154 Closing
+[Mon Mar  9 22:34:51 2026] [::1]:56156 Accepted
+[Mon Mar  9 22:34:51 2026] [::1]:56160 Accepted
+[Mon Mar  9 22:34:52 2026] [::1]:56156 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:34:52 2026] [::1]:56156 Closing
+[Mon Mar  9 22:34:52 2026] [::1]:56160 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:34:52 2026] [::1]:56160 Closing
+[Mon Mar  9 22:34:52 2026] [::1]:56172 Accepted
+[Mon Mar  9 22:34:52 2026] [::1]:56172 [302]: GET /favicon.ico
+[Mon Mar  9 22:34:52 2026] [::1]:56172 Closing
+[Mon Mar  9 22:34:52 2026] [::1]:56176 Accepted
+[Mon Mar  9 22:34:52 2026] [::1]:56176 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:34:52 2026] [::1]:56176 Closing
+[Mon Mar  9 22:37:23 2026] [::1]:58198 Accepted
+[Mon Mar  9 22:37:23 2026] [::1]:58198 [200]: GET /user/submit_complaint.php
+[Mon Mar  9 22:37:23 2026] [::1]:58198 Closing
+[Mon Mar  9 22:37:23 2026] [::1]:58204 Accepted
+[Mon Mar  9 22:37:23 2026] [::1]:58214 Accepted
+[Mon Mar  9 22:37:23 2026] [::1]:58204 [200]: GET /assets/css/style.css
+[Mon Mar  9 22:37:23 2026] [::1]:58204 Closing
+[Mon Mar  9 22:37:23 2026] [::1]:58214 [200]: GET /assets/js/main.js
+[Mon Mar  9 22:37:23 2026] [::1]:58214 Closing
+[Mon Mar  9 22:37:23 2026] [::1]:58218 Accepted
+[Mon Mar  9 22:37:23 2026] [::1]:58218 [302]: GET /favicon.ico
+[Mon Mar  9 22:37:23 2026] [::1]:58218 Closing
+[Mon Mar  9 22:37:23 2026] [::1]:58228 Accepted
+[Mon Mar  9 22:37:23 2026] [::1]:58228 [200]: GET /user/dashboard.php
+[Mon Mar  9 22:37:23 2026] [::1]:58228 Closing

@@ -60,7 +60,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    <span class="nav-icon">🚪</span> Logout
+                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
                 </a>
             </div>
         </aside>
@@ -114,24 +114,32 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <a href="submit_complaint.php" class="quick-action-card">
-                    <span class="action-icon">📝</span>
-                    <span class="action-label">New Complaint</span>
-                </a>
-                <a href="my_complaints.php" class="quick-action-card">
-                    <span class="action-icon">📋</span>
-                    <span class="action-label">View All Complaints</span>
-                </a>
-                <a href="my_complaints.php?status=Pending" class="quick-action-card">
-                    <span class="action-icon">⏳</span>
-                    <span class="action-label">Pending Issues</span>
-                </a>
-                <a href="my_complaints.php?status=Resolved" class="quick-action-card">
-                    <span class="action-icon">✅</span>
-                    <span class="action-label">Resolved Issues</span>
-                </a>
+            <!-- Quick Actions & Highlights -->
+            <div class="dashboard-widgets" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="quick-actions" style="margin-bottom: 0; height: 100%;">
+                    <a href="submit_complaint.php" class="quick-action-card">
+                        <span class="action-icon">📝</span>
+                        <span class="action-label">New Complaint</span>
+                    </a>
+                    <a href="my_complaints.php" class="quick-action-card">
+                        <span class="action-icon">📋</span>
+                        <span class="action-label">View All Complaints</span>
+                    </a>
+                    <a href="my_complaints.php?status=Pending" class="quick-action-card">
+                        <span class="action-icon">⏳</span>
+                        <span class="action-label">Pending Issues</span>
+                    </a>
+                    <a href="my_complaints.php?status=Resolved" class="quick-action-card">
+                        <span class="action-icon">✅</span>
+                        <span class="action-label">Resolved Issues</span>
+                    </a>
+                </div>
+
+                <div class="illustration-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.3s ease;">
+                    <img src="../assets/images/abstract-reports.png" alt="Submit Report Illustration" style="max-height: 120px; object-fit: contain; margin-bottom: 1rem; filter: drop-shadow(0 10px 15px rgba(99,102,241,0.25)); border-radius: 12px;">
+                     <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--text-white);">Streamlined Reporting</h3>
+                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">All your complaints and document processing securely tracked in one place.</p>
+                </div>
             </div>
 
             <!-- Recent Complaints -->
