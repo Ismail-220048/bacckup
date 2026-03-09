@@ -63,6 +63,9 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <a href="admin_dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
+                <a href="heatmap.php">
+                    <span class="nav-icon">🗺️</span> Heatmap
+                </a>
                 <a href="manage_complaints.php" class="active">
                     <span class="nav-icon">📋</span> Manage Complaints
                 </a>
@@ -75,7 +78,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
+                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
                 </a>
             </div>
         </aside>
@@ -108,6 +111,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                         <option value="in progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
                         <option value="resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
                     </select>
+                    <button class="btn btn-warning" id="btn-merge-selected" style="margin-left: auto;">🔗 Merge Selected</button>
                 </div>
 
                 <?php if (empty($complaintsList)): ?>
@@ -120,6 +124,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                         <table id="complaints-table">
                             <thead>
                                 <tr>
+                                    <th style="width: 40px; text-align: center;"><input type="checkbox" id="selectAllMerge"></th>
                                     <th>ID</th>
                                     <th>Title</th>
                                     <th>Category</th>
@@ -141,6 +146,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     $assignedOfficerId = $c['assigned_officer_id'] ?? '';
                                 ?>
                                 <tr id="row-<?php echo $cId; ?>">
+                                    <td style="text-align: center;"><input type="checkbox" class="merge-cb" value="<?php echo $cId; ?>" data-title="<?php echo htmlspecialchars($c['title']); ?>"></td>
                                     <td style="font-family: monospace; font-size: 0.78rem; color: var(--text-muted);"><?php echo substr($cId, -6); ?></td>
                                     <td style="color: var(--text-primary); font-weight: 500;">
                                         <?php echo htmlspecialchars($c['title']); ?>
@@ -221,6 +227,24 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <button class="modal-close">&times;</button>
             </div>
             <div id="viewContent"></div>
+        </div>
+    </div>
+
+    <!-- Merge Complaints Modal -->
+    <div class="modal-overlay" id="mergeModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Merge Complaints</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="mergeForm" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Select Primary Complaint <br><small style="color:var(--text-muted);">(The remaining selected complaints will be merged into this one and deleted)</small></label>
+                    <select id="merge-primary-select" class="filter-select" style="width: 100%; margin-top: 0.5rem;" required>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-warning btn-block">Confirm Merge</button>
+            </form>
         </div>
     </div>
 
@@ -324,6 +348,68 @@ $initials = strtoupper(substr($adminName, 0, 1));
             } else {
                 showToast(result.message, 'error');
             }
+        }
+
+        // --- Merge Logic ---
+        const selectAllCb = document.getElementById('selectAllMerge');
+        if (selectAllCb) {
+            selectAllCb.addEventListener('change', function() {
+                document.querySelectorAll('.merge-cb').forEach(cb => cb.checked = this.checked);
+            });
+        }
+
+        const btnMergeSelected = document.getElementById('btn-merge-selected');
+        if (btnMergeSelected) {
+            btnMergeSelected.addEventListener('click', function() {
+                const checked = document.querySelectorAll('.merge-cb:checked');
+                if (checked.length < 2) {
+                    showToast('Please select at least 2 complaints to merge.', 'warning');
+                    return;
+                }
+
+                const selectEl = document.getElementById('merge-primary-select');
+                selectEl.innerHTML = '';
+                checked.forEach(cb => {
+                    const option = document.createElement('option');
+                    option.value = cb.value;
+                    option.textContent = cb.dataset.title + ' (ID: ' + cb.value.substr(-6) + ')';
+                    selectEl.appendChild(option);
+                });
+
+                openModal('mergeModal');
+            });
+        }
+
+        const mergeForm = document.getElementById('mergeForm');
+        if (mergeForm) {
+            mergeForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const primaryId = document.getElementById('merge-primary-select').value;
+                const checked = document.querySelectorAll('.merge-cb:checked');
+                let secondaryIds = [];
+                checked.forEach(cb => {
+                    if (cb.value !== primaryId) secondaryIds.push(cb.value);
+                });
+
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Merging...';
+
+                const result = await postJSON('../api/merge_complaints.php', {
+                    primary_id: primaryId,
+                    secondary_ids: secondaryIds
+                });
+
+                if (result.success) {
+                    showToast(result.message, 'success');
+                    closeModal('mergeModal');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast(result.message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Confirm Merge';
+                }
+            });
         }
     </script>
 </body>

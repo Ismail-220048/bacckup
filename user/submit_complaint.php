@@ -52,7 +52,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
+                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
                 </a>
             </div>
         </aside>
@@ -164,68 +164,137 @@ $initials = strtoupper(substr($userName, 0, 1));
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         // --- MAP LOGIC ---
-        // Default to a generic location, e.g., center of a placeholder city (New York)
-        let defaultLat = 40.7128;
-        let defaultLng = -74.0060;
-        
-        let map = L.map('map').setView([defaultLat, defaultLng], 13);
-        
+        // Start with a neutral world view, then immediately zoom to the user's real GPS location
+        let map = L.map('map').setView([20, 0], 2);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        let marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
         const locationInput = document.getElementById('location');
+        let marker = null;
 
-        // Function to update input based on marker
-        function updateLocationInput(lat, lng) {
+        // Accuracy circle layer
+        let accuracyCircle = null;
+        let watchId = null;
+        let bestAccuracy = Infinity;
+
+        // Set map to a lat/lng — creates/moves marker and accuracy circle
+        function setMapLocation(lat, lng, accuracy, zoomLevel) {
             locationInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            map.setView([lat, lng], zoomLevel || map.getZoom() || 17);
+
+            // Create or move the draggable pin
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+                marker.on('dragend', function() {
+                    const pos = marker.getLatLng();
+                    locationInput.value = `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+                    if (accuracyCircle) { accuracyCircle.remove(); accuracyCircle = null; }
+                });
+            }
+
+            // Draw/update accuracy radius circle
+            if (accuracy) {
+                if (accuracyCircle) {
+                    accuracyCircle.setLatLng([lat, lng]).setRadius(accuracy);
+                } else {
+                    accuracyCircle = L.circle([lat, lng], {
+                        radius: accuracy,
+                        color: '#6366f1',
+                        fillColor: '#6366f1',
+                        fillOpacity: 0.08,
+                        weight: 1.5,
+                        dashArray: '5, 5'
+                    }).addTo(map);
+                }
+            }
         }
 
-        // Initialize with default
-        updateLocationInput(defaultLat, defaultLng);
-
-        // When marker is dragged
-        marker.on('dragend', function (e) {
-            const pos = marker.getLatLng();
-            updateLocationInput(pos.lat, pos.lng);
-        });
-
-        // When map is clicked
+        // When map is clicked — move the pin, stop any GPS watch
         map.on('click', function(e) {
-            marker.setLatLng(e.latlng);
-            updateLocationInput(e.latlng.lat, e.latlng.lng);
+            if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+            if (accuracyCircle) { accuracyCircle.remove(); accuracyCircle = null; }
+            setMapLocation(e.latlng.lat, e.latlng.lng, null, map.getZoom());
         });
 
-        // Get Live Location
-        document.getElementById('btn-get-location').addEventListener('click', () => {
-            if ("geolocation" in navigator) {
-                const btn = document.getElementById('btn-get-location');
-                btn.textContent = 'Locating...';
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        map.setView([lat, lng], 16);
-                        marker.setLatLng([lat, lng]);
-                        updateLocationInput(lat, lng);
-                        
-                        btn.textContent = '📍 My Location';
-                        showToast('Location updated successfully', 'success');
-                    },
-                    (error) => {
-                        console.error("Error obtaining location:", error);
-                        btn.textContent = '📍 My Location';
-                        showToast('Unable to retrieve your location.', 'error');
-                    },
-                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-                );
-            } else {
-                showToast('Geolocation is not supported by your browser.', 'error');
+        // Core locate using watchPosition — keeps refining until accuracy <= 50m
+        function autoLocate(showFeedback) {
+            const btn = document.getElementById('btn-get-location');
+            if (!('geolocation' in navigator)) {
+                if (showFeedback) showToast('Geolocation is not supported by your browser.', 'error');
+                return;
             }
+
+            // Stop any previous watch
+            if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+            bestAccuracy = Infinity;
+
+            if (showFeedback) {
+                btn.innerHTML = '⏳ Acquiring GPS...';
+                btn.disabled = true;
+            }
+
+            // Stop watching after 15 seconds max
+            const stopTimer = setTimeout(() => {
+                if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+                if (showFeedback) {
+                    btn.disabled = false;
+                    btn.innerHTML = '📍 Locate Me';
+                    if (bestAccuracy < Infinity) {
+                        showToast(`Best fix: ±${Math.round(bestAccuracy)}m. Drag the pin to fine-tune.`, 'info');
+                    }
+                }
+            }, 15000);
+
+            watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy; // metres
+
+                    // Only update if this fix is better than the previous
+                    if (accuracy < bestAccuracy) {
+                        bestAccuracy = accuracy;
+                        const zoom = accuracy < 50 ? 18 : accuracy < 200 ? 17 : accuracy < 1000 ? 15 : 13;
+                        setMapLocation(lat, lng, accuracy, zoom);
+                        if (showFeedback) btn.innerHTML = `⏳ ±${Math.round(accuracy)}m`;
+                    }
+
+                    // Good enough fix — stop
+                    if (accuracy <= 50) {
+                        clearTimeout(stopTimer);
+                        navigator.geolocation.clearWatch(watchId); watchId = null;
+                        if (showFeedback) {
+                            btn.disabled = false;
+                            btn.innerHTML = '📍 Locate Me';
+                            showToast(`Location locked! Accuracy ±${Math.round(accuracy)}m`, 'success');
+                        }
+                    }
+                },
+                (error) => {
+                    clearTimeout(stopTimer);
+                    if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+                    if (!marker) setMapLocation(20.5937, 78.9629, null, 5);
+                    if (showFeedback) {
+                        btn.disabled = false;
+                        btn.innerHTML = '📍 Locate Me';
+                        showToast('Location access denied. Click the map to pin manually.', 'warning');
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+            );
+        }
+
+        // Auto-detect silently on page load
+        autoLocate(false);
+
+        // Locate Me button — re-trigger with feedback
+        document.getElementById('btn-get-location').addEventListener('click', () => {
+            autoLocate(true);
         });
 
         // --- CAMERA LOGIC ---

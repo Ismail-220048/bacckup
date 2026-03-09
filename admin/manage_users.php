@@ -13,22 +13,6 @@ $db = Database::getInstance();
 $usersCol      = $db->getCollection('users');
 $complaintsCol = $db->getCollection('complaints');
 
-// Handle user deletion via POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_user') {
-    $userId = $_POST['user_id'] ?? '';
-    if ($userId) {
-        try {
-            $usersCol->deleteOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
-            // Also delete user's complaints
-            $complaintsCol->deleteMany(['user_id' => $userId]);
-            header('Location: manage_users.php?deleted=1');
-            exit;
-        } catch (Exception $e) {
-            header('Location: manage_users.php?error=' . urlencode('Failed to delete user.'));
-            exit;
-        }
-    }
-}
 
 $allUsers = $usersCol->find([], ['sort' => ['created_at' => -1]]);
 $usersList = iterator_to_array($allUsers);
@@ -65,6 +49,9 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <a href="admin_dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
+                <a href="heatmap.php">
+                    <span class="nav-icon">🗺️</span> Heatmap
+                </a>
                 <a href="manage_complaints.php">
                     <span class="nav-icon">📋</span> Manage Complaints
                 </a>
@@ -77,7 +64,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
+                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
                 </a>
             </div>
         </aside>
@@ -158,11 +145,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     <td>
                                         <div class="action-btns">
                                             <button class="btn btn-outline btn-sm" onclick="viewUserComplaints('<?php echo $uid; ?>')">📋 Complaints</button>
-                                            <form method="POST" style="display:inline;" onsubmit="return confirmDelete('Delete this user and all their complaints?')">
-                                                <input type="hidden" name="action" value="delete_user">
-                                                <input type="hidden" name="user_id" value="<?php echo $uid; ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete</button>
-                                            </form>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('<?php echo $uid; ?>', '<?php echo htmlspecialchars($u['name']); ?>')">🗑️ Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -194,6 +177,20 @@ $initials = strtoupper(substr($adminName, 0, 1));
     <script src="../assets/js/main.js"></script>
     <script>
         initTableSearch('search-input', 'users-table');
+
+        async function deleteUser(id, name) {
+            if (!confirmDelete('Delete user "' + name + '" and all their complaints? This cannot be undone.')) return;
+
+            const result = await postJSON('../api/delete_user.php', { user_id: id });
+
+            if (result.success) {
+                showToast(result.message, 'success');
+                const row = document.getElementById('user-row-' + id);
+                if (row) row.remove();
+            } else {
+                showToast(result.message || 'Failed to delete user.', 'error');
+            }
+        }
 
         async function viewUserComplaints(userId) {
             openModal('userComplaintsModal');

@@ -202,9 +202,215 @@ function confirmDelete(message = 'Are you sure you want to delete this?') {
     return confirm(message);
 }
 
+/* ---------- Notifications System ---------- */
+function getApiBase() {
+    // Determine the API base relative to the current page
+    const path = window.location.pathname;
+    // If we're in a sub-directory like /admin/ or /user/ or /officer/
+    if (path.includes('/admin/') || path.includes('/user/') || path.includes('/officer/')) {
+        return '../api';
+    }
+    return 'api';
+}
+
+async function fetchNotifications() {
+    try {
+        const res = await fetch(getApiBase() + '/get_notifications.php');
+        if (!res.ok) return null;
+        return await res.json();
+    } catch(e) { return null; }
+}
+
+async function markNotificationsRead() {
+    try {
+        await postJSON(getApiBase() + '/read_notifications.php', { mark_all: true });
+    } catch(e) {}
+}
+
+function initNotifications() {
+    // Only run on dashboard pages (those with a .page-header .user-info)
+    const userInfo = document.querySelector('.page-header .user-info');
+    if (!userInfo) return;
+
+    // Create Bell Container
+    const bellContainer = document.createElement('div');
+    bellContainer.className = 'notification-bell';
+    bellContainer.innerHTML = `
+        <span style="font-size: 1.4rem;">🔔</span>
+        <span class="notification-badge" style="display: none;">0</span>
+        <div class="notification-dropdown">
+            <div class="notification-header">
+                <h4 style="margin: 0; font-size: 0.95rem;">Notifications</h4>
+                <button id="mark-read-btn" style="background: none; border: none; font-size: 0.8rem; color: var(--primary); cursor: pointer; display: none;">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notification-list">
+                <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">Loading...</div>
+            </div>
+        </div>
+    `;
+    
+    // Insert before the span that holds the username
+    userInfo.insertBefore(bellContainer, userInfo.firstChild);
+
+    const badge = bellContainer.querySelector('.notification-badge');
+    const dropdown = bellContainer.querySelector('.notification-dropdown');
+    const list = bellContainer.querySelector('#notification-list');
+    const markReadBtn = bellContainer.querySelector('#mark-read-btn');
+
+    // Persist shown notification IDs across page navigations using sessionStorage
+    // This prevents repeated toast pop-ups every time the user switches dashboard sections
+    function getShownIds() {
+        try {
+            return new Set(JSON.parse(sessionStorage.getItem('ct_shown_notif_ids') || '[]'));
+        } catch(e) { return new Set(); }
+    }
+    function markShown(id) {
+        const ids = getShownIds();
+        ids.add(id);
+        try { sessionStorage.setItem('ct_shown_notif_ids', JSON.stringify([...ids])); } catch(e) {}
+    }
+    function isAlreadyShown(id) {
+        return getShownIds().has(id);
+    }
+
+    // Track whether this is the very first page load in this session
+    const isFirstLoad = !sessionStorage.getItem('ct_notif_initialized');
+    sessionStorage.setItem('ct_notif_initialized', '1');
+
+    let isDropdownOpen = false;
+
+    // Toggle dropdown
+    bellContainer.addEventListener('click', async (e) => {
+        if (e.target.closest('#mark-read-btn')) return; // ignore mark read click
+        isDropdownOpen = !isDropdownOpen;
+        dropdown.classList.toggle('active', isDropdownOpen);
+        
+        if (isDropdownOpen) {
+            badge.style.display = 'none'; // hide badge when opened
+            await markNotificationsRead(); // mark backend as read immediately
+        }
+    });
+    
+    markReadBtn.addEventListener('click', async () => {
+        await markNotificationsRead();
+        updateNotificationsList(true); // force visual read
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!bellContainer.contains(e.target) && isDropdownOpen) {
+            isDropdownOpen = false;
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Polling function
+    async function poll() {
+        const data = await fetchNotifications();
+        if (data && data.success) {
+            const notifs = data.notifications;
+            let unreadCount = data.unread_count;
+            
+            // Render list
+            if (notifs.length === 0) {
+                list.innerHTML = `<div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No recent notifications.</div>`;
+            } else {
+                list.innerHTML = notifs.map(n => `
+                    <div class="notification-item ${n.is_read ? 'read' : 'unread'}">
+                        <div style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.25rem;">${n.message}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">${n.created_at}</div>
+                    </div>
+                `).join('');
+                
+                if (unreadCount > 0) {
+                    markReadBtn.style.display = 'inline-block';
+                }
+            }
+
+            // Only show toasts for notifications NOT already shown this session
+            // AND only show them on the first page load OR when they come in via polling (not on page navigation)
+            notifs.forEach(n => {
+                if (!n.is_read && !isAlreadyShown(n.id)) {
+                    if (isFirstLoad) {
+                        // On first load only: show toasts for existing unread ones
+                        showToast(n.message, 'info', 5000);
+                    }
+                    markShown(n.id);
+                }
+            });
+
+            // During interval polling: show toast only for brand-new notifications
+            // (those not in sessionStorage yet) — handled next poll cycle
+
+            // Update badge if not currently opened
+            if (!isDropdownOpen && unreadCount > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            } else if (unreadCount === 0 || isDropdownOpen) {
+                badge.style.display = 'none';
+                markReadBtn.style.display = 'none';
+            }
+        }
+    }
+
+    function updateNotificationsList(forceRead) {
+        if (forceRead) {
+            list.querySelectorAll('.notification-item').forEach(el => {
+                el.classList.remove('unread');
+                el.classList.add('read');
+            });
+            markReadBtn.style.display = 'none';
+            badge.style.display = 'none';
+        }
+    }
+
+    // Initial poll (on page load)
+    poll();
+    
+    // Subsequent polling — show toasts for genuinely NEW notifications only
+    setInterval(async () => {
+        const data = await fetchNotifications();
+        if (data && data.success) {
+            const notifs = data.notifications;
+            let unreadCount = data.unread_count;
+
+            // Re-render list
+            if (notifs.length === 0) {
+                list.innerHTML = `<div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No recent notifications.</div>`;
+            } else {
+                list.innerHTML = notifs.map(n => `
+                    <div class="notification-item ${n.is_read ? 'read' : 'unread'}">
+                        <div style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.25rem;">${n.message}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">${n.created_at}</div>
+                    </div>
+                `).join('');
+                if (unreadCount > 0) markReadBtn.style.display = 'inline-block';
+            }
+
+            // Show toast ONLY for notifications not yet seen this session (real new arrivals)
+            notifs.forEach(n => {
+                if (!n.is_read && !isAlreadyShown(n.id)) {
+                    showToast(n.message, 'info', 5000); // Real new arrival — show toast
+                    markShown(n.id);
+                }
+            });
+
+            // Update badge
+            if (!isDropdownOpen && unreadCount > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            } else if (unreadCount === 0 || isDropdownOpen) {
+                badge.style.display = 'none';
+                markReadBtn.style.display = 'none';
+            }
+        }
+    }, 15000); // Poll every 15 seconds
+}
+
 /* ---------- Init on DOM Ready ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     initImagePreview();
     initModals();
+    initNotifications(); // Global Notifications init
 });

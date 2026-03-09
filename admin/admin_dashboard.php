@@ -62,6 +62,9 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <a href="admin_dashboard.php" class="active">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
+                <a href="heatmap.php">
+                    <span class="nav-icon">🗺️</span> Heatmap
+                </a>
                 <a href="manage_complaints.php">
                     <span class="nav-icon">📋</span> Manage Complaints
                 </a>
@@ -74,7 +77,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
+                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
                 </a>
             </div>
         </aside>

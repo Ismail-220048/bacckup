@@ -55,7 +55,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <a href="../logout.php">
-                    Logout <span class="nav-icon" style="margin-left: auto;">🚪</span>
+                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
                 </a>
             </div>
         </aside>

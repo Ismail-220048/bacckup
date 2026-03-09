@@ -77,20 +77,46 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 $db = Database::getInstance();
 $complaints = $db->getCollection('complaints');
 
+// Check for duplicates
+$duplicateCount = $complaints->countDocuments([
+    'location' => $location,
+    'category' => $category
+]);
+
 $result = $complaints->insertOne([
-    'user_id'     => $_SESSION['user_id'],
-    'title'       => $title,
-    'category'    => $category,
-    'description' => $description,
-    'location'    => $location,
-    'image'       => $imagePath,
-    'date'        => $date,
-    'status'      => 'Pending',
-    'admin_reply' => '',
-    'created_at'  => date('Y-m-d H:i:s')
+    'user_id'             => $_SESSION['user_id'],
+    'title'               => $title,
+    'category'            => $category,
+    'description'         => $description,
+    'location'            => $location,
+    'image'               => $imagePath,
+    'date'                => $date,
+    'status'              => 'Pending',
+    'admin_reply'         => '',
+    'additional_user_ids' => [],
+    'created_at'          => date('Y-m-d H:i:s')
 ]);
 
 if ($result->getInsertedCount() > 0) {
+    // Notify Admins
+    $notifications = $db->getCollection('notifications');
+    
+    if ($duplicateCount > 0) {
+        $notifications->insertOne([
+            'role'       => 'admin',
+            'message'    => "Duplicate location and category detected for new complaint: " . $title . ". Consider merging.",
+            'is_read'    => false,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    } else {
+        $notifications->insertOne([
+            'role'       => 'admin',
+            'message'    => "New user complaint submitted: " . $title,
+            'is_read'    => false,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+
     header('Content-Type: application/json');
     echo json_encode(['success' => true, 'message' => 'Complaint submitted successfully!']);
 } else {

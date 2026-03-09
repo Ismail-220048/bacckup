@@ -51,8 +51,45 @@ if ($action === 'delete') {
         echo json_encode(['success' => false, 'message' => 'Only admins can delete complaints.']);
         exit;
     }
+
+    // Fetch complaint BEFORE deleting to grab user IDs for notifications
+    $toDelete = $complaints->findOne(['_id' => $objectId]);
+
     $result = $complaints->deleteOne(['_id' => $objectId]);
+
     if ($result->getDeletedCount() > 0) {
+        // Notify all affected users about their complaint being removed
+        if ($toDelete) {
+            $notifications = $db->getCollection('notifications');
+            $delMsg = "Your complaint '" . ($toDelete['title'] ?? 'Unknown') . "' has been deleted by an administrator.";
+
+            // Notify primary user
+            if (!empty($toDelete['user_id'])) {
+                $notifications->insertOne([
+                    'user_id'    => $toDelete['user_id'],
+                    'role'       => 'user',
+                    'message'    => $delMsg,
+                    'is_read'    => false,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+
+            // Notify any merged additional users
+            if (!empty($toDelete['additional_user_ids']) && is_array($toDelete['additional_user_ids'])) {
+                foreach ($toDelete['additional_user_ids'] as $uid) {
+                    if ($uid) {
+                        $notifications->insertOne([
+                            'user_id'    => $uid,
+                            'role'       => 'user',
+                            'message'    => $delMsg,
+                            'is_read'    => false,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]);
+                    }
+                }
+            }
+        }
+
         echo json_encode(['success' => true, 'message' => 'Complaint deleted successfully.']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Complaint not found.']);
@@ -120,6 +157,61 @@ $result = $complaints->updateOne(
 );
 
 if ($result->getModifiedCount() > 0 || $result->getMatchedCount() > 0) {
+    // Notify Users and Admins
+    $notifications = $db->getCollection('notifications');
+    $complaint = $complaints->findOne(['_id' => $objectId]);
+    
+    if ($complaint) {
+        $msg = "Complaint '" . ($complaint['title'] ?? 'Unknown') . "' was updated.";
+        
+        // Notify the user who originally created it
+        if (!empty($complaint['user_id'])) {
+            $notifications->insertOne([
+                'user_id'    => $complaint['user_id'],
+                'role'       => 'user',
+                'message'    => $msg,
+                'is_read'    => false,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        // Notify merged users (if any)
+        if (!empty($complaint['additional_user_ids']) && is_array($complaint['additional_user_ids'])) {
+            foreach ($complaint['additional_user_ids'] as $uid) {
+                if ($uid) {
+                    $notifications->insertOne([
+                        'user_id'    => $uid,
+                        'role'       => 'user',
+                        'message'    => $msg,
+                        'is_read'    => false,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+        }
+        
+        // If Officer updated it, notify Admins
+        if ($_SESSION['role'] === 'officer') {
+            $notifications->insertOne([
+                'role'       => 'admin',
+                'message'    => "Officer updated complaint: " . ($complaint['title'] ?? 'Unknown'),
+                'is_read'    => false,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+        
+        // If Admin assigned an officer, notify that officer
+        if ($_SESSION['role'] === 'admin' && !empty($updateFields['assigned_officer_id'])) {
+             $notifications->insertOne([
+                'user_id'    => $updateFields['assigned_officer_id'],
+                'role'       => 'officer',
+                'message'    => "You have been assigned to complaint: " . ($complaint['title'] ?? 'Unknown'),
+                'is_read'    => false,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+    }
+
     echo json_encode(['success' => true, 'message' => 'Complaint updated successfully.']);
 } else {
     echo json_encode(['success' => false, 'message' => 'Complaint not found or no changes made.']);
