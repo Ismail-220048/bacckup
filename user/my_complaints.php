@@ -31,7 +31,7 @@ $initials = strtoupper(substr($userName, 0, 1));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Complaints — CivicTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -39,9 +39,15 @@ $initials = strtoupper(substr($userName, 0, 1));
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>🏛️ CivicTrack</h2>
-                <span>Citizen Portal</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Citizen Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
                 <a href="dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
@@ -51,6 +57,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </a>
                 <a href="my_complaints.php" class="active">
                     <span class="nav-icon">📋</span> My Complaints
+                </a>
+                <a href="profile.php">
+                    <span class="nav-icon">👤</span> My Profile
                 </a>
             </nav>
             <div class="sidebar-footer">

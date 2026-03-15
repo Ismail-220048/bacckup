@@ -42,42 +42,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Officer Login — CivicTrack</title>
+    <title>Officer Login — CivicTrack Field Operations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
+<div class="auth-page-wrapper">
+
+    <!-- Government Header -->
+    <div class="auth-gov-header">
+        <img src="../assets/images/govt_emblem.png" alt="Government Emblem" class="emblem">
+        <div class="portal-text">
+            <h1>CivicTrack — Field Officer Portal</h1>
+            <p>Municipal Field Operations Division · Government of India</p>
+        </div>
+    </div>
+
+    <!-- Auth Body -->
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="logo">
-                <h1>👮 Officer Portal</h1>
-                <p>CivicTrack Field Operations</p>
+                <img src="../assets/images/govt_emblem.png" alt="CivicTrack Emblem" class="gov-emblem-sm">
+                <h1>Officer Sign In</h1>
+                <p>Field Operations &amp; Complaint Management</p>
             </div>
 
             <?php if ($error): ?>
                 <div class="alert alert-error">❌ <?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
             <?php if (isset($_GET['logout'])): ?>
-                <div class="alert alert-success">👋 You have been logged out.</div>
+                <div class="alert alert-success">👋 You have been securely logged out.</div>
             <?php endif; ?>
+
+            <div class="auth-section-title">Officer Credentials</div>
 
             <form method="POST">
                 <div class="form-group">
-                    <label for="email">Officer Email</label>
-                    <input type="email" id="email" name="email" placeholder="officer@civictrack.com" required>
+                    <label for="email">Officer Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="officer@civictrack.gov" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Password <span class="required">*</span></label>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Officer Sign In</button>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top:0.5rem; padding: 0.75rem;">
+                    👮 Sign In to Officer Portal
+                </button>
             </form>
 
             <div class="auth-footer">
-                <a href="../login.php">← Back to User Login</a>
+                <a href="../login.php">← Citizen Login</a>
+                &nbsp;|&nbsp;
+                <a href="../admin/admin_login.php">Admin Login →</a>
             </div>
         </div>
     </div>
+
+    <!-- Government Footer -->
+    <div class="auth-gov-footer">
+        © 2026 CivicTrack — Field Officer Portal. Government of India. |
+        <a href="#">Help</a> | <a href="#">Terms of Use</a>
+    </div>
+
+</div>
 </body>
 </html>

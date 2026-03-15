@@ -17,10 +17,16 @@ class Database {
 
     private function __construct() {
         try {
-            $this->client = new Client("mongodb://localhost:27017");
+            // Explicitly set a short timeout for initial connection check
+            $this->client = new Client("mongodb://localhost:27017", [
+                'serverSelectionTimeoutMS' => 2000
+            ]);
+            // Attempt a simple command to verify connection
+            $this->client->listDatabases();
             $this->db = $this->client->civictrack;
         } catch (Exception $e) {
-            die("Database connection failed: " . $e->getMessage());
+            header('Content-Type: text/plain');
+            die("CivicTrack Error: Database connection failed. Please ensure MongoDB is running on localhost:27017.\nDetails: " . $e->getMessage());
         }
     }
 

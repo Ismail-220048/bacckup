@@ -10,17 +10,34 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$email    = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-$password = $_POST['password'] ?? '';
+// Support both JSON and standard POST
+$input = json_decode(file_get_contents('php://input'), true);
+if ($input) {
+    $email    = filter_var(trim($input['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $password = $input['password'] ?? '';
+} else {
+    $email    = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $password = $_POST['password'] ?? '';
+}
 
 // Validation
 if (empty($email) || empty($password)) {
-    header('Location: ../login.php?error=' . urlencode('All fields are required.'));
+    $errorMsg = 'All fields are required.';
+    if ($input) {
+        echo json_encode(['success' => false, 'message' => $errorMsg]);
+    } else {
+        header('Location: ../login.php?error=' . urlencode($errorMsg));
+    }
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header('Location: ../login.php?error=' . urlencode('Invalid email format.'));
+    $errorMsg = 'Invalid email format.';
+    if ($input) {
+        echo json_encode(['success' => false, 'message' => $errorMsg]);
+    } else {
+        header('Location: ../login.php?error=' . urlencode($errorMsg));
+    }
     exit;
 }
 
@@ -29,13 +46,13 @@ $users = $db->getCollection('users');
 
 $user = $users->findOne(['email' => $email]);
 
-if (!$user) {
-    header('Location: ../login.php?error=' . urlencode('Invalid email or password.'));
-    exit;
-}
-
-if (!password_verify($password, $user['password'])) {
-    header('Location: ../login.php?error=' . urlencode('Invalid email or password.'));
+if (!$user || !password_verify($password, $user['password'])) {
+    $errorMsg = 'Invalid email or password.';
+    if ($input) {
+        echo json_encode(['success' => false, 'message' => $errorMsg]);
+    } else {
+        header('Location: ../login.php?error=' . urlencode($errorMsg));
+    }
     exit;
 }
 
@@ -45,5 +62,16 @@ $_SESSION['user_name'] = $user['name'];
 $_SESSION['user_email'] = $user['email'];
 $_SESSION['role'] = $user['role'] ?? 'user';
 
-header('Location: ../user/dashboard.php');
+if ($input) {
+    echo json_encode(['success' => true, 'role' => $_SESSION['role']]);
+} else {
+    // Redirect based on role
+    if ($_SESSION['role'] === 'admin') {
+        header('Location: ../admin/admin_dashboard.php');
+    } elseif ($_SESSION['role'] === 'officer') {
+        header('Location: ../officer/officer_dashboard.php');
+    } else {
+        header('Location: ../user/dashboard.php');
+    }
+}
 exit;

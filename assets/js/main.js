@@ -413,4 +413,177 @@ document.addEventListener('DOMContentLoaded', () => {
     initImagePreview();
     initModals();
     initNotifications(); // Global Notifications init
+    initAIRobot();      // AI Robot Mode init (Admin Only)
 });
+
+/* ---------- AI Robot Mode (Admin Only) ---------- */
+function initAIRobot() {
+    const roleEl = document.querySelector('.sidebar-user-role');
+    if (!roleEl || !roleEl.textContent.includes('Administrator')) return;
+
+    const apiBase = getApiBase();
+    
+    // Create Robot UI
+    const robot = document.createElement('div');
+    robot.className = 'ai-robot-float';
+    robot.id = 'ai-robot-toggle';
+    robot.innerHTML = `
+        <img src="../assets/images/ai_robot.png" alt="AI Agent">
+        <div class="ai-status-indicator"></div>
+        <div class="ai-robot-tooltip"></div>
+    `;
+    
+    const logContainer = document.createElement('div');
+    logContainer.id = 'ai-logs-container';
+    logContainer.innerHTML = `<div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; color: #06b6d4;">🤖 AI AGENT LOGS</span>
+        <span id="close-ai-logs" style="cursor: pointer; opacity: 0.6;">&times;</span>
+    </div><div id="ai-logs-list" style="flex: 1; overflow-y: auto;"></div>`;
+
+    document.body.appendChild(robot);
+    document.body.appendChild(logContainer);
+
+    // Initial Position Check
+    const savedPos = JSON.parse(localStorage.getItem('ai_robot_pos'));
+    if (savedPos) {
+        Object.assign(robot.style, {
+            right: 'auto', bottom: 'auto',
+            left: savedPos.x + 'px', top: savedPos.y + 'px'
+        });
+    }
+
+    let aiModeActive = false;
+    let loopInterval = null;
+    let isDragging = false;
+    let dragStartX, dragStartY, initialX, initialY;
+
+    // Draggable Logic
+    robot.addEventListener('mousedown', (e) => {
+        if (e.target.closest('#close-ai-logs')) return;
+        isDragging = false;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        const rect = robot.getBoundingClientRect();
+        initialX = rect.left;
+        initialY = rect.top;
+
+        const onMouseMove = (moveEv) => {
+            const dx = moveEv.clientX - dragStartX;
+            const dy = moveEv.clientY - dragStartY;
+            if (!isDragging && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+                isDragging = true;
+                robot.classList.add('dragging');
+                setBubbleMessage("Wheee! Let's go!");
+            }
+            if (isDragging) {
+                Object.assign(robot.style, {
+                    right: 'auto', bottom: 'auto',
+                    left: (initialX + dx) + 'px',
+                    top: (initialY + dy) + 'px'
+                });
+            }
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            if (isDragging) {
+                const rect = robot.getBoundingClientRect();
+                localStorage.setItem('ai_robot_pos', JSON.stringify({ x: rect.left, y: rect.top }));
+                robot.classList.remove('dragging');
+                setTimeout(() => { isDragging = false; }, 50);
+                setBubbleMessage("I'll stay right here!");
+            }
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    const setBubbleMessage = (msg, duration = 3000) => {
+        const tooltip = robot.querySelector('.ai-robot-tooltip');
+        tooltip.textContent = msg;
+        tooltip.style.opacity = '1';
+        tooltip.style.visibility = 'visible';
+        tooltip.style.transform = 'translateX(-50%) translateY(0)';
+        
+        if (duration) {
+            clearTimeout(robot._msgTimeout);
+            robot._msgTimeout = setTimeout(() => {
+                tooltip.style.opacity = '0';
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.transform = 'translateX(-50%) translateY(10px)';
+            }, duration);
+        }
+    };
+
+    const addLog = (msg) => {
+        const list = document.getElementById('ai-logs-list');
+        const entry = document.createElement('div');
+        entry.className = 'ai-log-entry';
+        const time = new Date().toLocaleTimeString();
+        entry.innerHTML = `<span class="ai-log-time">[${time}]</span> ${msg}`;
+        list.prepend(entry);
+        if (list.children.length > 20) list.lastChild.remove();
+        if (!logContainer.classList.contains('visible')) logContainer.classList.add('visible');
+    };
+
+    const runAILoop = async () => {
+        if (!aiModeActive) return;
+        try {
+            const res = await fetch(apiBase + '/ai_run_tasks.php');
+            const data = await res.json();
+            if (data.success && data.actions_taken > 0) {
+                data.logs.forEach(log => {
+                    addLog(log);
+                    setBubbleMessage("Task Done: " + log);
+                });
+                if (window.location.pathname.includes('manage_')) {
+                    setTimeout(() => location.reload(), 2000);
+                }
+            }
+        } catch (e) { console.error("AI Loop Error", e); }
+    };
+
+    const setAIMode = (active) => {
+        aiModeActive = active;
+        if (active) {
+            robot.classList.add('active');
+            setBubbleMessage("AI Mode Active! I'm watching everything.");
+            addLog("AI System Initialized...");
+            loopInterval = setInterval(runAILoop, 5000);
+            runAILoop();
+        } else {
+            robot.classList.remove('active');
+            setBubbleMessage("AI Mode is OFF. Ready for manual control.");
+            if (loopInterval) clearInterval(loopInterval);
+            addLog("AI System Powered Down.");
+        }
+    };
+
+    robot.addEventListener('click', async (e) => {
+        if (isDragging) return;
+        if (e.target.closest('#close-ai-logs')) return;
+        
+        const res = await postJSON(apiBase + '/ai_mode_control.php', { action: 'toggle' });
+        if (res.success) {
+            setAIMode(res.ai_mode);
+        }
+    });
+
+    logContainer.querySelector('#close-ai-logs').addEventListener('click', () => {
+        logContainer.classList.remove('visible');
+    });
+
+    // Welcome Greeting
+    setTimeout(() => {
+        setBubbleMessage("Welcome back, Chief! Need some AI help today?");
+    }, 1000);
+
+    // Initial state
+    fetch(apiBase + '/ai_mode_control.php')
+        .then(r => r.json())
+        .then(res => {
+            if (res.success && res.ai_mode) setAIMode(true);
+        });
+}

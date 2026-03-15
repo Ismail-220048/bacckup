@@ -34,9 +34,9 @@ $initials = strtoupper(substr($userName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — CivicTrack</title>
+    <title>Citizen Dashboard — CivicTrack Official Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -44,10 +44,17 @@ $initials = strtoupper(substr($userName, 0, 1));
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>🏛️ CivicTrack</h2>
-                <span>Citizen Portal</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Citizen Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php" class="active">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
@@ -57,25 +64,46 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <a href="my_complaints.php">
                     <span class="nav-icon">📋</span> My Complaints
                 </a>
+                <a href="profile.php">
+                    <span class="nav-icon">👤</span> My Profile
+                </a>
             </nav>
             <div class="sidebar-footer">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div>
+                        <div class="sidebar-user-name"><?php echo htmlspecialchars($userName); ?></div>
+                        <div class="sidebar-user-role">Citizen</div>
+                    </div>
+                </div>
                 <a href="../logout.php">
-                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
+                    <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
         </aside>
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
-
+            <!-- Page Header -->
             <div class="page-header">
-                <h1>Dashboard</h1>
+                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div>
+                        <h1>📊 My Dashboard</h1>
+                        <div class="breadcrumb">
+                            <a href="dashboard.php">Home</a>
+                            <span>›</span>
+                            <span>Citizen Dashboard</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="user-info">
+                    <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
                     <span>Welcome, <?php echo htmlspecialchars($userName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
                 </div>
             </div>
+            <div class="page-body">
 
             <!-- Profile Card -->
             <div class="profile-card">
@@ -114,9 +142,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </div>
             </div>
 
-            <!-- Quick Actions & Highlights -->
-            <div class="dashboard-widgets" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-                <div class="quick-actions" style="margin-bottom: 0; height: 100%;">
+            <!-- Quick Actions -->
+            <div class="dashboard-widgets" style="margin-bottom: 2rem;">
+                <div class="quick-actions" style="margin-bottom: 0;">
                     <a href="submit_complaint.php" class="quick-action-card">
                         <span class="action-icon">📝</span>
                         <span class="action-label">New Complaint</span>
@@ -133,12 +161,6 @@ $initials = strtoupper(substr($userName, 0, 1));
                         <span class="action-icon">✅</span>
                         <span class="action-label">Resolved Issues</span>
                     </a>
-                </div>
-
-                <div class="illustration-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.3s ease;">
-                    <img src="../assets/images/abstract-reports.png" alt="Submit Report Illustration" style="max-height: 120px; object-fit: contain; margin-bottom: 1rem; filter: drop-shadow(0 10px 15px rgba(99,102,241,0.25)); border-radius: 12px;">
-                     <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--text-white);">Streamlined Reporting</h3>
-                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">All your complaints and document processing securely tracked in one place.</p>
                 </div>
             </div>
 
@@ -178,7 +200,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                         <?php
                                         $status = $c['status'] ?? 'Pending';
                                         $badgeClass = 'badge-pending';
-                                        if ($status === 'In Progress') $badgeClass = 'badge-progress';
+                                        if ($status === 'In Progress' || $status === 'Officer Completed') $badgeClass = 'badge-progress';
                                         elseif ($status === 'Resolved') $badgeClass = 'badge-resolved';
                                         ?>
                                         <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
@@ -190,6 +212,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
+            </div><!-- /.page-body -->
         </main>
     </div>
 

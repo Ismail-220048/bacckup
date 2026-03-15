@@ -28,8 +28,9 @@ $userLookup = [];
 foreach ($userIds as $uid) {
     if ($uid) {
         try {
-            $u = $usersCol->findOne(['_id' => new MongoDB\BSON\ObjectId($uid)]);
-            if ($u) $userLookup[$uid] = $u['name'];
+            // Ensure $uid is string before creating ObjectId
+            $u = $usersCol->findOne(['_id' => new MongoDB\BSON\ObjectId((string)$uid)]);
+            if ($u) $userLookup[(string)$uid] = $u['name'];
         } catch (Exception $e) {}
     }
 }
@@ -37,6 +38,13 @@ foreach ($userIds as $uid) {
 // Get all officers for assignment dropdown
 $allOfficers = $officersCol->find([], ['sort' => ['name' => 1]]);
 $officersList = iterator_to_array($allOfficers);
+
+// Get IDs of officers who have active (Pending or In Progress) complaints
+$busyIdsRaw = $complaintsCol->distinct('assigned_officer_id', [
+    'status' => ['$in' => ['Pending', 'In Progress']],
+    'assigned_officer_id' => ['$ne' => '']
+]);
+$busyOfficerIds = array_map(fn($id) => (string)$id, (array)$busyIdsRaw);
 
 $adminName = $_SESSION['user_name'] ?? 'Admin';
 $initials = strtoupper(substr($adminName, 0, 1));
@@ -48,7 +56,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Complaints — CivicTrack Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -56,10 +64,17 @@ $initials = strtoupper(substr($adminName, 0, 1));
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>🛡️ CivicTrack</h2>
-                <span>Admin Panel</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Administration Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
                 <a href="admin_dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
@@ -77,8 +92,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </a>
             </nav>
             <div class="sidebar-footer">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div>
+                        <div class="sidebar-user-name"><?php echo htmlspecialchars($adminName); ?></div>
+                        <div class="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
                 <a href="../logout.php">
-                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
+                    <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
         </aside>
@@ -107,9 +129,10 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     </div>
                     <select class="filter-select" id="status-filter">
                         <option value="">All Status</option>
-                        <option value="pending" <?php echo (($_GET['status'] ?? '') === 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="in progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
-                        <option value="resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
+                        <option value="Pending" <?php echo (($_GET['status'] ?? '') === 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                        <option value="In Progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
+                        <option value="Officer Completed" <?php echo (($_GET['status'] ?? '') === 'Officer Completed') ? 'selected' : ''; ?>>Officer Completed</option>
+                        <option value="Resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
                     </select>
                     <button class="btn btn-warning" id="btn-merge-selected" style="margin-left: auto;">🔗 Merge Selected</button>
                 </div>
@@ -142,6 +165,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     $bc = 'badge-pending';
                                     if ($status === 'In Progress') $bc = 'badge-progress';
                                     elseif ($status === 'Resolved') $bc = 'badge-resolved';
+                                    elseif ($status === 'Officer Completed') $bc = 'badge-progress'; // Or a custom class like badge-warning
                                     $assignedOfficer = $c['assigned_officer_name'] ?? '';
                                     $assignedOfficerId = $c['assigned_officer_id'] ?? '';
                                 ?>
@@ -179,6 +203,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
+            </div><!-- /.page-body -->
         </main>
     </div>
 
@@ -195,17 +220,21 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     <label for="update-status">Status</label>
                     <select id="update-status" class="filter-select" style="width: 100%;">
                         <option value="Pending">⏳ Pending</option>
-                        <option value="In Progress">🔄 In Progress</option>
-                        <option value="Resolved">✅ Resolved</option>
+                        <option value="In Progress">🔄 In Progress (or needs rework)</option>
+                        <option value="Officer Completed">✅ Officer Completed (Needs Review)</option>
+                        <option value="Resolved">✅ Resolved (Close Complaint)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="update-officer">Assign Officer</label>
                     <select id="update-officer" class="filter-select" style="width: 100%;">
                         <option value="">— Not Assigned —</option>
-                        <?php foreach ($officersList as $o): ?>
-                            <option value="<?php echo (string) $o['_id']; ?>">
-                                👮 <?php echo htmlspecialchars($o['name']); ?> (<?php echo htmlspecialchars($o['email']); ?>)
+                        <?php foreach ($officersList as $o): 
+                            $oId = (string)$o['_id'];
+                            $isBusy = in_array($oId, $busyOfficerIds);
+                        ?>
+                            <option value="<?php echo $oId; ?>" data-busy="<?php echo $isBusy ? '1' : '0'; ?>">
+                                👮 <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -258,6 +287,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 'description'           => $c['description'],
                 'location'              => $c['location'] ?? '',
                 'image'                 => $c['image'] ?? '',
+                'officer_proof_image'   => $c['officer_proof_image'] ?? '',
                 'date'                  => $c['date'] ?? $c['created_at'],
                 'status'                => $c['status'],
                 'admin_reply'           => $c['admin_reply'] ?? '',
@@ -272,6 +302,22 @@ $initials = strtoupper(substr($adminName, 0, 1));
         initStatusFilter('status-filter', 'complaints-table');
 
         function openUpdateModal(id, status, reply, officerId) {
+            // Filter officer dropdown to only show free officers
+            const officerSelect = document.getElementById('update-officer');
+            Array.from(officerSelect.options).forEach(opt => {
+                if (opt.value === '') return; // "Not Assigned" is always visible
+                
+                const isBusy = opt.dataset.busy === '1';
+                // Show if it's the current officer (assigned to THIS complaint) OR if not busy at all
+                if (opt.value === officerId || !isBusy) {
+                    opt.style.display = '';
+                    opt.disabled = false;
+                } else {
+                    opt.style.display = 'none';
+                    opt.disabled = true;
+                }
+            });
+
             document.getElementById('update-complaint-id').value = id;
             document.getElementById('update-status').value = status;
             document.getElementById('update-reply').value = reply || '';
@@ -287,8 +333,9 @@ $initials = strtoupper(substr($adminName, 0, 1));
             html += `<div class="detail-item"><label>Title</label><p>${c.title}</p></div>`;
             html += `<div class="detail-item"><label>Category</label><p>${c.category}</p></div>`;
             html += `<div class="detail-item"><label>Location</label><p>${c.location}</p></div>`;
+            let badgeClass = c.status === 'Pending' ? 'pending' : (c.status === 'Resolved' ? 'resolved' : 'progress');
             html += `<div class="detail-item"><label>Date</label><p>${c.date}</p></div>`;
-            html += `<div class="detail-item"><label>Status</label><p><span class="badge badge-${c.status === 'Pending' ? 'pending' : c.status === 'In Progress' ? 'progress' : 'resolved'}">${c.status}</span></p></div>`;
+            html += `<div class="detail-item"><label>Status</label><p><span class="badge badge-${badgeClass}">${c.status}</span></p></div>`;
             html += `<div class="detail-item"><label>Reported By</label><p>${c.user_name}</p></div>`;
             if (c.assigned_officer_name) {
                 html += `<div class="detail-item"><label>Assigned Officer</label><p>👮 ${c.assigned_officer_name}</p></div>`;
@@ -301,8 +348,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
             if (c.officer_notes) {
                 html += `<div style="margin-top:1rem"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Officer Notes</label><p style="color:var(--text-primary);font-size:0.92rem;">${c.officer_notes}</p></div>`;
             }
-            if (c.image) {
-                html += `<div style="margin-top:1rem"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Image</label><img src="../${c.image}" alt="Complaint Image" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);margin-top:0.5rem;"></div>`;
+            if (c.image || c.officer_proof_image) {
+                html += `<div style="margin-top:1rem; display: flex; gap: 1rem; flex-wrap: wrap;">`;
+                if (c.image) {
+                    html += `<div style="flex:1; min-width: 200px;"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">User Image</label><img src="../${c.image}" alt="Complaint Image" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);"></div>`;
+                }
+                if (c.officer_proof_image) {
+                    html += `<div style="flex:1; min-width: 200px;"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Officer Proof Image</label><img src="../${c.officer_proof_image}" alt="Proof Image" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);"></div>`;
+                }
+                html += `</div>`;
             }
 
             document.getElementById('viewContent').innerHTML = html;

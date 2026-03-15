@@ -17,7 +17,7 @@ $initials = strtoupper(substr($userName, 0, 1));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Complaint — CivicTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
@@ -36,9 +36,15 @@ $initials = strtoupper(substr($userName, 0, 1));
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>🏛️ CivicTrack</h2>
-                <span>Citizen Portal</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Citizen Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
                 <a href="dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
@@ -48,6 +54,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </a>
                 <a href="my_complaints.php">
                     <span class="nav-icon">📋</span> My Complaints
+                </a>
+                <a href="profile.php">
+                    <span class="nav-icon">👤</span> My Profile
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -69,93 +78,97 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3>📝 New Civic Complaint</h3>
+            <div class="page-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📝 New Civic Complaint</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <form id="complaintForm" enctype="multipart/form-data">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="title">Complaint Title</label>
+                                    <input type="text" id="title" name="title" placeholder="e.g. Broken road near main market" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select id="category" name="category" required>
+                                        <option value="">Select category...</option>
+                                        <option value="Road Damage">🛣️ Road Damage</option>
+                                        <option value="Garbage">🗑️ Garbage</option>
+                                        <option value="Water Leakage">💧 Water Leakage</option>
+                                        <option value="Street Light Issue">💡 Street Light Issue</option>
+                                        <option value="Drainage Problem">🚰 Drainage Problem</option>
+                                        <option value="Other">📌 Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" name="description" placeholder="Describe the issue in detail..." required></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label>Evidence & Location (Pinpoint on Map)</label>
+                                    
+                                    <div style="position: relative;">
+                                        <div id="map"></div>
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                                        <input type="text" id="location" name="location" placeholder="Select location on map or permit GPS access." required readonly style="background: var(--bg-body); cursor: not-allowed; flex: 1;">
+                                        <button type="button" id="btn-get-location" class="btn btn-info btn-sm">📍 Locate Me</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="date">Date</label>
+                                    <input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; flex-direction: column; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                                <label style="margin-bottom: 1rem;">Evidence Document / Photo (optional)</label>
+                                <div style="display: flex; gap: 15px; margin-bottom: 1rem; justify-content: center; width: 100%;">
+                                    <label class="btn btn-primary" style="cursor: pointer; margin: 0; border-radius: 20px; padding: 0.6rem 1.5rem;" for="complaint-image">
+                                        📁 Upload image
+                                    </label>
+                                    <input type="file" id="complaint-image" name="image" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
+                                    <button type="button" class="btn btn-warning" id="open-camera-btn" style="border-radius: 20px; color: #161822; padding: 0.6rem 1.5rem;">
+                                        📸 Live Camera
+                                    </button>
+                                </div>
+                                
+                                <!-- Camera Interface -->
+                                <div id="camera-interface" style="display: none; flex-direction: column; align-items: center; gap: 10px; background: var(--bg-input); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 10px;">
+                                    <video id="camera-stream" autoplay playsinline style="width: 100%; max-width: 400px; border-radius: var(--radius-sm); background: #000;"></video>
+                                    <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
+                                        <button type="button" class="btn btn-success" id="capture-btn" style="flex: 1;">📱 Snap Photo</button>
+                                        <button type="button" class="btn btn-danger" id="close-camera-btn" style="flex: 1;">❌ Close</button>
+                                    </div>
+                                </div>
+
+                                <canvas id="camera-canvas" style="display: none;"></canvas>
+                                
+                                <div id="preview-container" style="display: none; position: relative; max-width: 400px; margin: 0 auto;">
+                                    <img id="image-preview" class="image-preview" src="" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--border);" alt="Preview">
+                                    <button type="button" class="btn btn-danger btn-sm" id="clear-image-btn" style="position: absolute; top: 10px; right: 10px; border-radius: 50%; width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center;">✕</button>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 2rem;  " >
+                                <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.05rem; border-radius: 30px;">
+                                    Submit Complaint
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <form id="complaintForm" enctype="multipart/form-data">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="title">Complaint Title</label>
-                            <input type="text" id="title" name="title" placeholder="e.g. Broken road near main market" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Category</label>
-                            <select id="category" name="category" required>
-                                <option value="">Select category...</option>
-                                <option value="Road Damage">🛣️ Road Damage</option>
-                                <option value="Garbage">🗑️ Garbage</option>
-                                <option value="Water Leakage">💧 Water Leakage</option>
-                                <option value="Street Light Issue">💡 Street Light Issue</option>
-                                <option value="Drainage Problem">🚰 Drainage Problem</option>
-                                <option value="Other">📌 Other</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" placeholder="Describe the issue in detail..." required></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group" style="grid-column: 1 / -1;">
-                            <label>Evidence & Location (Pinpoint on Map)</label>
-                            
-                            <div style="position: relative;">
-                                <div id="map"></div>
-                            </div>
-                            
-                            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                                <input type="text" id="location" name="location" placeholder="Select location on map or permit GPS access." required readonly style="background: var(--bg-body); cursor: not-allowed; flex: 1;">
-                                <button type="button" id="btn-get-location" class="btn btn-info btn-sm">📍 Locate Me</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="display: flex; flex-direction: column; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-                        <label style="margin-bottom: 1rem;">Evidence Document / Photo (optional)</label>
-                        <div style="display: flex; gap: 15px; margin-bottom: 1rem; justify-content: center; width: 100%;">
-                            <label class="btn btn-primary" style="cursor: pointer; margin: 0; border-radius: 20px; padding: 0.6rem 1.5rem;" for="complaint-image">
-                                📁 Upload image
-                            </label>
-                            <input type="file" id="complaint-image" name="image" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
-                            <button type="button" class="btn btn-warning" id="open-camera-btn" style="border-radius: 20px; color: #161822; padding: 0.6rem 1.5rem;">
-                                📸 Live Camera
-                            </button>
-                        </div>
-                        
-                        <!-- Camera Interface -->
-                        <div id="camera-interface" style="display: none; flex-direction: column; align-items: center; gap: 10px; background: var(--bg-input); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 10px;">
-                            <video id="camera-stream" autoplay playsinline style="width: 100%; max-width: 400px; border-radius: var(--radius-sm); background: #000;"></video>
-                            <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
-                                <button type="button" class="btn btn-success" id="capture-btn" style="flex: 1;">📱 Snap Photo</button>
-                                <button type="button" class="btn btn-danger" id="close-camera-btn" style="flex: 1;">❌ Close</button>
-                            </div>
-                        </div>
-
-                        <canvas id="camera-canvas" style="display: none;"></canvas>
-                        
-                        <div id="preview-container" style="display: none; position: relative; max-width: 400px; margin: 0 auto;">
-                            <img id="image-preview" class="image-preview" src="" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--border);" alt="Preview">
-                            <button type="button" class="btn btn-danger btn-sm" id="clear-image-btn" style="position: absolute; top: 10px; right: 10px; border-radius: 50%; width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center;">✕</button>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; justify-content: center; margin-top: 2rem;">
-                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.05rem; border-radius: 30px;">
-                            Submit Complaint
-                        </button>
-                    </div>
-                </form>
             </div>
         </main>
     </div>

@@ -34,7 +34,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users — CivicTrack Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -42,10 +42,17 @@ $initials = strtoupper(substr($adminName, 0, 1));
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>🛡️ CivicTrack</h2>
-                <span>Admin Panel</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Administration Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
                 <a href="admin_dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
@@ -63,8 +70,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </a>
             </nav>
             <div class="sidebar-footer">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div>
+                        <div class="sidebar-user-name"><?php echo htmlspecialchars($adminName); ?></div>
+                        <div class="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
                 <a href="../logout.php">
-                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
+                    <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
         </aside>
@@ -155,6 +169,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
+            </div><!-- /.page-body -->
         </main>
     </div>
 

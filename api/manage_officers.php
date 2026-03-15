@@ -51,11 +51,12 @@ $action = $input['action'] ?? '';
 if ($action === 'add') {
     $name     = htmlspecialchars(trim($input['name'] ?? ''), ENT_QUOTES, 'UTF-8');
     $email    = filter_var(trim($input['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $department = htmlspecialchars(trim($input['department'] ?? ''), ENT_QUOTES, 'UTF-8');
     $phone    = htmlspecialchars(trim($input['phone'] ?? ''), ENT_QUOTES, 'UTF-8');
     $password = $input['password'] ?? '';
 
-    if (empty($name) || empty($email) || empty($password)) {
-        echo json_encode(['success' => false, 'message' => 'Name, email, and password are required.']);
+    if (empty($name) || empty($email) || empty($password) || empty($department)) {
+        echo json_encode(['success' => false, 'message' => 'Name, email, department, and password are required.']);
         exit;
     }
 
@@ -74,6 +75,7 @@ if ($action === 'add') {
     $officers->insertOne([
         'name'       => $name,
         'email'      => $email,
+        'department' => $department,
         'phone'      => $phone,
         'password'   => password_hash($password, PASSWORD_BCRYPT),
         'role'       => 'officer',

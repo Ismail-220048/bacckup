@@ -28,51 +28,95 @@ $recentArr = iterator_to_array($recentComplaints);
 
 $officerName = $_SESSION['user_name'] ?? 'Officer';
 $initials = strtoupper(substr($officerName, 0, 1));
+
+// Data for Bar Graph: Workflow over last 7 days
+$days = [];
+$counts = [];
+for ($i = 6; $i >= 0; $i--) {
+    $date = date('Y-m-d', strtotime("-$i days"));
+    $days[] = date('D', strtotime($date));
+    
+    // We count assignments created on each day
+    // Note: In a production app, you might track 'resolution_date' for workflow
+    $count = $complaintsCol->countDocuments([
+        'assigned_officer_id' => $officerId,
+        'created_at' => ['$regex' => "^$date"]
+    ]);
+    $counts[] = $count;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Officer Dashboard — CivicTrack</title>
+    <title>Officer Dashboard — CivicTrack Field Operations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>👮 CivicTrack</h2>
-                <span>Officer Portal</span>
+                <div class="sidebar-brand-inner">
+                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
+                    <div class="sidebar-brand-text">
+                        <h2>CivicTrack</h2>
+                        <span>Field Officer Portal</span>
+                    </div>
+                </div>
             </div>
+            <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Navigation</div>
                 <a href="officer_dashboard.php" class="active">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
                 <a href="my_assignments.php">
                     <span class="nav-icon">📋</span> My Assignments
                 </a>
+                <a href="profile.php">
+                    <span class="nav-icon">👤</span> My Profile
+                </a>
             </nav>
             <div class="sidebar-footer">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div>
+                        <div class="sidebar-user-name"><?php echo htmlspecialchars($officerName); ?></div>
+                        <div class="sidebar-user-role">Field Officer</div>
+                    </div>
+                </div>
                 <a href="../logout.php">
-                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
+                    <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
         </aside>
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
-
             <div class="page-header">
-                <h1>Officer Dashboard</h1>
+                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div>
+                        <h1>📊 Officer Dashboard</h1>
+                        <div class="breadcrumb">
+                            <a href="officer_dashboard.php">Home</a>
+                            <span>›</span>
+                            <span>Dashboard</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="user-info">
-                    <span>Welcome, <?php echo htmlspecialchars($officerName); ?></span>
+                    <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
+                    <span><?php echo htmlspecialchars($officerName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
                 </div>
             </div>
+            <div class="page-body">
 
             <!-- Profile Card -->
             <div class="profile-card">
@@ -88,32 +132,28 @@ $initials = strtoupper(substr($officerName, 0, 1));
             </div>
 
             <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card purple animate-card">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-value"><?php echo $assignedTotal; ?></div>
-                    <div class="stat-label">Total Assigned</div>
+            <!-- Charts Grid replaces Stats -->
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 2rem;">
+                <!-- Workflow Bar Chart -->
+                <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📈 Weekly Workflow</h3>
+                    <div style="width: 100%; height: 220px;">
+                        <canvas id="workflowBarChart"></canvas>
+                    </div>
                 </div>
-                <div class="stat-card orange animate-card">
-                    <div class="stat-icon">⏳</div>
-                    <div class="stat-value"><?php echo $assignedPending; ?></div>
-                    <div class="stat-label">Pending</div>
-                </div>
-                <div class="stat-card cyan animate-card">
-                    <div class="stat-icon">🔄</div>
-                    <div class="stat-value"><?php echo $assignedProgress; ?></div>
-                    <div class="stat-label">In Progress</div>
-                </div>
-                <div class="stat-card green animate-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-value"><?php echo $assignedResolved; ?></div>
-                    <div class="stat-label">Resolved</div>
+
+                <!-- Status Distribution Pie Chart -->
+                <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📊 Complaint Status</h3>
+                    <div style="width: 100%; height: 220px;">
+                        <canvas id="statusPieChart"></canvas>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quick Actions & Highlights -->
-            <div class="dashboard-widgets" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-                <div class="quick-actions" style="margin-bottom: 0; height: 100%;">
+            <!-- Quick Actions -->
+            <div class="dashboard-widgets" style="margin-bottom: 2rem;">
+                <div class="quick-actions" style="margin-bottom: 0;">
                     <a href="my_assignments.php" class="quick-action-card">
                         <span class="action-icon">📋</span>
                         <span class="action-label">All Assignments</span>
@@ -130,12 +170,6 @@ $initials = strtoupper(substr($officerName, 0, 1));
                         <span class="action-icon">✅</span>
                         <span class="action-label">Resolved (<?php echo $assignedResolved; ?>)</span>
                     </a>
-                </div>
-
-                <div class="illustration-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.3s ease;">
-                    <img src="../assets/images/abstract-reports.png" alt="Officer Tasks" style="max-height: 120px; object-fit: contain; margin-bottom: 1rem; filter: drop-shadow(0 10px 15px rgba(16,185,129,0.25)) hue-rotate(90deg); border-radius: 12px;">
-                     <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--text-white);">Task Management</h3>
-                     <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">Investigate, update, and resolve civic complaints effectively.</p>
                 </div>
             </div>
 
@@ -185,9 +219,67 @@ $initials = strtoupper(substr($officerName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
+            </div><!-- /.page-body -->
         </main>
     </div>
 
     <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 10 }
+                        }
+                    }
+                }
+            };
+
+            // Workflow Bar Chart
+            new Chart(document.getElementById('workflowBarChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode($days); ?>,
+                    datasets: [{
+                        label: 'New Assignments',
+                        data: <?php echo json_encode($counts); ?>,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 5,
+                        maxBarThickness: 30
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: { ...chartOptions.plugins, legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+
+            // Status Distribution Pie Chart
+            new Chart(document.getElementById('statusPieChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['Pending', 'In Progress', 'Resolved'],
+                    datasets: [{
+                        data: [<?php echo $assignedPending; ?>, <?php echo $assignedProgress; ?>, <?php echo $assignedResolved; ?>],
+                        backgroundColor: ['#f59e0b', '#0ea5e9', '#10b981'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: chartOptions
+            });
+        });
+    </script>
 </body>
 </html>

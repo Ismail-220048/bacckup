@@ -23,8 +23,12 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'offi
 
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
-    echo json_encode(['success' => false, 'message' => 'Invalid request body.']);
-    exit;
+    if (!empty($_POST)) {
+        $input = $_POST;
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid request body.']);
+        exit;
+    }
 }
 
 $complaintId = $input['complaint_id'] ?? '';
@@ -107,7 +111,7 @@ if ($_SESSION['role'] === 'officer') {
 }
 
 // Build update fields
-$validStatuses = ['Pending', 'In Progress', 'Resolved'];
+$validStatuses = ['Pending', 'In Progress', 'Resolved', 'Officer Completed'];
 $updateFields = [];
 
 if (!empty($input['status'])) {
@@ -143,6 +147,27 @@ if (isset($input['assigned_officer_id']) && $_SESSION['role'] === 'admin') {
         }
     } else {
         $updateFields['assigned_officer_name'] = '';
+    }
+}
+
+// Handle officer proof image upload
+if (isset($_FILES['officer_proof_image']) && $_FILES['officer_proof_image']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = __DIR__ . '/../uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    
+    $fileInfo = pathinfo($_FILES['officer_proof_image']['name']);
+    $ext = strtolower($fileInfo['extension']);
+    $allowedExt = ['jpg', 'jpeg', 'png', 'gif'];
+    
+    if (in_array($ext, $allowedExt)) {
+        $newName = uniqid('proof_') . '.' . $ext;
+        $destPath = $uploadDir . $newName;
+        
+        if (move_uploaded_file($_FILES['officer_proof_image']['tmp_name'], $destPath)) {
+            $updateFields['officer_proof_image'] = 'uploads/' . $newName;
+        }
     }
 }
 

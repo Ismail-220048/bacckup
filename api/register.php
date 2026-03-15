@@ -1,12 +1,19 @@
 <?php
 /**
  * CivicTrack API — User Registration
+ * Requires: session otp_verified = true (set by verify_otp.php)
  */
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../register.php');
+    exit;
+}
+
+// Block registration if phone OTP was not verified
+if (empty($_SESSION['otp_verified']) || $_SESSION['otp_verified'] !== true) {
+    header('Location: ../register.php?error=' . urlencode('Phone verification required. Please complete OTP verification.'));
     exit;
 }
 
@@ -47,6 +54,13 @@ if ($existing) {
     exit;
 }
 
+// Check duplicate phone
+$existingPhone = $users->findOne(['phone' => $phone]);
+if ($existingPhone) {
+    header('Location: ../register.php?error=' . urlencode('Phone number already registered.'));
+    exit;
+}
+
 // Insert user
 $users->insertOne([
     'name'       => $name,
@@ -56,6 +70,9 @@ $users->insertOne([
     'role'       => 'user',
     'created_at' => date('Y-m-d H:i:s')
 ]);
+
+// Clear OTP session flags after successful registration
+unset($_SESSION['otp_verified'], $_SESSION['otp_phone'], $_SESSION['otp_expiry']);
 
 header('Location: ../login.php?registered=1');
 exit;
