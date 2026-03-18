@@ -1,7 +1,5 @@
 <?php
-/**
- * CivicTrack API — Initiate Google OAuth
- */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/google.php';
 

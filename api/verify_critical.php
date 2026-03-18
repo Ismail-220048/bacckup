@@ -3,8 +3,14 @@
  * CivicTrack API — Verify Critical Complaint
  */
 session_start();
-require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../config/database.php';
+
+// Load .env if not already loaded
+if (!isset($_ENV['SMTP_HOST'])) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->load();
+}
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -91,20 +97,20 @@ if ($action === 'verify') {
     if (!empty($officerEmail)) {
         $mail = new PHPMailer(true);
         try {
-            // Server settings
+            // Server settings — loaded from .env
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
+            $mail->Host       = $_ENV['SMTP_HOST']     ?? 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'reportmycity0fficial@gmail.com';
-            
-            // NOTE TO USER: Put your 16-character Google App Password below
-            $mail->Password   = 'rxvt kefe zvkw ncnb'; 
-            
+            $mail->Username   = $_ENV['SMTP_USERNAME'] ?? '';
+            $mail->Password   = $_ENV['SMTP_PASSWORD'] ?? '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
+            $mail->Port       = (int)($_ENV['SMTP_PORT'] ?? 587);
 
             // Recipients
-            $mail->setFrom('reportmycity0fficial@gmail.com', 'CivicTrack Admin');
+            $mail->setFrom(
+                $_ENV['SMTP_FROM_EMAIL'] ?? $_ENV['SMTP_USERNAME'] ?? '',
+                $_ENV['SMTP_FROM_NAME']  ?? 'CivicTrack Admin'
+            );
             $mail->addAddress($officerEmail, $officerName);
 
             // Attach Citizen's Uploaded Photo if it exists
