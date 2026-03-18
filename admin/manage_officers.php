@@ -84,18 +84,25 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
             <div class="page-header">
-                <h1>Manage Officers</h1>
+                                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
+                    <h1>Manage Officers</h1>
+                </div>
                 <div class="user-info">
                     <span><?php echo htmlspecialchars($adminName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
                 </div>
             </div>
 
-            <!-- Add Officer Card -->
-            <div class="card">
+
+                <!-- Add Officer Card -->
+                <div class="card">
                 <div class="card-header">
                     <h3>➕ Add New Officer</h3>
                 </div>
@@ -195,7 +202,9 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     </td>
                                     <td><?php echo htmlspecialchars($o['created_at'] ?? '—'); ?></td>
                                     <td>
-                                        <button class="btn btn-danger btn-sm" onclick="deleteOfficer('<?php echo $oid; ?>')">🗑️ Delete</button>
+                                        <div class="action-btns">
+                                            <button class="btn btn-danger btn-sm" onclick="deleteOfficer('<?php echo $oid; ?>')">🗑️ Delete</button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -204,7 +213,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
-            </div><!-- /.page-body -->
+
         </main>
     </div>
 

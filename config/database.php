@@ -8,6 +8,10 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Load .env variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
 use MongoDB\Client;
 
 class Database {
@@ -17,16 +21,19 @@ class Database {
 
     private function __construct() {
         try {
+            $mongoUri = $_ENV['MONGO_URI'] ?? 'mongodb://localhost:27017';
+            $mongoDb  = $_ENV['MONGO_DB']  ?? 'civictrack';
+
             // Explicitly set a short timeout for initial connection check
-            $this->client = new Client("mongodb://localhost:27017", [
+            $this->client = new Client($mongoUri, [
                 'serverSelectionTimeoutMS' => 2000
             ]);
             // Attempt a simple command to verify connection
             $this->client->listDatabases();
-            $this->db = $this->client->civictrack;
+            $this->db = $this->client->$mongoDb;
         } catch (Exception $e) {
             header('Content-Type: text/plain');
-            die("CivicTrack Error: Database connection failed. Please ensure MongoDB is running on localhost:27017.\nDetails: " . $e->getMessage());
+            die("CivicTrack Error: Database connection failed. Please ensure MongoDB is running.\nDetails: " . $e->getMessage());
         }
     }
 
@@ -50,13 +57,16 @@ class Database {
      */
     public function seedAdmin() {
         try {
-            $admins = $this->getCollection('admins');
-            $existing = $admins->findOne(['email' => 'admin@civictrack.com']);
+            $adminEmail    = $_ENV['ADMIN_EMAIL']    ?? 'admin@civictrack.com';
+            $adminPassword = $_ENV['ADMIN_PASSWORD'] ?? 'admin123';
+
+            $admins   = $this->getCollection('admins');
+            $existing = $admins->findOne(['email' => $adminEmail]);
             if (!$existing) {
                 $admins->insertOne([
                     'name'       => 'Admin',
-                    'email'      => 'admin@civictrack.com',
-                    'password'   => password_hash('admin123', PASSWORD_BCRYPT),
+                    'email'      => $adminEmail,
+                    'password'   => password_hash($adminPassword, PASSWORD_BCRYPT),
                     'role'       => 'admin',
                     'created_at' => date('Y-m-d H:i:s')
                 ]);
@@ -71,14 +81,17 @@ class Database {
      */
     public function seedOfficer() {
         try {
+            $officerEmail    = $_ENV['OFFICER_EMAIL']    ?? 'officer@civictrack.com';
+            $officerPassword = $_ENV['OFFICER_PASSWORD'] ?? 'officer123';
+
             $officers = $this->getCollection('officers');
-            $existing = $officers->findOne(['email' => 'officer@civictrack.com']);
+            $existing = $officers->findOne(['email' => $officerEmail]);
             if (!$existing) {
                 $officers->insertOne([
                     'name'       => 'Default Officer',
-                    'email'      => 'officer@civictrack.com',
+                    'email'      => $officerEmail,
                     'phone'      => '',
-                    'password'   => password_hash('officer123', PASSWORD_BCRYPT),
+                    'password'   => password_hash($officerPassword, PASSWORD_BCRYPT),
                     'role'       => 'officer',
                     'created_at' => date('Y-m-d H:i:s')
                 ]);

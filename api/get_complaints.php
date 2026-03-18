@@ -50,17 +50,18 @@ $cursor = $complaints->find($filter, ['sort' => ['created_at' => -1]]);
 $results = [];
 foreach ($cursor as $doc) {
     $results[] = [
-        '_id'         => (string) $doc['_id'],
-        'user_id'     => $doc['user_id'] ?? '',
-        'title'       => $doc['title'] ?? '',
-        'category'    => $doc['category'] ?? '',
-        'description' => $doc['description'] ?? '',
-        'location'    => $doc['location'] ?? '',
-        'image'       => $doc['image'] ?? '',
-        'date'        => $doc['date'] ?? '',
-        'status'      => $doc['status'] ?? 'Pending',
-        'admin_reply' => $doc['admin_reply'] ?? '',
-        'created_at'  => $doc['created_at'] ?? ''
+        '_id'                 => (string) $doc['_id'],
+        'user_id'             => $doc['user_id'] ?? '',
+        'title'               => $doc['title'] ?? '',
+        'category'            => $doc['category'] ?? '',
+        'description'         => $doc['description'] ?? '',
+        'location'            => $doc['location'] ?? '',
+        'image'               => $doc['image'] ?? '',
+        'officer_proof_image' => $doc['officer_proof_image'] ?? '',
+        'date'                => $doc['date'] ?? '',
+        'status'              => $doc['status'] ?? 'Pending',
+        'admin_reply'         => $doc['admin_reply'] ?? '',
+        'created_at'          => $doc['created_at'] ?? ''
     ];
 }
 

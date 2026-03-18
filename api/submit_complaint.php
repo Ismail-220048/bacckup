@@ -23,6 +23,7 @@ $category    = htmlspecialchars(trim($_POST['category'] ?? ''), ENT_QUOTES, 'UTF
 $description = htmlspecialchars(trim($_POST['description'] ?? ''), ENT_QUOTES, 'UTF-8');
 $location    = htmlspecialchars(trim($_POST['location'] ?? ''), ENT_QUOTES, 'UTF-8');
 $date        = htmlspecialchars(trim($_POST['date'] ?? date('Y-m-d')), ENT_QUOTES, 'UTF-8');
+$riskType    = htmlspecialchars(trim($_POST['risk_type'] ?? 'Medium'), ENT_QUOTES, 'UTF-8');
 
 // Validation
 if (empty($title) || empty($category) || empty($description) || empty($location)) {
@@ -40,7 +41,18 @@ if (!in_array($category, $validCategories)) {
 
 // Handle image upload
 $imagePath = '';
-if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+if (isset($_FILES['image']) && $_FILES['image']['name'] !== '') {
+    if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+        header('Content-Type: application/json');
+        
+        $errMsg = 'Unknown upload error.';
+        if ($_FILES['image']['error'] === UPLOAD_ERR_INI_SIZE || $_FILES['image']['error'] === UPLOAD_ERR_FORM_SIZE) {
+            $errMsg = 'Image size exceeds the allowed system limit (usually 2MB or 5MB). Please compress the image.';
+        }
+        echo json_encode(['success' => false, 'message' => $errMsg]);
+        exit;
+    }
+
     $file = $_FILES['image'];
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     $maxSize = 5 * 1024 * 1024; // 5MB
@@ -91,6 +103,7 @@ $result = $complaints->insertOne([
     'location'            => $location,
     'image'               => $imagePath,
     'date'                => $date,
+    'risk_type'           => $riskType,
     'status'              => 'Pending',
     'admin_reply'         => '',
     'additional_user_ids' => [],

@@ -107,37 +107,43 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
             <div class="page-header">
-                <h1>Manage Complaints</h1>
+                                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
+                    <h1>Manage Complaints</h1>
+                </div>
                 <div class="user-info">
                     <span><?php echo htmlspecialchars($adminName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3>📋 All Complaints (<?php echo count($complaintsList); ?>)</h3>
-                </div>
-
-                <!-- Toolbar -->
-                <div class="toolbar">
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search complaints...">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📋 All Complaints (<?php echo count($complaintsList); ?>)</h3>
                     </div>
-                    <select class="filter-select" id="status-filter">
-                        <option value="">All Status</option>
-                        <option value="Pending" <?php echo (($_GET['status'] ?? '') === 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="In Progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
-                        <option value="Officer Completed" <?php echo (($_GET['status'] ?? '') === 'Officer Completed') ? 'selected' : ''; ?>>Officer Completed</option>
-                        <option value="Resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
-                    </select>
-                    <button class="btn btn-warning" id="btn-merge-selected" style="margin-left: auto;">🔗 Merge Selected</button>
-                </div>
 
-                <?php if (empty($complaintsList)): ?>
+                    <!-- Toolbar -->
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Search complaints...">
+                        </div>
+                        <select class="filter-select" id="status-filter">
+                            <option value="">All Status</option>
+                            <option value="Pending" <?php echo (($_GET['status'] ?? '') === 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                            <option value="In Progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
+                            <option value="Officer Completed" <?php echo (($_GET['status'] ?? '') === 'Officer Completed') ? 'selected' : ''; ?>>Officer Completed</option>
+                            <option value="Resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
+                        </select>
+                        <button class="btn btn-warning" id="btn-merge-selected" style="margin-left: auto;">🔗 Merge Selected</button>
+                    </div>
+
+                    <?php if (empty($complaintsList)): ?>
                     <div class="empty-state">
                         <div class="empty-icon">📭</div>
                         <p>No complaints found.</p>
@@ -155,6 +161,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     <th>Officer</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th>Citizen Rating</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -178,7 +185,10 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                             <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);">📷 View Image</a>
                                         <?php endif; ?>
                                     </td>
-                                    <td><?php echo htmlspecialchars($c['category']); ?></td>
+                                     <td>
+                                         <?php echo htmlspecialchars($c['category']); ?>
+                                         <br><small style="color:var(--text-muted); font-size: 0.75rem;">Risk: <?php echo htmlspecialchars($c['risk_type'] ?? 'Medium'); ?></small>
+                                     </td>
                                     <td><?php echo htmlspecialchars($userLookup[$c['user_id'] ?? ''] ?? 'Unknown'); ?></td>
                                     <td>
                                         <?php if ($assignedOfficer): ?>
@@ -190,8 +200,26 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                     <td><?php echo htmlspecialchars($c['date'] ?? $c['created_at']); ?></td>
                                     <td><span class="badge <?php echo $bc; ?>"><?php echo htmlspecialchars($status); ?></span></td>
                                     <td>
+                                        <?php if (isset($c['rating'])): ?>
+                                            <div class="rating-display" style="font-size: 0.85rem;">
+                                                <?php for($i=1; $i<=5; $i++): ?>
+                                                    <span class="star-static <?php echo ($i <= $c['rating']) ? 'filled' : ''; ?>" style="font-size: 0.85rem;">★</span>
+                                                <?php endfor; ?>
+                                                <small style="display:block; color:var(--text-muted);">"<?php echo htmlspecialchars($c['user_feedback'] ?? ''); ?>"</small>
+                                            </div>
+                                        <?php else: ?>
+                                            <span style="color: var(--text-muted); font-size: 0.8rem;">No rating yet</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
                                         <div class="action-btns">
-                                            <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['admin_reply'] ?? '')); ?>, '<?php echo htmlspecialchars($assignedOfficerId); ?>')">✏️ Update</button>
+                                            <?php if ($status !== 'Resolved'): ?>
+                                                <?php if (($c['risk_type'] ?? '') === 'Critical' && empty($c['is_verified_critical']) && $status === 'Pending'): ?>
+                                                    <button class="btn btn-danger btn-sm" onclick="openVerifyCriticalModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($c['title'], ENT_QUOTES); ?>')">🚨 Verify Critical</button>
+                                                <?php else: ?>
+                                                    <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['admin_reply'] ?? '')); ?>, '<?php echo htmlspecialchars($assignedOfficerId); ?>')">✏️ Update</button>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                             <button class="btn btn-outline btn-sm" onclick="viewComplaint('<?php echo $cId; ?>')">👁️ View</button>
                                             <button class="btn btn-danger btn-sm" onclick="deleteComplaint('<?php echo $cId; ?>')">🗑️</button>
                                         </div>
@@ -203,16 +231,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
-            </div><!-- /.page-body -->
         </main>
     </div>
 
     <!-- Update Status Modal -->
     <div class="modal-overlay" id="updateModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Update Complaint</h3>
-                <button class="modal-close">&times;</button>
+        <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">✏️ Update Complaint</h3>
+                <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <form id="updateForm">
                 <input type="hidden" id="update-complaint-id">
@@ -250,21 +277,57 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
     <!-- View Complaint Modal -->
     <div class="modal-overlay" id="viewModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Complaint Details</h3>
-                <button class="modal-close">&times;</button>
+        <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">📋 Task & Issue Details</h3>
+                <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <div id="viewContent"></div>
         </div>
     </div>
 
+    <!-- Verify Critical Modal -->
+    <div class="modal-overlay" id="verifyCriticalModal">
+        <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--danger);">🚨 Verify Critical Complaint</h3>
+                <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
+            </div>
+            <form id="verifyCriticalForm" style="margin-top: 1rem;">
+                <input type="hidden" id="vc-complaint-id">
+                <p style="margin-bottom: 1rem;"><strong>Title:</strong> <span id="vc-title-display"></span></p>
+                <div class="form-group">
+                    <label>Is this a genuine critical issue that needs immediate attention?</label>
+                    <select id="vc-action" class="filter-select" style="width: 100%;">
+                        <option value="verify">Yes, verify Critical & assign Officer Immediately</option>
+                        <option value="downgrade">No, downgrade to Medium risk</option>
+                    </select>
+                </div>
+                <div class="form-group" id="vc-officer-group">
+                    <label>Dispatch Officer Immediately</label>
+                    <select id="vc-officer" class="filter-select" style="width: 100%;">
+                        <option value="">— Select Officer —</option>
+                        <?php foreach ($officersList as $o):
+                            $oId = (string)$o['_id'];
+                            $isBusy = in_array($oId, $busyOfficerIds);
+                        ?>
+                            <option value="<?php echo $oId; ?>">
+                                👮 <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]<?php echo $isBusy ? ' (Busy)' : ''; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-danger btn-block">Confirm</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Merge Complaints Modal -->
     <div class="modal-overlay" id="mergeModal">
-        <div class="modal" style="max-width: 500px;">
-            <div class="modal-header">
-                <h3>Merge Complaints</h3>
-                <button class="modal-close">&times;</button>
+        <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--warning);">🔗 Merge Complaints</h3>
+                <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <form id="mergeForm" style="margin-top: 1rem;">
                 <div class="form-group">
@@ -329,35 +392,55 @@ $initials = strtoupper(substr($adminName, 0, 1));
             const c = complaintsData.find(item => item._id === id);
             if (!c) return;
 
-            let html = '<div class="complaint-detail-grid">';
-            html += `<div class="detail-item"><label>Title</label><p>${c.title}</p></div>`;
-            html += `<div class="detail-item"><label>Category</label><p>${c.category}</p></div>`;
-            html += `<div class="detail-item"><label>Location</label><p>${c.location}</p></div>`;
             let badgeClass = c.status === 'Pending' ? 'pending' : (c.status === 'Resolved' ? 'resolved' : 'progress');
-            html += `<div class="detail-item"><label>Date</label><p>${c.date}</p></div>`;
-            html += `<div class="detail-item"><label>Status</label><p><span class="badge badge-${badgeClass}">${c.status}</span></p></div>`;
-            html += `<div class="detail-item"><label>Reported By</label><p>${c.user_name}</p></div>`;
+
+            let html = '<div class="complaint-detail-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">';
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Issue Title</label><p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">${c.title}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Location</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.location}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Date Reported</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.date}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Current Status</label><p style="margin-top: 0.4rem;"><span class="badge badge-${badgeClass}" style="font-size: 0.95rem; padding: 0.4rem 0.8rem;">${c.status}</span></p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Reported By</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">👤 ${c.user_name}</p></div>`;
             if (c.assigned_officer_name) {
-                html += `<div class="detail-item"><label>Assigned Officer</label><p>👮 ${c.assigned_officer_name}</p></div>`;
+                html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Assigned Officer</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--warning); margin-top: 0.2rem;">👮 ${c.assigned_officer_name}</p></div>`;
             }
             html += '</div>';
-            html += `<div style="margin-top:1rem"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Description</label><p style="color:var(--text-primary);font-size:0.92rem;">${c.description}</p></div>`;
+            
+            html += `<div style="margin-top:1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); border-left: 4px solid var(--primary-light);">
+                        <label style="display:block;font-size:0.85rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:0.5rem;">Citizen Description</label>
+                        <p style="color:var(--text-primary);font-size:1.05rem; line-height: 1.6;">${c.description}</p>
+                     </div>`;
             if (c.admin_reply) {
-                html += `<div style="margin-top:1rem"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Admin Reply</label><p style="color:var(--text-primary);font-size:0.92rem;">${c.admin_reply}</p></div>`;
+                html += `<div style="margin-top:1rem; background: rgba(59, 130, 246, 0.05); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid rgba(59, 130, 246, 0.2);">
+                            <label style="display:block;font-size:0.85rem;color:var(--gov-navy);font-weight:700;text-transform:uppercase;margin-bottom:0.4rem;">Admin Reply</label>
+                            <p style="color:var(--text-primary);font-size:1rem; line-height: 1.5;">${c.admin_reply}</p>
+                         </div>`;
             }
             if (c.officer_notes) {
-                html += `<div style="margin-top:1rem"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Officer Notes</label><p style="color:var(--text-primary);font-size:0.92rem;">${c.officer_notes}</p></div>`;
+                html += `<div style="margin-top:1rem; background: var(--bg-card); padding: 1.2rem; border-radius: var(--radius-md); border: 1px dashed var(--border);">
+                            <label style="display:block;font-size:0.85rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:0.4rem;">Officer Notes</label>
+                            <p style="color:var(--text-primary);font-size:1rem; line-height: 1.5;">${c.officer_notes}</p>
+                         </div>`;
             }
+
             if (c.image || c.officer_proof_image) {
-                html += `<div style="margin-top:1rem; display: flex; gap: 1rem; flex-wrap: wrap;">`;
+                html += `<div style="margin-top:1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">`;
                 if (c.image) {
-                    html += `<div style="flex:1; min-width: 200px;"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">User Image</label><img src="../${c.image}" alt="Complaint Image" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);"></div>`;
+                    html += `<div style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                                <label style="display:block;font-size:0.85rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:0.8rem;">Citizen Submission Image</label>
+                                <img src="../${c.image}" alt="Complaint Image" style="display:block; width:100%; height:auto; max-height: 350px; object-fit: contain; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                             </div>`;
                 }
                 if (c.officer_proof_image) {
-                    html += `<div style="flex:1; min-width: 200px;"><label style="display:block;font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:0.25rem;">Officer Proof Image</label><img src="../${c.officer_proof_image}" alt="Proof Image" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);"></div>`;
+                    html += `<div style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                                <label style="display:block;font-size:0.85rem;color:var(--success);font-weight:700;text-transform:uppercase;margin-bottom:0.8rem;">Officer Uploaded Proof Image</label>
+                                <img src="../${c.officer_proof_image}" alt="Proof Image" style="display:block; width:100%; height:auto; max-height: 350px; object-fit: contain; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                             </div>`;
                 }
                 html += `</div>`;
             }
+
+            // Removed map code from here.
 
             document.getElementById('viewContent').innerHTML = html;
             openModal('viewModal');
@@ -462,6 +545,59 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     showToast(result.message, 'error');
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Confirm Merge';
+                }
+            });
+        }
+
+        // --- Verify Critical Logic ---
+        function openVerifyCriticalModal(id, title) {
+            document.getElementById('vc-complaint-id').value = id;
+            document.getElementById('vc-title-display').textContent = title;
+            document.getElementById('vc-action').value = 'verify';
+            document.getElementById('vc-officer-group').style.display = 'block';
+            openModal('verifyCriticalModal');
+        }
+
+        const verifyCriticalForm = document.getElementById('verifyCriticalForm');
+        if (verifyCriticalForm) {
+            const vcAction = document.getElementById('vc-action');
+            vcAction.addEventListener('change', function() {
+                if (this.value === 'verify') {
+                    document.getElementById('vc-officer-group').style.display = 'block';
+                } else {
+                    document.getElementById('vc-officer-group').style.display = 'none';
+                }
+            });
+
+            verifyCriticalForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('button[type="submit"]');
+                const id = document.getElementById('vc-complaint-id').value;
+                const action = document.getElementById('vc-action').value;
+                const officerId = document.getElementById('vc-officer').value;
+
+                if (action === 'verify' && !officerId) {
+                    showToast('Please select an officer for urgent dispatch.', 'error');
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = 'Processing...';
+
+                const result = await postJSON('../api/verify_critical.php', {
+                    complaint_id: id,
+                    action: action,
+                    officer_id: officerId
+                });
+
+                if (result.success) {
+                    showToast(result.message, 'success');
+                    closeModal('verifyCriticalModal');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast(result.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Confirm';
                 }
             });
         }

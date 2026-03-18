@@ -88,17 +88,24 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
             <div class="page-header">
-                <h1>Complaint Density Heatmap</h1>
+                                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
+                    <h1>Complaint Density Heatmap</h1>
+                </div>
                 <div class="user-info">
                     <span><?php echo htmlspecialchars($adminName); ?></span>
                     <div class="user-avatar"><?php echo $initials; ?></div>
                 </div>
             </div>
 
-            <div class="card">
+
+                <div class="card">
                 <div class="card-header">
                     <h3>🔥 Live Complaint Activity Heatmap</h3>
                 </div>
@@ -115,7 +122,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <!-- Map Container -->
                 <div id="heatmap-container"></div>
             </div>
-            </div><!-- /.page-body -->
+
         </main>
     </div>
 

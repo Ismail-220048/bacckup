@@ -62,9 +62,15 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                     <label for="password">Password <span class="required">*</span></label>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top:0.5rem; padding: 0.75rem;">
-                    🔐 Sign In to Portal
-                </button>
+                <div class="auth-buttons-grid">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        🔐 Sign In
+                    </button>
+                    <a href="api/google_auth.php" class="btn btn-outline btn-block btn-google" style="margin-bottom:0; font-size: 0.8rem; padding: 0.65rem 0.5rem;">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="auth-icon">
+                        Continue with Google
+                    </a>
+                </div>
             </form>
 
             <div class="auth-footer">

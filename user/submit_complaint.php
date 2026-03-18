@@ -7,6 +7,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
     exit;
 }
+$db = Database::getInstance();
+$userDoc = $db->getCollection('users')->findOne(['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
+$userPhoto = $userDoc['photo'] ?? '';
 $userName = $_SESSION['user_name'] ?? 'User';
 $initials = strtoupper(substr($userName, 0, 1));
 ?>
@@ -60,21 +63,61 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </a>
             </nav>
             <div class="sidebar-footer">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-avatar">
+                        <?php if ($userPhoto): ?>
+                            <img src="../<?php echo htmlspecialchars($userPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <?php else: ?>
+                            <?php echo $initials; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div>
+                        <div class="sidebar-user-name"><?php echo htmlspecialchars($userName); ?></div>
+                        <div class="sidebar-user-role">Citizen</div>
+                    </div>
+                </div>
                 <a href="../logout.php">
-                    Logout <i class="fa fa-sign-out" style="margin-left: auto; font-size: 1.1rem;"></i>
+                    <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
         </aside>
 
         <!-- Main -->
         <main class="main-content">
-            <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
             <div class="page-header">
-                <h1>Submit a Complaint</h1>
+                                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
+                    <h1>Submit a Complaint</h1>
+                </div>
+
                 <div class="user-info">
                     <span><?php echo htmlspecialchars($userName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php if ($userPhoto): ?>
+                                <img src="../<?php echo htmlspecialchars($userPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                            <?php else: ?>
+                                <?php echo $initials; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($userName); ?></strong>
+                                <span>Citizen Account</span>
+                            </div>
+                            <a href="profile.php">
+                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                            </a>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -127,8 +170,17 @@ $initials = strtoupper(substr($userName, 0, 1));
                             
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="date">Date</label>
+                                    <label for="date">Incident Date</label>
                                     <input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="risk_type">Risk Type / Priority</label>
+                                    <select id="risk_type" name="risk_type" required>
+                                        <option value="Low">🟢 Low Risk (General Maintenance)</option>
+                                        <option value="Medium" selected>🟡 Medium Risk (Needs Attention)</option>
+                                        <option value="High">🔴 High Risk (Immediate Danger / Health Hazard)</option>
+                                        <option value="Critical">🆘 Critical (Emergency)</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -420,6 +472,13 @@ $initials = strtoupper(substr($userName, 0, 1));
                 submitBtn.textContent = 'Submit Complaint';
             }
         });
+
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
+        }
     </script>
 </body>
 </html>

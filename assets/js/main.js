@@ -25,18 +25,21 @@ function showToast(message, type = 'info', duration = 3500) {
     }, duration);
 }
 
-/* ---------- Sidebar Toggle (Mobile) ---------- */
+/* ---------- Sidebar Toggle ---------- */
 function initSidebar() {
-    const toggle = document.querySelector('.sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
-    if (toggle && sidebar) {
-        toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-        document.addEventListener('click', (e) => {
-            if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== toggle) {
-                sidebar.classList.remove('open');
-            }
-        });
-    }
+    if (!sidebar) return;
+
+    // We add a single document listener. Since inline onclick already handles toggling,
+    // we only need to handle closing when clicking outside.
+    document.addEventListener('click', (e) => {
+        const isToggle = e.target.closest('.sidebar-toggle');
+        const isSidebar = e.target.closest('.sidebar');
+        
+        if (sidebar.classList.contains('open') && !isSidebar && !isToggle) {
+            sidebar.classList.remove('open');
+        }
+    });
 }
 
 /* ---------- Image Preview ---------- */
@@ -416,13 +419,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initAIRobot();      // AI Robot Mode init (Admin Only)
 });
 
-/* ---------- AI Robot Mode (Admin Only) ---------- */
+/* ---------- AI Robot System ---------- */
 function initAIRobot() {
-    const roleEl = document.querySelector('.sidebar-user-role');
-    if (!roleEl || !roleEl.textContent.includes('Administrator')) return;
+    // Only show on dashboard-like pages
+    if (!document.querySelector('.main-content')) return;
 
     const apiBase = getApiBase();
-    
+    const isDashboard = window.location.pathname.includes('dashboard.php');
+    const roleEl = document.querySelector('.sidebar-user-role');
+    const isAdmin = roleEl && roleEl.textContent.includes('Administrator');
+
     // Create Robot UI
     const robot = document.createElement('div');
     robot.className = 'ai-robot-float';
@@ -440,17 +446,53 @@ function initAIRobot() {
         <span id="close-ai-logs" style="cursor: pointer; opacity: 0.6;">&times;</span>
     </div><div id="ai-logs-list" style="flex: 1; overflow-y: auto;"></div>`;
 
-    document.body.appendChild(robot);
-    document.body.appendChild(logContainer);
+    const chatWindow = document.createElement('div');
+    chatWindow.id = 'ai-chat-window';
+    chatWindow.innerHTML = `
+        <div class="ai-chat-header">
+            <img src="../assets/images/ai_robot.png" alt="AI Agent">
+            <div class="ai-chat-header-info">
+                <h4>Civic Assistant</h4>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span style="color: #10b981; font-size: 0.7rem;">● Active</span>
+                    <button id="reset-ai-chat" title="Restart Chat" style="background: none; border: none; cursor: pointer; font-size: 0.8rem; opacity: 0.6;">🔄</button>
+                </div>
+            </div>
+            <button id="close-ai-chat">&times;</button>
+        </div>
+        <div class="ai-chat-body" id="ai-chat-messages">
+            <div class="chat-message ai">
+                Hello! I'm your AI Civic Assistant. How can I help you today?
+                <div class="ai-chat-suggestions">
+                    <div class="suggestion-chip" onclick="handleAIRobotAction('report_complaint')">📢 Report Complaint</div>
+                    <div class="suggestion-chip" onclick="handleAIRobotAction('check_status')">🔍 Check My Status</div>
+                </div>
+            </div>
+        </div>
+        <div class="typing-indicator" id="ai-typing">
+            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>
+        <div class="ai-chat-footer">
+            <input type="text" id="ai-chat-input" placeholder="Type a message...">
+            <button id="send-ai-message">✈️</button>
+        </div>
+    `;
 
-    // Initial Position Check
-    const savedPos = JSON.parse(localStorage.getItem('ai_robot_pos'));
-    if (savedPos) {
-        Object.assign(robot.style, {
-            right: 'auto', bottom: 'auto',
-            left: savedPos.x + 'px', top: savedPos.y + 'px'
-        });
+    const userInfo = document.querySelector('.page-header .user-info');
+    if (userInfo) {
+        robot.classList.add('in-header');
+        userInfo.insertBefore(robot, userInfo.firstChild);
+    } else {
+        document.body.appendChild(robot);
     }
+
+    if (isAdmin) {
+        document.body.appendChild(logContainer);
+    } else {
+        document.body.appendChild(chatWindow);
+    }
+
+    // Start at default position (relative in header or fixed on body)
 
     let aiModeActive = false;
     let loopInterval = null;
@@ -473,14 +515,33 @@ function initAIRobot() {
             if (!isDragging && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
                 isDragging = true;
                 robot.classList.add('dragging');
+                robot.style.position = 'fixed';
                 setBubbleMessage("Wheee! Let's go!");
             }
             if (isDragging) {
+                const newLeft = initialX + dx;
+                const newTop = initialY + dy;
+                
                 Object.assign(robot.style, {
                     right: 'auto', bottom: 'auto',
-                    left: (initialX + dx) + 'px',
-                    top: (initialY + dy) + 'px'
+                    left: newLeft + 'px',
+                    top: newTop + 'px'
                 });
+
+                // Reposition Chat/Logs to follow
+                if (!isAdmin) {
+                    Object.assign(chatWindow.style, {
+                        right: 'auto', bottom: 'auto',
+                        left: (newLeft - 315) + 'px',
+                        top: (newTop + 75) + 'px'
+                    });
+                } else if (logContainer) {
+                    Object.assign(logContainer.style, {
+                        right: 'auto', bottom: 'auto',
+                        left: (newLeft - 235) + 'px',
+                        top: (newTop + 75) + 'px'
+                    });
+                }
             }
         };
 
@@ -489,7 +550,7 @@ function initAIRobot() {
             document.removeEventListener('mouseup', onMouseUp);
             if (isDragging) {
                 const rect = robot.getBoundingClientRect();
-                localStorage.setItem('ai_robot_pos', JSON.stringify({ x: rect.left, y: rect.top }));
+                // No longer saving position to ensure it resets to top-right on reload
                 robot.classList.remove('dragging');
                 setTimeout(() => { isDragging = false; }, 50);
                 setBubbleMessage("I'll stay right here!");
@@ -529,7 +590,7 @@ function initAIRobot() {
     };
 
     const runAILoop = async () => {
-        if (!aiModeActive) return;
+        if (!isAdmin || !aiModeActive) return;
         try {
             const res = await fetch(apiBase + '/ai_run_tasks.php');
             const data = await res.json();
@@ -565,20 +626,160 @@ function initAIRobot() {
         if (isDragging) return;
         if (e.target.closest('#close-ai-logs')) return;
         
-        const res = await postJSON(apiBase + '/ai_mode_control.php', { action: 'toggle' });
-        if (res.success) {
-            setAIMode(res.ai_mode);
+        if (isAdmin) {
+            // Admin Mode: Toggle Background Automation
+            setAIMode(!aiModeActive);
+        } else {
+            // User/Officer Mode: Toggle Chat Window
+            chatWindow.classList.toggle('visible');
+            if (chatWindow.classList.contains('visible')) {
+                document.getElementById('ai-chat-input').focus();
+            }
         }
     });
 
-    logContainer.querySelector('#close-ai-logs').addEventListener('click', () => {
-        logContainer.classList.remove('visible');
-    });
+    if (!isAdmin) {
+        chatWindow.querySelector('#close-ai-chat').addEventListener('click', () => {
+            chatWindow.classList.remove('visible');
+        });
+
+        chatWindow.querySelector('#reset-ai-chat').addEventListener('click', async () => {
+            if (confirm("Restart this conversation?")) {
+                await postJSON(apiBase + '/ai_chat.php', { message: 'RESET_SESSION' });
+                document.getElementById('ai-chat-messages').innerHTML = `
+                    <div class="chat-message ai">
+                        Conversation restarted. How can I help you?
+                        <div class="ai-chat-suggestions">
+                            <div class="suggestion-chip" onclick="handleAIRobotAction('report_complaint')">📢 Report Complaint</div>
+                            <div class="suggestion-chip" onclick="handleAIRobotAction('check_status')">🔍 Check My Status</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    const addChatMessage = (text, sender = 'ai') => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${sender}`;
+        msgDiv.innerHTML = text;
+        const body = document.getElementById('ai-chat-messages');
+        body.appendChild(msgDiv);
+        body.scrollTop = body.scrollHeight;
+        return msgDiv;
+    };
+
+    const showTyping = (show) => {
+        document.getElementById('ai-typing').style.display = show ? 'flex' : 'none';
+        const body = document.getElementById('ai-chat-messages');
+        body.scrollTop = body.scrollHeight;
+    };
+
+    window.handleAIRobotAction = async (action) => {
+        if (action === 'report_complaint') {
+            addChatMessage("I can help you with that! First, I'll need your location to know where the issue is. Is it okay if I access your live location?", 'ai');
+            const chips = document.createElement('div');
+            chips.className = 'ai-chat-suggestions';
+            chips.innerHTML = `
+                <div class="suggestion-chip" id="btn-allow-loc">📍 Allow Location</div>
+                <div class="suggestion-chip" onclick="addChatMessage('I\\'ll provide it manually.', 'user'); handleAIRobotAction('manual_loc')">📝 Enter Manually</div>
+            `;
+            document.getElementById('ai-chat-messages').appendChild(chips);
+            
+            document.getElementById('btn-allow-loc').onclick = () => {
+                addChatMessage("Sure, allow my location.", 'user');
+                chips.remove();
+                if (navigator.geolocation) {
+                    showTyping(true);
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        // Reverse Geocoding or just use coords
+                        const locStr = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                        sessionStorage.setItem('ai_chat_lat', lat);
+                        sessionStorage.setItem('ai_chat_lng', lng);
+                        handleAIRobotMessage("MY_LOCATION:" + locStr);
+                    }, (err) => {
+                        showTyping(false);
+                        addChatMessage("Oops! I couldn't get your location. Please type it manually.", 'ai');
+                    });
+                } else {
+                    addChatMessage("Geolocation is not supported by your browser. Please type your location.", 'ai');
+                }
+            };
+        } else if (action === 'check_status') {
+             addChatMessage("I'll check your complaints. One moment...", 'ai');
+             handleAIRobotMessage("CHECK_STATUS");
+        } else if (action === 'manual_loc') {
+             addChatMessage("No problem. Please type the location of the issue.", 'ai');
+        }
+    };
+
+    const handleAIRobotMessage = async (text) => {
+        showTyping(true);
+        try {
+            const res = await postJSON(apiBase + '/ai_chat.php', { message: text });
+            showTyping(false);
+            if (res.success) {
+                addChatMessage(res.reply, 'ai');
+                if (res.suggestions) {
+                    const chips = document.createElement('div');
+                    chips.className = 'ai-chat-suggestions';
+                    res.suggestions.forEach(s => {
+                        const chip = document.createElement('div');
+                        chip.className = 'suggestion-chip';
+                        chip.textContent = s.label;
+                        chip.onclick = () => {
+                            addChatMessage(s.label, 'user');
+                            handleAIRobotMessage(s.value);
+                            chips.remove();
+                        };
+                        chips.appendChild(chip);
+                    });
+                    document.getElementById('ai-chat-messages').appendChild(chips);
+                }
+                if (res.action === 'RELOAD') {
+                    setTimeout(() => location.reload(), 2000);
+                }
+            } else {
+                addChatMessage("I'm having a bit of trouble connecting to my brain. Please try again later.", 'ai');
+            }
+        } catch (e) {
+            showTyping(false);
+            addChatMessage("I encountered an error. Please try again.", 'ai');
+        }
+    };
+
+    const sendMsg = () => {
+        const input = document.getElementById('ai-chat-input');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        addChatMessage(text, 'user');
+        handleAIRobotMessage(text);
+    };
+
+    if (!isAdmin) {
+        document.getElementById('send-ai-message').addEventListener('click', sendMsg);
+        document.getElementById('ai-chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMsg();
+        });
+    }
+
+    if (isAdmin) {
+        logContainer.querySelector('#close-ai-logs').addEventListener('click', () => {
+            logContainer.classList.remove('visible');
+        });
+    }
 
     // Welcome Greeting
     setTimeout(() => {
-        setBubbleMessage("Welcome back, Chief! Need some AI help today?");
-    }, 1000);
+        if (isAdmin) {
+            setBubbleMessage("AI System Online. Ready to automate.");
+        } else {
+            setBubbleMessage("Hi! I'm your Civic Assistant. Need help?");
+        }
+    }, 1500);
 
     // Initial state
     fetch(apiBase + '/ai_mode_control.php')

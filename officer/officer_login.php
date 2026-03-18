@@ -86,7 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password">Password <span class="required">*</span></label>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top:0.5rem; padding: 0.75rem;">
+                <div class="form-group" style="text-align: right; margin-top: -0.5rem; margin-bottom: 1rem;">
+                    <a href="forgot_password.php" style="font-size: 0.82rem; color: var(--text-muted); text-decoration: underline;">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.75rem;">
                     👮 Sign In to Officer Portal
                 </button>
             </form>

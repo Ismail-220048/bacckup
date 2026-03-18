@@ -44,6 +44,12 @@ try {
     exit;
 }
 
+$userDoc = $collection->findOne(['_id' => $userId]);
+if (!$userDoc) {
+    echo json_encode(['success' => false, 'message' => 'User not found.']);
+    exit;
+}
+
 // Check for duplicate email across other accounts
 $existingEmail = $collection->findOne([
     'email' => $email,
@@ -60,14 +66,45 @@ $updateFields = [
     'phone' => $phone
 ];
 
+if (!empty($input['photo']) && strpos($input['photo'], 'data:image') === 0) {
+    // Handle base64 photo
+    $data = explode(',', $input['photo']);
+    if (count($data) > 1) {
+        $imgData = base64_decode($data[1]);
+        $info = getimagesizefromstring($imgData);
+        if ($info) {
+            $ext = 'jpg';
+            if ($info[2] === IMAGETYPE_PNG) $ext = 'png';
+            if ($info[2] === IMAGETYPE_GIF) $ext = 'gif';
+            
+            $filename = 'profile_' . $_SESSION['user_id'] . '_' . time() . '.' . $ext;
+            $filepath = __DIR__ . '/../uploads/profiles/' . $filename;
+            
+            if (file_put_contents($filepath, $imgData)) {
+                $updateFields['photo'] = 'uploads/profiles/' . $filename;
+                
+                // Cleanup old photo if exists
+                if (!empty($userDoc['photo'])) {
+                    $oldPath = __DIR__ . '/../' . $userDoc['photo'];
+                    if (file_exists($oldPath)) @unlink($oldPath);
+                }
+            }
+        }
+    }
+}
+
 if (!empty($password)) {
     $updateFields['password'] = password_hash($password, PASSWORD_BCRYPT);
+    if (isset($_SESSION['needs_password_notification'])) {
+        unset($_SESSION['needs_password_notification']);
+    }
 }
 
 $result = $collection->updateOne(
     ['_id' => $userId],
     ['$set' => $updateFields]
 );
+
 
 // Update session variables if they changed
 $_SESSION['user_name'] = $name;

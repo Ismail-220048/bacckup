@@ -27,7 +27,10 @@ $recentComplaints = $complaintsCol->find(
 $recentArr = iterator_to_array($recentComplaints);
 
 $officerName = $_SESSION['user_name'] ?? 'Officer';
+$officerEmail = $_SESSION['user_email'] ?? '';
 $initials = strtoupper(substr($officerName, 0, 1));
+$officerDoc = $db->getCollection('officers')->findOne(['_id' => new MongoDB\BSON\ObjectId($officerId)]);
+$officerPhoto = $officerDoc['photo'] ?? '';
 
 // Data for Bar Graph: Workflow over last 7 days
 $days = [];
@@ -84,7 +87,13 @@ for ($i = 6; $i >= 0; $i--) {
             </nav>
             <div class="sidebar-footer">
                 <div class="sidebar-user-info">
-                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div class="sidebar-user-avatar">
+                        <?php if ($officerPhoto): ?>
+                            <img src="../<?php echo htmlspecialchars($officerPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <?php else: ?>
+                            <?php echo $initials; ?>
+                        <?php endif; ?>
+                    </div>
                     <div>
                         <div class="sidebar-user-name"><?php echo htmlspecialchars($officerName); ?></div>
                         <div class="sidebar-user-role">Field Officer</div>
@@ -99,8 +108,12 @@ for ($i = 6; $i >= 0; $i--) {
         <!-- Main -->
         <main class="main-content">
             <div class="page-header">
-                <div class="header-left">
+                                <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
                     <div>
                         <h1>📊 Officer Dashboard</h1>
                         <div class="breadcrumb">
@@ -113,14 +126,41 @@ for ($i = 6; $i >= 0; $i--) {
                 <div class="user-info">
                     <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
                     <span><?php echo htmlspecialchars($officerName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php if ($officerPhoto): ?>
+                                <img src="../<?php echo htmlspecialchars($officerPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                            <?php else: ?>
+                                <?php echo $initials; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($officerName); ?></strong>
+                                <span><?php echo htmlspecialchars($officerEmail); ?></span>
+                            </div>
+                            <a href="profile.php">
+                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                            </a>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="page-body">
 
             <!-- Profile Card -->
             <div class="profile-card">
-                <div class="profile-avatar"><?php echo $initials; ?></div>
+                <div class="profile-avatar">
+                    <?php if ($officerPhoto): ?>
+                        <img src="../<?php echo htmlspecialchars($officerPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                    <?php else: ?>
+                        <?php echo $initials; ?>
+                    <?php endif; ?>
+                </div>
                 <div class="profile-info">
                     <h3><?php echo htmlspecialchars($officerName); ?></h3>
                     <p><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></p>
@@ -225,6 +265,12 @@ for ($i = 6; $i >= 0; $i--) {
 
     <script src="../assets/js/main.js"></script>
     <script>
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const chartOptions = {
                 responsive: true,

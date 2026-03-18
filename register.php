@@ -658,11 +658,17 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                 <span class="field-hint">An OTP will be sent to this number for verification.</span>
             </div>
 
-            <button class="btn-next" id="btn-1">
-                <span>Send OTP</span>
-                <span>📩</span>
-                <div class="spinner" id="spin-1"></div>
-            </button>
+            <div class="auth-buttons-grid">
+                <button class="btn-next" id="btn-1" style="margin-top:0;">
+                    <span>Send OTP</span>
+                    <span>📩</span>
+                    <div class="spinner" id="spin-1"></div>
+                </button>
+                <a href="api/google_auth.php" class="btn btn-outline btn-block btn-google" style="margin-bottom:0; font-size: 0.8rem; padding: 0.65rem 0.4rem;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="auth-icon">
+                    Continue with Google
+                </a>
+            </div>
 
             <div class="reg-footer-link">Already have an account? <a href="login.php">Sign in</a></div>
         </div>

@@ -3,3 +3,4 @@ mongodb_data/
 node_modules/
 .env
 vendor/
+.env.example

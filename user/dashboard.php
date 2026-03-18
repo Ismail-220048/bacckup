@@ -27,6 +27,8 @@ $recentComplaints = $complaints->find(
 
 $userName = $_SESSION['user_name'] ?? 'User';
 $userEmail = $_SESSION['user_email'] ?? '';
+$userDoc = $db->getCollection('users')->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
+$userPhoto = $userDoc['photo'] ?? '';
 $initials = strtoupper(substr($userName, 0, 1));
 ?>
 <!DOCTYPE html>
@@ -70,7 +72,13 @@ $initials = strtoupper(substr($userName, 0, 1));
             </nav>
             <div class="sidebar-footer">
                 <div class="sidebar-user-info">
-                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
+                    <div class="sidebar-user-avatar">
+                        <?php if ($userPhoto): ?>
+                            <img src="../<?php echo htmlspecialchars($userPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <?php else: ?>
+                            <?php echo $initials; ?>
+                        <?php endif; ?>
+                    </div>
                     <div>
                         <div class="sidebar-user-name"><?php echo htmlspecialchars($userName); ?></div>
                         <div class="sidebar-user-role">Citizen</div>
@@ -86,8 +94,12 @@ $initials = strtoupper(substr($userName, 0, 1));
         <main class="main-content">
             <!-- Page Header -->
             <div class="page-header">
-                <div class="header-left">
+                                <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <div class="header-logo-group">
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
+                        <span>CivicTrack</span>
+                    </div>
                     <div>
                         <h1>📊 My Dashboard</h1>
                         <div class="breadcrumb">
@@ -97,17 +109,55 @@ $initials = strtoupper(substr($userName, 0, 1));
                         </div>
                     </div>
                 </div>
+
                 <div class="user-info">
                     <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
                     <span>Welcome, <?php echo htmlspecialchars($userName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php if ($userPhoto): ?>
+                                <img src="../<?php echo htmlspecialchars($userPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                            <?php else: ?>
+                                <?php echo $initials; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($userName); ?></strong>
+                                <span><?php echo htmlspecialchars($userEmail); ?></span>
+                            </div>
+                            <a href="profile.php">
+                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                            </a>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="page-body">
+                <?php if (isset($_SESSION['needs_password_notification'])): ?>
+                <div class="alert alert-warning animate-slide-down" style="margin-bottom: 2rem; border-left: 4px solid #f59e0b; background: #fffbeb; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem;">⚠️</span>
+                        <div>
+                            <strong style="color: #92400e;">Security Recommendation</strong>
+                            <p style="margin: 0; color: #b45309; font-size: 0.9rem;">You logged in via Google. Please <a href="profile.php" style="font-weight: 600; text-decoration: underline;">create a password</a> in your profile to enable direct login later.</p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
 
             <!-- Profile Card -->
             <div class="profile-card">
-                <div class="profile-avatar"><?php echo $initials; ?></div>
+                <div class="profile-avatar">
+                    <?php if ($userPhoto): ?>
+                        <img src="../<?php echo htmlspecialchars($userPhoto); ?>" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                    <?php else: ?>
+                        <?php echo $initials; ?>
+                    <?php endif; ?>
+                </div>
                 <div class="profile-info">
                     <h3><?php echo htmlspecialchars($userName); ?></h3>
                     <p><?php echo htmlspecialchars($userEmail); ?></p>
@@ -212,10 +262,17 @@ $initials = strtoupper(substr($userName, 0, 1));
                     </div>
                 <?php endif; ?>
             </div>
-            </div><!-- /.page-body -->
         </main>
     </div>
 
     <script src="../assets/js/main.js"></script>
+    <script>
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
+        }
+    </script>
 </body>
 </html>

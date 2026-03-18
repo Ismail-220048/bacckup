@@ -151,7 +151,16 @@ if (isset($input['assigned_officer_id']) && $_SESSION['role'] === 'admin') {
 }
 
 // Handle officer proof image upload
-if (isset($_FILES['officer_proof_image']) && $_FILES['officer_proof_image']['error'] === UPLOAD_ERR_OK) {
+if (isset($_FILES['officer_proof_image']) && $_FILES['officer_proof_image']['name'] !== '') {
+    if ($_FILES['officer_proof_image']['error'] !== UPLOAD_ERR_OK) {
+        $errMsg = 'Unknown upload error.';
+        if ($_FILES['officer_proof_image']['error'] === UPLOAD_ERR_INI_SIZE || $_FILES['officer_proof_image']['error'] === UPLOAD_ERR_FORM_SIZE) {
+            $errMsg = 'Officer proof image size exceeds the allowed system limit (usually 2MB or 5MB). Please compress the image.';
+        }
+        echo json_encode(['success' => false, 'message' => $errMsg]);
+        exit;
+    }
+
     $uploadDir = __DIR__ . '/../uploads/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
