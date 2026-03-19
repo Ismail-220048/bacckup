@@ -168,7 +168,7 @@ h4 { font-size: 1rem; }
     height: 65px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 0 6px rgba(200,146,42,0.4));
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
 }
 
 .auth-gov-header .portal-text h1 {
@@ -531,7 +531,7 @@ h4 { font-size: 1rem; }
     object-fit: contain;
     flex-shrink: 0;
     max-width: 100%;
-    filter: brightness(1.1) drop-shadow(0 0 4px rgba(200,146,42,0.3));
+    filter: brightness(1.1) drop-shadow(0 0 4px rgba(248, 247, 245, 0.3));
 }
 
 .sidebar-brand-text h2 {
@@ -719,7 +719,7 @@ h4 { font-size: 1rem; }
 .header-logo-group img {
     height: 35px;
     width: auto;
-    filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));
+    filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));
 }
 
 .header-logo-group span {

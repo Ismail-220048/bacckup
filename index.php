@@ -53,10 +53,10 @@ if (isset($_SESSION['user_id'])) {
     <!-- ====== NAVIGATION BAR (MERGED HEADER) ====== -->
     <nav class="navbar" id="navbar" style="padding: 10px 60px; align-items: center;">
         <a href="#" class="nav-logo" style="display: flex; align-items: center; gap: 15px; text-decoration: none;">
-            <img src="assets/images/govt_emblem.png" alt="CivicTrack Government Emblem" class="gov-header-emblem" style="height: 58px; width: auto; filter: drop-shadow(0 0 6px rgba(200,146,42,0.3)); transition: filter 0.3s;">
+            <img src="assets/images/govt_emblem.png" alt="CivicTrack Government Emblem" class="gov-header-emblem" style="height: 58px; width: auto; filter: drop-shadow(0 0 6px rgba(245, 244, 243, 0.3)); transition: filter 0.3s;">
             <div class="gov-brand-divider" style="width: 2px; height: 40px; background: rgba(200,146,42,0.5);"></div>
             <div class="gov-site-title" style="display: flex; flex-direction: column;">
-                <h1 style="font-family: 'Noto Serif', Georgia, serif; font-size: 1.25rem; color: #0a2558; font-weight: 700; margin: 0; line-height: 1.1;">CivicTrack</h1>
+                <h1 style="font-family: 'Noto Serif', Georgia, serif; font-size: 1.25rem; color: #0a2558; font-weight: 700; margin: 0; line-height: 1.1;">ReportMyCity</h1>
                 <div class="subtitle" style="font-size: 0.65rem; color: #c8922a; letter-spacing: 0.1em; text-transform: uppercase;">Official Portal</div>
             </div>
         </a>
@@ -233,6 +233,37 @@ if (isset($_SESSION['user_id'])) {
                     <div class="step-number">4</div>
                     <h3>Track & Resolve</h3>
                     <p>Monitor real-time status updates until the issue is marked as resolved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== TRUST & ACCOUNTABILITY ====== -->
+    <section class="trust-section" id="accountability" style="background: #f8fafc; padding: 100px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag">🛡️ Integrity</div>
+                <h2>Built on Trust & Transparency</h2>
+                <p>CivicTrack maintains the highest standards of accountability for both citizens and government officials.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px;">
+                <div class="trust-card reveal" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: transform 0.3s ease;">
+                    <div style="width: 60px; height: 60px; background: #fee2e2; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;">🛡️</div>
+                    <h3 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 15px;">Officer Oversight</h3>
+                    <p style="color: #64748b; line-height: 1.7;">Citizens have the direct authority to report unprofessional conduct or negligence from assigned officers, ensuring every complaint is handled with integrity.</p>
+                </div>
+
+                <div class="trust-card reveal" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: transform 0.3s ease;">
+                    <div style="width: 60px; height: 60px; background: #fffbeb; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;">🚩</div>
+                    <h3 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 15px;">Fraud Prevention</h3>
+                    <p style="color: #64748b; line-height: 1.7;">Advanced side-by-side photographic verification audits protect the system from fake or malicious reporting, maintaining the platform's focus on genuine civic issues.</p>
+                </div>
+
+                <div class="trust-card reveal" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: transform 0.3s ease;">
+                    <div style="width: 60px; height: 60px; background: #e0f2fe; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;">🏛️</div>
+                    <h3 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 15px;">Administrative Audit</h3>
+                    <p style="color: #64748b; line-height: 1.7;">Senior municipal administrators review every reported misconduct case and audit finding, providing an impartial layer of oversight for high-standard public service.</p>
                 </div>
             </div>
         </div>

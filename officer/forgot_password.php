@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — Officer Forgot Password
+ * ReportMyCity — Officer Forgot Password
  */
 session_start();
 ?>
@@ -20,7 +20,7 @@ session_start();
     <div class="auth-gov-header">
         <img src="../assets/images/govt_emblem.png" alt="Government Emblem" class="emblem">
         <div class="portal-text">
-            <h1>CivicTrack — Field Officer Portal</h1>
+            <h1>ReportMyCity — Field Officer Portal</h1>
             <p>Municipal Field Operations Division · Government of India</p>
         </div>
     </div>
@@ -28,7 +28,7 @@ session_start();
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="logo">
-                <img src="../assets/images/govt_emblem.png" alt="CivicTrack Emblem" class="gov-emblem-sm">
+                <img src="../assets/images/govt_emblem.png" alt="ReportMyCity Emblem" class="gov-emblem-sm">
                 <h1>Reset Password</h1>
                 <p>Enter your officer email to receive a reset link</p>
             </div>
@@ -38,7 +38,7 @@ session_start();
             <form id="forgotPasswordForm">
                 <div class="form-group">
                     <label for="email">Officer Email Address <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="officer@civictrack.gov" required>
+                    <input type="email" id="email" name="email" placeholder="officer@reportmycity.gov" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" id="submit-btn" style="padding: 0.75rem;">
                     🚀 Send Reset Link
@@ -52,7 +52,7 @@ session_start();
     </div>
 
     <div class="auth-gov-footer">
-        © 2026 CivicTrack — Field Officer Portal. Government of India.
+        © 2026 ReportMyCity — Field Officer Portal. Government of India.
     </div>
 
 </div>

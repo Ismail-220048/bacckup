@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — User Profile
+ * ReportMyCity — User Profile
  */
 session_start();
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['user', 'officer'])) {
@@ -38,7 +38,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile — CivicTrack</title>
+    <title>My Profile — ReportMyCity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -252,7 +252,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                         <span><?php echo ($role === 'user') ? 'Citizen Portal' : 'Officer Portal'; ?></span>
                     </div>
                 </div>
@@ -274,6 +274,17 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <a href="profile.php" class="active">
                     <span class="nav-icon">👤</span> My Profile
                 </a>
+                <?php if ($role === 'user'): ?>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                    <span class="nav-icon">👮</span> Report Officer Conduct
+                </a>
+                <?php else: ?>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <a href="my_assignments.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                    <span class="nav-icon">🚩</span> Flag Improper User
+                </a>
+                <?php endif; ?>
             </nav>
             <div class="sidebar-footer">
                 <div class="sidebar-user-info">
@@ -300,8 +311,8 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <div>
                         <h1>👤 Profile Settings</h1>

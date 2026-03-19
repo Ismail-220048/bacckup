@@ -589,7 +589,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
     <img src="assets/images/govt_emblem.png" alt="Government Emblem" class="emblem">
 
     <div class="portal-text">
-        <h1>CivicTrack — Citizen Registration</h1>
+        <h1>ReportMyCity — Citizen Registration</h1>
         <p>Ministry of Urban Development &amp; Civic Affairs · Government of India</p>
     </div>
 

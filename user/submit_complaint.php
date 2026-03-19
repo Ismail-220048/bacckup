@@ -1,12 +1,13 @@
 <?php
 /**
- * CivicTrack — Submit Complaint Page
+ * ReportMyCity — Submit Complaint Page
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
     exit;
 }
+require_once __DIR__ . '/../config/database.php';
 $db = Database::getInstance();
 $userDoc = $db->getCollection('users')->findOne(['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
 $userPhoto = $userDoc['photo'] ?? '';
@@ -18,7 +19,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Complaint — CivicTrack</title>
+    <title>Submit Complaint — ReportMyCity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -42,7 +43,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                         <span>Citizen Portal</span>
                     </div>
                 </div>
@@ -60,6 +61,10 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </a>
                 <a href="profile.php">
                     <span class="nav-icon">👤</span> My Profile
+                </a>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                    <span class="nav-icon">👮</span> Report Officer Conduct
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -89,8 +94,8 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <h1>Submit a Complaint</h1>
                 </div>

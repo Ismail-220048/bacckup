@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — My Complaints Page
+ * ReportMyCity — My Complaints Page
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
@@ -31,7 +31,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Complaints — CivicTrack</title>
+    <title>My Complaints — ReportMyCity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -44,7 +44,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                         <span>Citizen Portal</span>
                     </div>
                 </div>
@@ -62,6 +62,10 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </a>
                 <a href="profile.php">
                     <span class="nav-icon">👤</span> My Profile
+                </a>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                    <span class="nav-icon">👮</span> Report Officer Conduct
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -91,8 +95,8 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <h1>My Complaints</h1>
                 </div>
@@ -273,6 +277,39 @@ $initials = strtoupper(substr($userName, 0, 1));
         </div>
     </div>
 
+    <!-- Report Officer Modal -->
+    <div id="reportOfficerModal" class="modal-overlay">
+        <div class="modal" style="max-width: 500px; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid #fee2e2; background: #fffafb; padding: 1.5rem;">
+                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;">🚩 Report Officer Conduct</h3>
+                <button class="modal-close" onclick="closeModal('reportOfficerModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <p style="font-size: 0.9rem; color: #7f1d1d; background: #fef2f2; padding: 1rem; border-radius: 8px; border: 1px solid #fecaca; margin-bottom: 1.5rem;">
+                    <strong>Notice:</strong> Please report only genuine misconduct, negligence, or unprofessional behavior. False reports are subject to administrative review.
+                </p>
+                <form id="reportOfficerForm">
+                    <input type="hidden" name="complaint_id" id="report-complaint-id">
+                    
+                    <div class="form-group">
+                        <label style="font-weight: 700; color: var(--gov-navy);">Reported Officer</label>
+                        <p id="report-officer-name" style="font-weight: 600; color: var(--text-primary); margin: 0.5rem 0 1.5rem;"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="report_description" style="font-weight: 700; color: var(--gov-navy);">Reason for Report</label>
+                        <textarea name="report_description" id="report_description" required placeholder="Describe the issue with the officer's handling of this complaint..." style="min-height: 120px; width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 6px;"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline btn-block" onclick="closeModal('reportOfficerModal')">Cancel</button>
+                        <button type="submit" class="btn btn-block" style="background: #dc2626; color: white;">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- View Complaint Modal -->
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
@@ -409,6 +446,16 @@ $initials = strtoupper(substr($userName, 0, 1));
                 html += `</div>`;
             }
 
+            if (c.assigned_officer_name && c.status !== 'Resolved') {
+                html += `
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
+                        <button class="btn btn-sm" onclick="openReportOfficerModal('${c._id}', '${c.assigned_officer_name}')" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; display: flex; align-items: center; gap: 6px;">
+                            🚩 Report Officer Conduct
+                        </button>
+                    </div>
+                `;
+            }
+
             document.getElementById('viewContent').innerHTML = html;
             openModal('viewModal');
 
@@ -458,11 +505,45 @@ $initials = strtoupper(substr($userName, 0, 1));
             });
         });
 
+        function openReportOfficerModal(id, officerName) {
+            document.getElementById('report-complaint-id').value = id;
+            document.getElementById('report-officer-name').innerText = '👮 ' + officerName;
+            closeModal('viewModal');
+            openModal('reportOfficerModal');
+        }
+
+        document.getElementById('reportOfficerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('../api/submit_officer_complaint.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Officer conduct report has been submitted to the administration for review.');
+                    closeModal('reportOfficerModal');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            });
+        });
+
         // Close modal on outside click
         window.onclick = function(event) {
-            const modal = document.getElementById('feedbackModal');
-            if (event.target == modal) {
+            const feedbackModal = document.getElementById('feedbackModal');
+            const reportModal = document.getElementById('reportOfficerModal');
+            if (event.target == feedbackModal) {
                 closeFeedbackModal();
+            }
+            if (event.target == reportModal) {
+                closeModal('reportOfficerModal');
             }
         }
     </script>

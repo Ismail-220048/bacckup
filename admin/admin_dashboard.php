@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — Admin Dashboard
+ * ReportMyCity — Admin Dashboard
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -22,6 +22,8 @@ $resolvedCount = $complaintsCol->countDocuments(['status' => 'Resolved']);
 
 $totalUsers = $usersCol->countDocuments();
 $totalOfficers = $officersCol->countDocuments();
+$officerReportsCount = $db->getCollection('officer_reports')->countDocuments(['status' => 'Pending Review']);
+$userReportsCount = $db->getCollection('user_reports')->countDocuments(['status' => 'Audit Requested']);
 
 // Recent Complaints
 $recentComplaints = $complaintsCol->find([], ['limit' => 5, 'sort' => ['created_at' => -1]]);
@@ -38,6 +40,7 @@ if (!empty($userIds)) {
 }
 
 $adminName = $_SESSION['user_name'] ?? 'Admin';
+$adminEmail = $_SESSION['user_email'] ?? 'admin@reportmycity.gov';
 $initials = strtoupper(substr($adminName, 0, 1));
 ?>
 <!DOCTYPE html>
@@ -45,7 +48,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | CivicTrack</title>
+    <title>Admin Dashboard | ReportMyCity</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -58,7 +61,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     <img src="../assets/images/govt_emblem.png" class="sidebar-emblem" alt="Gov Emblem">
                     <div class="sidebar-brand-text">
                         <span>Republic of India</span>
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                     </div>
                 </div>
                 <div class="sidebar-gold-stripe"></div>
@@ -70,6 +73,8 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <a href="manage_complaints.php">📋 All Complaints</a>
                 <a href="manage_users.php">👥 Manage Citizens</a>
                 <a href="manage_officers.php">👮 Manage Officers</a>
+                <a href="manage_officer_reports.php">🛡️ Officer Reports <?php if($officerReportsCount > 0): ?><span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span><?php endif; ?></a>
+                <a href="manage_user_reports.php">🚩 Fake Complaints <?php if($userReportsCount > 0): ?><span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span><?php endif; ?></a>
                 
                 <div class="sidebar-section-label">Analytics</div>
                 <a href="heatmap.php">🗺️ Heatmap</a>
@@ -95,8 +100,8 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <div>
                         <h1>📊 Admin Dashboard</h1>
@@ -109,8 +114,22 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </div>
                 <div class="user-info">
                     <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
-                    <span><?php echo htmlspecialchars($adminName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <span>Welcome, <?php echo htmlspecialchars($adminName); ?></span>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php echo $initials; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($adminName); ?></strong>
+                                <span><?php echo htmlspecialchars($adminEmail); ?></span>
+                            </div>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -151,6 +170,38 @@ $initials = strtoupper(substr($adminName, 0, 1));
                          Total Reports: <strong><?php echo $totalComplaints; ?></strong>
                     </div>
                 </div>
+
+                <!-- NEW: Audit & Reports Mini-Stats -->
+                <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+                    <h3 style="margin-bottom: 1.25rem; font-size: 1rem; color: var(--text-primary);">🛡️ Oversight & Audits</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <a href="manage_officer_reports.php" style="text-decoration:none; display:flex; justify-content:space-between; align-items:center; padding: 0.8rem; background: #fef2f2; border-radius: 8px; border: 1px solid #fee2e2;">
+                            <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                <span style="font-size: 1.2rem;">👮</span>
+                                <div style="display:flex; flex-direction:column;">
+                                    <span style="font-size:0.85rem; font-weight:700; color:#991b1b;">Officer Conduct</span>
+                                    <span style="font-size:0.7rem; color:#b91c1c;">Pending Review</span>
+                                </div>
+                            </div>
+                            <span style="font-size: 1.2rem; font-weight: 800; color: #991b1b;"><?php echo $officerReportsCount; ?></span>
+                        </a>
+
+                        <a href="manage_user_reports.php" style="text-decoration:none; display:flex; justify-content:space-between; align-items:center; padding: 0.8rem; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7;">
+                            <div style="display:flex; align-items:center; gap: 0.8rem;">
+                                <span style="font-size: 1.2rem;">🚩</span>
+                                <div style="display:flex; flex-direction:column;">
+                                    <span style="font-size:0.85rem; font-weight:700; color:#92400e;">Fake Complaints</span>
+                                    <span style="font-size:0.7rem; color:#b45309;">System Audits</span>
+                                </div>
+                            </div>
+                            <span style="font-size: 1.2rem; font-weight: 800; color: #92400e;"><?php echo $userReportsCount; ?></span>
+                        </a>
+                        
+                        <div style="margin-top:0.5rem; font-size: 0.75rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); padding-top: 0.8rem;">
+                            High-integrity operations active
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Quick Actions & Illustration -->
@@ -179,6 +230,14 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     <a href="manage_officers.php" class="quick-action-card">
                         <span class="action-icon">👮</span>
                         <span class="action-label">Manage Officers</span>
+                    </a>
+                    <a href="manage_officer_reports.php" class="quick-action-card">
+                        <span class="action-icon">🛡️</span>
+                        <span class="action-label">Officer Reports</span>
+                    </a>
+                    <a href="manage_user_reports.php" class="quick-action-card">
+                        <span class="action-icon">🚩</span>
+                        <span class="action-label">Fake Complaints</span>
                     </a>
                     <a href="heatmap.php" class="quick-action-card">
                         <span class="action-icon">🗺️</span>
@@ -300,6 +359,14 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 }
             });
         });
+    </script>
+    <script>
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
+        }
     </script>
 </body>
 </html>

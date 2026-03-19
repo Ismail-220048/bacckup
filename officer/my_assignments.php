@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — Officer: My Assignments
+ * ReportMyCity — Officer: My Assignments
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'officer') {
@@ -46,7 +46,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Assignments — CivicTrack Officer</title>
+    <title>My Assignments — ReportMyCity Officer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -59,7 +59,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                         <span>Field Officer Portal</span>
                     </div>
                 </div>
@@ -74,6 +74,10 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                 </a>
                 <a href="profile.php">
                     <span class="nav-icon">👤</span> My Profile
+                </a>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <a href="my_assignments.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                    <span class="nav-icon">🚩</span> Flag Improper User
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -103,8 +107,8 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <h1>My Assignments</h1>
                 </div>
@@ -260,6 +264,45 @@ $officerPhoto = $officerDoc['photo'] ?? '';
         </div>
     </div>
 
+    <!-- Report User/Fake Complaint Modal -->
+    <div id="reportUserModal" class="modal-overlay">
+        <div class="modal" style="max-width: 500px; border-radius: var(--radius-lg);">
+            <div class="modal-header" style="border-bottom: 2px solid #fee2e2; background: #fffafb; padding: 1.5rem;">
+                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;">🚩 Audit: Flag as Fake</h3>
+                <button class="modal-close" onclick="closeModal('reportUserModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <p style="font-size: 0.85rem; color: #7f1d1d; background: #fef2f2; padding: 1rem; border-radius: 8px; border: 1px solid #fecaca; margin-bottom: 1.5rem;">
+                    <strong>Verification Required:</strong> You are reporting that the citizen's complaint is fraudulent, non-existent, or malicious. You MUST upload a photo proof of the actual site as evidence.
+                </p>
+                <form id="reportUserForm">
+                    <input type="hidden" name="complaint_id" id="report-user-complaint-id">
+                    
+                    <div class="form-group">
+                        <label style="font-weight: 700; color: var(--gov-navy);">Target Complaint</label>
+                        <p id="report-user-complaint-title" style="font-weight: 600; color: var(--text-primary); margin: 0.5rem 0 1.5rem;"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="report_reason" style="font-weight: 700; color: var(--gov-navy);">Reason for Flagging</label>
+                        <textarea name="report_reason" id="report_reason" required placeholder="Describe why this complaint is fake or improper (e.g. 'Site visit confirmed no such pothole exists at this location')..." style="min-height: 100px; width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 6px;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proof_photo" style="font-weight: 700; color: var(--gov-navy);">Evidence Photo (Site Verification)</label>
+                        <input type="file" name="proof_photo" id="proof_photo" required accept="image/*" style="width: 100%; padding: 5px;">
+                        <small style="color: var(--text-muted);">Required to proceed with administrative audit.</small>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline btn-block" onclick="closeModal('reportUserModal')">Cancel</button>
+                        <button type="submit" class="btn btn-block" style="background: #dc2626; color: white;">Submit Flag</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- View Complaint Modal -->
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
@@ -354,19 +397,50 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                 html += `</div>`;
             }
 
-            // Real Google Maps Tracking with Geolocation API
             html += `
-            <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-                <label style="display:block;font-size:0.85rem;color:var(--gov-navy);font-weight:700;margin-bottom:0.8rem;">Live Navigation</label>
-                <button onclick="startLiveTracking('${encodeURIComponent(c.location)}')" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;">
+            <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <button onclick="startLiveTracking('${encodeURIComponent(c.location)}')" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Google Maps" style="width: 20px; height: 20px;">
-                    Start Live Tracking & Navigation
+                    Navigate
+                </button>
+                <button onclick="openReportUserModal('${c._id}', '${c.title.replace(/'/g, "\\'")}')" class="btn" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    🚩 Flag as Fake
                 </button>
             </div>`;
 
             document.getElementById('viewContent').innerHTML = html;
             openModal('viewModal');
         }
+
+        function openReportUserModal(id, title) {
+            document.getElementById('report-user-complaint-id').value = id;
+            document.getElementById('report-user-complaint-title').innerText = title;
+            closeModal('viewModal');
+            openModal('reportUserModal');
+        }
+
+        document.getElementById('reportUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('../api/submit_user_report.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    closeModal('reportUserModal');
+                } else {
+                    showToast(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('An unexpected error occurred.', 'error');
+            });
+        });
 
         function startLiveTracking(destination) {
             if (navigator.geolocation) {

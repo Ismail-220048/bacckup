@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — Admin: Manage Complaints (with Officer Assignment)
+ * ReportMyCity — Admin: Manage Complaints (with Officer Assignment)
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -47,14 +47,19 @@ $busyIdsRaw = $complaintsCol->distinct('assigned_officer_id', [
 $busyOfficerIds = array_map(fn($id) => (string)$id, (array)$busyIdsRaw);
 
 $adminName = $_SESSION['user_name'] ?? 'Admin';
+$adminEmail = $_SESSION['user_email'] ?? 'admin@reportmycity.gov';
 $initials = strtoupper(substr($adminName, 0, 1));
+
+// Fetch pending counts for sidebar notification badges
+$officerReportsCount = $db->getCollection('officer_reports')->countDocuments(['status' => 'Pending Admin Review']);
+$userReportsCount = $db->getCollection('user_reports')->countDocuments(['status' => 'Audit Requested']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Complaints — CivicTrack Admin</title>
+    <title>Manage Complaints — ReportMyCity Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -67,7 +72,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                         <span>Administration Portal</span>
                     </div>
                 </div>
@@ -89,6 +94,22 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </a>
                 <a href="manage_officers.php">
                     <span class="nav-icon">👮</span> Manage Officers
+                </a>
+                <a href="manage_officer_reports.php">
+                    <span class="nav-icon">🛡️</span> Officer Reports
+                    <?php if($officerReportsCount > 0): ?>
+                        <span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span>
+                    <?php endif; ?>
+                </a>
+                <a href="manage_user_reports.php">
+                    <span class="nav-icon">🚩</span> Fake Complaints
+                    <?php if($userReportsCount > 0): ?>
+                        <span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span>
+                    <?php endif; ?>
+                </a>
+                <div class="sidebar-section-label">Analytics</div>
+                <a href="heatmap.php">
+                    <span class="nav-icon">🗺️</span> Heatmap
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -112,14 +133,29 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <h1>Manage Complaints</h1>
                 </div>
                 <div class="user-info">
-                    <span><?php echo htmlspecialchars($adminName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
+                    <span>Welcome, <?php echo htmlspecialchars($adminName); ?></span>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php echo $initials; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($adminName); ?></strong>
+                                <span><?php echo htmlspecialchars($adminEmail); ?></span>
+                            </div>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -600,6 +636,14 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     btn.textContent = 'Confirm';
                 }
             });
+        }
+    </script>
+    <script>
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
         }
     </script>
 </body>

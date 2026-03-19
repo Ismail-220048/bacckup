@@ -1,6 +1,6 @@
 <?php
 /**
- * CivicTrack — Admin: Manage Users
+ * ReportMyCity — Admin: Manage Users
  */
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
@@ -28,14 +28,19 @@ foreach ($counts as $c) {
 }
 
 $adminName = $_SESSION['user_name'] ?? 'Admin';
+$adminEmail = $_SESSION['user_email'] ?? 'admin@reportmycity.gov';
 $initials = strtoupper(substr($adminName, 0, 1));
+
+// Fetch pending counts for sidebar notification badges
+$officerReportsCount = $db->getCollection('officer_reports')->countDocuments(['status' => 'Pending Admin Review']);
+$userReportsCount = $db->getCollection('user_reports')->countDocuments(['status' => 'Audit Requested']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users | CivicTrack Admin</title>
+    <title>Manage Users | ReportMyCity Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="admin-theme">
@@ -47,7 +52,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     <img src="../assets/images/govt_emblem.png" class="sidebar-emblem" alt="Gov Emblem">
                     <div class="sidebar-brand-text">
                         <span>Republic of India</span>
-                        <h2>CivicTrack</h2>
+                        <h2>ReportMyCity</h2>
                     </div>
                 </div>
                 <div class="sidebar-gold-stripe"></div>
@@ -59,6 +64,8 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 <a href="manage_complaints.php">📋 All Complaints</a>
                 <a href="manage_users.php" class="active">👥 Manage Citizens</a>
                 <a href="manage_officers.php">👮 Manage Officers</a>
+                <a href="manage_officer_reports.php">🛡️ Officer Reports <?php if($officerReportsCount > 0): ?><span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span><?php endif; ?></a>
+                <a href="manage_user_reports.php">🚩 Fake Complaints <?php if($userReportsCount > 0): ?><span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span><?php endif; ?></a>
                 
                 <div class="sidebar-section-label">Analytics</div>
                 <a href="heatmap.php">🗺️ Heatmap</a>
@@ -83,14 +90,29 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                 <div class="header-left">
                     <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
                     <div class="header-logo-group">
-                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(200,146,42,0.3));">
-                        <span>CivicTrack</span>
+                        <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
+                        <span>ReportMyCity</span>
                     </div>
                     <h1>Manage Users</h1>
                 </div>
                 <div class="user-info">
-                    <span><?php echo htmlspecialchars($adminName); ?></span>
-                    <div class="user-avatar"><?php echo $initials; ?></div>
+                    <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
+                    <span>Welcome, <?php echo htmlspecialchars($adminName); ?></span>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                        <div class="user-avatar">
+                            <?php echo $initials; ?>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div class="profile-dropdown-header">
+                                <strong><?php echo htmlspecialchars($adminName); ?></strong>
+                                <span><?php echo htmlspecialchars($adminEmail); ?></span>
+                            </div>
+                            <a href="../logout.php" class="dropdown-logout">
+                                <div class="dropdown-icon">🚪</div> Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -230,6 +252,14 @@ $initials = strtoupper(substr($adminName, 0, 1));
             } catch (e) {
                 container.innerHTML = '<div class="alert alert-error">Failed to load complaints.</div>';
             }
+        }
+    </script>
+    <script>
+        // Profile Dropdown
+        const pdw = document.getElementById('profileDropdownWrapper');
+        if (pdw) {
+            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
+            document.addEventListener('click', () => pdw.classList.remove('open'));
         }
     </script>
 </body>
