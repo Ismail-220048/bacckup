@@ -263,6 +263,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <a href="dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
+                <a href="leaderboard.php">
+                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                </a>
                 <?php if ($role === 'user'): ?>
                 <a href="submit_complaint.php">
                     <span class="nav-icon">📝</span> Submit Complaint

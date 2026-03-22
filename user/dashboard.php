@@ -30,6 +30,51 @@ $userEmail = $_SESSION['user_email'] ?? '';
 $userDoc = $db->getCollection('users')->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
 $userPhoto = $userDoc['photo'] ?? '';
 $initials = strtoupper(substr($userName, 0, 1));
+
+// Leaderboard Logic (Calculate Civic Points)
+try {
+    $pipeline = [
+        ['$group' => [
+            '_id' => '$user_id',
+            'total' => ['$sum' => 1],
+            'resolved' => [
+                '$sum' => ['$cond' => [['$eq' => ['$status', 'Resolved']], 1, 0]]
+            ]
+        ]],
+        ['$addFields' => [
+            'points' => ['$add' => [['$multiply' => ['$total', 10]], ['$multiply' => ['$resolved', 15]]]]
+        ]],
+        ['$sort' => ['points' => -1]],
+        ['$limit' => 5]
+    ];
+    $leaderboardStats = $complaints->aggregate($pipeline);
+    $leaderboard = [];
+    $userPoints = 0;
+    
+    foreach ($leaderboardStats as $stat) {
+        if (!$stat['_id']) continue;
+        $u = $db->getCollection('users')->findOne(['_id' => new MongoDB\BSON\ObjectId($stat['_id'])]);
+        if ($u) {
+            $leaderboard[] = [
+                'name' => $u['name'],
+                'photo' => $u['photo'] ?? '',
+                'points' => $stat['points'],
+                'resolved' => $stat['resolved']
+            ];
+        }
+        if ((string)$stat['_id'] === $userId) {
+            $userPoints = $stat['points'];
+        }
+    }
+    
+    // Fallback if current user is not in top 5
+    if ($userPoints === 0) {
+        $userPoints = ($totalComplaints * 10) + ($resolvedComplaints * 15);
+    }
+} catch (Exception $e) {
+    $leaderboard = [];
+    $userPoints = ($totalComplaints * 10) + ($resolvedComplaints * 15);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +97,12 @@ $initials = strtoupper(substr($userName, 0, 1));
     </style>
 </head>
 <body>
+    <div class="gov-animation-layer">
+        <div class="gov-blob blob-navy"></div>
+        <div class="gov-blob blob-gold"></div>
+        <div class="gov-grid"></div>
+    </div>
+
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -69,6 +120,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php" class="active">
                     <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="leaderboard.php">
+                    <span class="nav-icon">🏆</span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php">
                     <span class="nav-icon">📝</span> Submit Complaint
@@ -178,6 +232,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                     <div class="profile-meta">
                         <span>📋 <?php echo $totalComplaints; ?> complaints filed</span>
                         <span>✅ <?php echo $resolvedComplaints; ?> resolved</span>
+                        <span style="background: var(--gov-gold-glow); color: var(--gov-gold); padding: 4px 10px; border-radius: 20px; font-weight: 700; border: 1px solid var(--gov-gold);">🎖️ <?php echo $userPoints; ?> Civic Points</span>
                     </div>
                 </div>
             </div>
@@ -228,12 +283,14 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </div>
             </div>
 
-            <!-- Recent Complaints -->
-            <div class="card">
-                <div class="card-header">
-                    <h3>Recent Complaints</h3>
-                    <a href="my_complaints.php" class="btn btn-outline btn-sm">View All →</a>
-                </div>
+            <!-- Recent Complaints & Leaderboard -->
+            <div class="dashboard-main-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <!-- Left: Recent Complaints -->
+                <div class="card" style="margin-top: 0;">
+                    <div class="card-header">
+                        <h3>Recent Complaints</h3>
+                        <a href="my_complaints.php" class="btn btn-outline btn-sm">View All →</a>
+                    </div>
                 <?php
                 $recentArr = iterator_to_array($recentComplaints);
                 if (empty($recentArr)): ?>
@@ -281,6 +338,44 @@ $initials = strtoupper(substr($userName, 0, 1));
                         </table>
                     </div>
                 <?php endif; ?>
+                </div>
+
+                <!-- Right: Leaderboard -->
+                <div class="card leaderboard-card" style="margin-top: 0; background: linear-gradient(to bottom, #ffffff, #f8faff); border: 1px solid var(--gov-gold); box-shadow: var(--shadow-gold);">
+                    <div class="card-header" style="border-bottom: 2px solid var(--gov-gold-pale);">
+                        <h3 style="color: var(--gov-gold); display: flex; align-items: center; gap: 10px;">🏆 Civic Heroes</h3>
+                        <span style="font-size: 0.75rem; background: var(--gov-gold); color: white; padding: 2px 8px; border-radius: 10px;">TOP 5</span>
+                    </div>
+                    <div class="leaderboard-list">
+                        <?php if (empty($leaderboard)): ?>
+                            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Participate to become the first hero!</p>
+                        <?php else: 
+                            $ranks = ['🥇', '🥈', '🥉', '4.', '5.'];
+                            foreach ($leaderboard as $index => $hero): ?>
+                            <div class="leaderboard-item" style="display: flex; align-items: center; gap: 15px; padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); <?php echo ($hero['name'] === $userName) ? 'background: var(--gov-gold-glow);' : ''; ?>">
+                                <div class="hero-rank" style="font-size: 1.2rem; min-width: 25px;"><?php echo $ranks[$index]; ?></div>
+                                <div class="hero-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--border); overflow: hidden; border: 2px solid var(--gov-gold-pale);">
+                                    <?php if ($hero['photo']): ?>
+                                        <img src="../<?php echo htmlspecialchars($hero['photo']); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <?php else: ?>
+                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: #e2e8f0; color: #475569;"><?php echo strtoupper(substr($hero['name'], 0, 1)); ?></div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="hero-info" style="flex: 1;">
+                                    <div class="hero-name" style="font-weight: 700; font-size: 0.9rem; color: var(--gov-navy);"><?php echo htmlspecialchars($hero['name']); ?></div>
+                                    <div class="hero-stat" style="font-size: 0.72rem; color: var(--text-muted);"><?php echo $hero['resolved']; ?> verified solutions</div>
+                                </div>
+                                <div class="hero-score" style="text-align: right;">
+                                    <div style="font-weight: 800; color: var(--gov-gold); font-size: 1rem;"><?php echo $hero['points']; ?></div>
+                                    <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">pts</div>
+                                </div>
+                            </div>
+                        <?php endforeach; endif; ?>
+                    </div>
+                    <div class="leaderboard-footer" style="padding: 1rem; text-align: center; font-size: 0.78rem; border-top: 1px solid var(--gov-gold-pale);">
+                        <p style="margin: 0; color: var(--text-muted);">Points: 💡 10 per Report | ✅ 15 per Solution</p>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -479,6 +574,26 @@ $initials = strtoupper(substr($userName, 0, 1));
                     });
             });
         }
+    </script>
+    <!-- jQuery for Animations -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Background Parallax Animation
+            $(document).mousemove(function(e) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 40;
+                const y = (e.clientY / window.innerHeight - 0.5) * 40;
+                
+                // Move Blobs in opposite directions for depth
+                $('.blob-navy').css('transform', `translate(${x}px, ${y}px)`);
+                $('.blob-gold').css('transform', `translate(${-x}px, ${-y}px)`);
+                
+                // Extremely subtle tilt for a 'Premium Card' feel
+                const tiltX = (e.clientY / window.innerHeight - 0.5) * 2;
+                const tiltY = (e.clientX / window.innerWidth - 0.5) * -2;
+                $('.dashboard-layout').css('transform', `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`);
+            });
+        });
     </script>
 </body>
 </html>

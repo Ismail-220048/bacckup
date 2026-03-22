@@ -50,9 +50,13 @@ $initials = strtoupper(substr($userName, 0, 1));
                 </div>
             </div>
             <div class="sidebar-gold-stripe"></div>
+            <div class="sidebar-section-label">Navigation</div>
             <nav class="sidebar-nav">
                 <a href="dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="leaderboard.php">
+                    <span class="nav-icon">🏆</span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php">
                     <span class="nav-icon">📝</span> Submit Complaint

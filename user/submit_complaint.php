@@ -33,6 +33,30 @@ $initials = strtoupper(substr($userName, 0, 1));
             margin-bottom: 0.5rem;
             z-index: 10;
         }
+        /* Pulsing Blue Dot for Live Location */
+        .live-dot {
+            width: 14px;
+            height: 14px;
+            background: #2563eb;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+        .live-dot-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(37, 99, 235, 0.2);
+            border-radius: 50%;
+            animation: map_pulse 2s infinite ease-out;
+        }
+        @keyframes map_pulse {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -50,8 +74,12 @@ $initials = strtoupper(substr($userName, 0, 1));
             </div>
             <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php">
                     <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="leaderboard.php">
+                    <span class="nav-icon">🏆</span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php" class="active">
                     <span class="nav-icon">📝</span> Submit Complaint
@@ -164,6 +192,16 @@ $initials = strtoupper(substr($userName, 0, 1));
                                     
                                     <div style="position: relative;">
                                         <div id="map"></div>
+                                        <!-- Address Search Overlay -->
+                                        <div style="position: absolute; top: 12px; left: 50px; right: 12px; z-index: 50;">
+                                            <div style="display: flex; gap: 5px; background: white; padding: 4px; border-radius: 25px; box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+                                                <input type="text" id="map-search-input" placeholder="🔍 Search for address, street or landmark..." 
+                                                    style="flex: 1; border: none; padding: 6px 15px; border-radius: 20px; font-size: 0.85rem; outline: none; background: transparent;">
+                                                <button type="button" id="btn-search-go" class="btn btn-primary" 
+                                                    style="padding: 0 15px; height: 32px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap;">Search</button>
+                                            </div>
+                                            <div id="search-results" style="display: none; background: white; border: 1px solid var(--border); border-radius: 8px; margin-top: 5px; max-height: 200px; overflow-y: auto; box-shadow: var(--shadow-lg);"></div>
+                                        </div>
                                     </div>
                                     
                                     <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
@@ -189,16 +227,30 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 </div>
                             </div>
 
-                            <div class="form-group" style="display: flex; flex-direction: column; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-                                <label style="margin-bottom: 1rem;">Evidence Document / Photo (optional)</label>
-                                <div style="display: flex; gap: 15px; margin-bottom: 1rem; justify-content: center; width: 100%;">
-                                    <label class="btn btn-primary" style="cursor: pointer; margin: 0; border-radius: 20px; padding: 0.6rem 1.5rem;" for="complaint-image">
-                                        📁 Upload image
+                            <div class="form-group" style="margin-top: 2rem; padding-top: 2rem; border-top: 1.5px solid var(--border);">
+                                <label style="display: block; text-align: left; margin-bottom: 1.5rem; font-weight: 800; color: var(--gov-navy); font-size: 1.35rem; letter-spacing: -0.01em;">📸 Evidence Selection</label>
+                                
+                                <div class="evidence-source-picker">
+                                    <label class="source-card" for="complaint-image">
+                                        <div class="source-icon-wrapper blue">
+                                            <span>📂</span>
+                                        </div>
+                                        <div class="source-content">
+                                            <strong>Upload Image</strong>
+                                            <span>From your device gallery</span>
+                                        </div>
                                     </label>
                                     <input type="file" id="complaint-image" name="image" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
-                                    <button type="button" class="btn btn-warning" id="open-camera-btn" style="border-radius: 20px; color: #161822; padding: 0.6rem 1.5rem;">
-                                        📸 Live Camera
-                                    </button>
+                                    
+                                    <div class="source-card" id="open-camera-btn">
+                                        <div class="source-icon-wrapper gold">
+                                            <span>📸</span>
+                                        </div>
+                                        <div class="source-content">
+                                            <strong>Open Camera</strong>
+                                            <span>Take a live snapshot</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <!-- Camera Interface -->
@@ -218,7 +270,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 </div>
                             </div>
 
-                            <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 2rem;  " >
+                            <div style="display: flex; justify-content: flex-end; margin-top: 2rem; margin-bottom: 2rem;  " >
                                 <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.05rem; border-radius: 30px;">
                                     Submit Complaint
                                 </button>
@@ -245,21 +297,35 @@ $initials = strtoupper(substr($userName, 0, 1));
         const locationInput = document.getElementById('location');
         let marker = null;
 
+        // Pulsing Live Icon
+        const liveIcon = L.divIcon({
+            className: 'live-marker',
+            html: '<div class="live-dot-pulse"></div><div class="live-dot"></div>',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+
         // Accuracy circle layer
         let accuracyCircle = null;
         let watchId = null;
         let bestAccuracy = Infinity;
+        let hasUserInteracted = false;
 
         // Set map to a lat/lng — creates/moves marker and accuracy circle
         function setMapLocation(lat, lng, accuracy, zoomLevel) {
             locationInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-            map.setView([lat, lng], zoomLevel || map.getZoom() || 17);
+            
+            // Auto-center only if user hasn't scrolled away manually
+            if (!hasUserInteracted) {
+                map.setView([lat, lng], zoomLevel || map.getZoom() || 18);
+            }
 
             // Create or move the draggable pin
             if (marker) {
                 marker.setLatLng([lat, lng]);
             } else {
-                marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+                marker = L.marker([lat, lng], { draggable: true, icon: liveIcon }).addTo(map);
+                marker.on('dragstart', () => { hasUserInteracted = true; });
                 marker.on('dragend', function() {
                     const pos = marker.getLatLng();
                     locationInput.value = `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
@@ -274,18 +340,24 @@ $initials = strtoupper(substr($userName, 0, 1));
                 } else {
                     accuracyCircle = L.circle([lat, lng], {
                         radius: accuracy,
-                        color: '#6366f1',
-                        fillColor: '#6366f1',
-                        fillOpacity: 0.08,
-                        weight: 1.5,
-                        dashArray: '5, 5'
+                        color: '#2563eb',
+                        fillColor: '#2563eb',
+                        fillOpacity: 0.1,
+                        weight: 1,
+                        dashArray: '4'
                     }).addTo(map);
                 }
             }
         }
 
+        // Detect user interaction with map
+        map.on('mousedown dragstart zoomstart', function() {
+            hasUserInteracted = true;
+        });
+
         // When map is clicked — move the pin, stop any GPS watch
         map.on('click', function(e) {
+            hasUserInteracted = true;
             if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
             if (accuracyCircle) { accuracyCircle.remove(); accuracyCircle = null; }
             setMapLocation(e.latlng.lat, e.latlng.lng, null, map.getZoom());
@@ -299,6 +371,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                 return;
             }
 
+            // Reset interaction on explicit button click
+            if (showFeedback) hasUserInteracted = false;
+
             // Stop any previous watch
             if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
             bestAccuracy = Infinity;
@@ -308,56 +383,105 @@ $initials = strtoupper(substr($userName, 0, 1));
                 btn.disabled = true;
             }
 
-            // Stop watching after 15 seconds max
-            const stopTimer = setTimeout(() => {
-                if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-                if (showFeedback) {
-                    btn.disabled = false;
-                    btn.innerHTML = '📍 Locate Me';
-                    if (bestAccuracy < Infinity) {
-                        showToast(`Best fix: ±${Math.round(bestAccuracy)}m. Drag the pin to fine-tune.`, 'info');
-                    }
-                }
-            }, 15000);
+            // High Precision Options
+            const geoOptions = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
 
             watchId = navigator.geolocation.watchPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    const accuracy = position.coords.accuracy; // metres
+                    const accuracy = position.coords.accuracy;
 
-                    // Only update if this fix is better than the previous
-                    if (accuracy < bestAccuracy) {
+                    // Update if this is better or at least acceptable
+                    if (accuracy < bestAccuracy || bestAccuracy === Infinity) {
                         bestAccuracy = accuracy;
-                        const zoom = accuracy < 50 ? 18 : accuracy < 200 ? 17 : accuracy < 1000 ? 15 : 13;
+                        // For extremely high accuracy, zoom in more
+                        const zoom = accuracy < 20 ? 19 : accuracy < 50 ? 18 : accuracy < 150 ? 17 : 15;
                         setMapLocation(lat, lng, accuracy, zoom);
-                        if (showFeedback) btn.innerHTML = `⏳ ±${Math.round(accuracy)}m`;
+                        if (showFeedback) btn.innerHTML = `📡 Locating (±${Math.round(accuracy)}m)`;
                     }
 
-                    // Good enough fix — stop
-                    if (accuracy <= 50) {
-                        clearTimeout(stopTimer);
-                        navigator.geolocation.clearWatch(watchId); watchId = null;
+                    // Perfect fix
+                    if (accuracy <= 15) {
                         if (showFeedback) {
                             btn.disabled = false;
                             btn.innerHTML = '📍 Locate Me';
-                            showToast(`Location locked! Accuracy ±${Math.round(accuracy)}m`, 'success');
+                            showToast('High-accuracy location locked!', 'success');
                         }
                     }
                 },
                 (error) => {
-                    clearTimeout(stopTimer);
-                    if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-                    if (!marker) setMapLocation(20.5937, 78.9629, null, 5);
                     if (showFeedback) {
                         btn.disabled = false;
                         btn.innerHTML = '📍 Locate Me';
-                        showToast('Location access denied. Click the map to pin manually.', 'warning');
+                        showToast('Unable to get precise location. Pin manually.', 'warning');
                     }
                 },
-                { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+                geoOptions
             );
+
+            // Timeout after 20s if no good fix
+            setTimeout(() => {
+                if (showFeedback && btn.disabled) {
+                    btn.disabled = false;
+                    btn.innerHTML = '📍 Locate Me';
+                }
+            }, 20000);
         }
+
+        // --- SEARCH / GEOCODING LOGIC ---
+        const searchInput = document.getElementById('map-search-input');
+        const searchBtn = document.getElementById('btn-search-go');
+        const resultsDiv = document.getElementById('search-results');
+
+        async function performSearch() {
+            const query = searchInput.value.trim();
+            if (query.length < 3) return;
+            
+            searchBtn.innerHTML = '...';
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+                const data = await response.json();
+                
+                if (data.length > 0) {
+                    resultsDiv.innerHTML = '';
+                    resultsDiv.style.display = 'block';
+                    data.forEach(place => {
+                        const item = document.createElement('div');
+                        item.style.padding = '10px 15px';
+                        item.style.cursor = 'pointer';
+                        item.style.fontSize = '0.85rem';
+                        item.style.borderBottom = '1px solid #f0f0f0';
+                        item.innerText = place.display_name;
+                        item.onmouseover = () => item.style.background = '#f8faff';
+                        item.onmouseout = () => item.style.background = 'transparent';
+                        item.onclick = () => {
+                            const lat = parseFloat(place.lat);
+                            const lon = parseFloat(place.lon);
+                            hasUserInteracted = false; // allow auto-center for this
+                            setMapLocation(lat, lon, null, 17);
+                            resultsDiv.style.display = 'none';
+                            searchBtn.innerHTML = 'Search';
+                        };
+                        resultsDiv.appendChild(item);
+                    });
+                } else {
+                    showToast('Location not found.', 'warning');
+                    searchBtn.innerHTML = 'Search';
+                }
+            } catch (e) {
+                console.error(e);
+                searchBtn.innerHTML = 'Search';
+            }
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); performSearch(); } });
+        document.addEventListener('click', (e) => { if (!e.target.closest('#map-search-input')) resultsDiv.style.display = 'none'; });
 
         // Auto-detect silently on page load
         autoLocate(false);
