@@ -163,7 +163,7 @@ try {
             <!-- Page Header -->
             <div class="page-header">
                                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle" id="menu-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>
@@ -441,11 +441,27 @@ try {
             ];
         }, $recentArr), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
+        // Sidebar Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        if (menuToggle && sidebar) {
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+            });
+        }
+
         // Profile Dropdown
         const pdw = document.getElementById('profileDropdownWrapper');
         if (pdw) {
-            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
-            document.addEventListener('click', () => pdw.classList.remove('open'));
+            pdw.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+            });
+            // Close dropdown when clicking anywhere else
+            document.addEventListener('click', () => {
+                if (pdw) pdw.classList.remove('open');
+            });
         }
 
         function viewComplaint(id) {
@@ -579,7 +595,7 @@ try {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Background Parallax Animation
+            // Background Parallax Animation (Blobs)
             $(document).mousemove(function(e) {
                 const x = (e.clientX / window.innerWidth - 0.5) * 40;
                 const y = (e.clientY / window.innerHeight - 0.5) * 40;
@@ -588,10 +604,10 @@ try {
                 $('.blob-navy').css('transform', `translate(${x}px, ${y}px)`);
                 $('.blob-gold').css('transform', `translate(${-x}px, ${-y}px)`);
                 
-                // Extremely subtle tilt for a 'Premium Card' feel
-                const tiltX = (e.clientY / window.innerHeight - 0.5) * 2;
-                const tiltY = (e.clientX / window.innerWidth - 0.5) * -2;
-                $('.dashboard-layout').css('transform', `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`);
+                // Tilt effect disabled to avoid click conflicts
+                // const tiltX = (e.clientY / window.innerHeight - 0.5) * 2;
+                // const tiltY = (e.clientX / window.innerWidth - 0.5) * -2;
+                // $('.dashboard-layout').css('transform', `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`);
             });
         });
     </script>

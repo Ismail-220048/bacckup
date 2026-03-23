@@ -30,15 +30,43 @@ function initSidebar() {
     const sidebar = document.querySelector('.sidebar');
     if (!sidebar) return;
 
-    // We add a single document listener. Since inline onclick already handles toggling,
-    // we only need to handle closing when clicking outside.
     document.addEventListener('click', (e) => {
-        const isToggle = e.target.closest('.sidebar-toggle');
-        const isSidebar = e.target.closest('.sidebar');
+        const toggleBtn = e.target.closest('.sidebar-toggle');
+        const isSidebar = e.target.closest('.sidebar' );
         
-        if (sidebar.classList.contains('open') && !isSidebar && !isToggle) {
+        // Handle Toggle
+        if (toggleBtn) {
+            e.stopPropagation();
+            sidebar.classList.toggle('open');
+            return;
+        }
+
+        // Close on outside click
+        if (sidebar.classList.contains('open') && !isSidebar) {
             sidebar.classList.remove('open');
         }
+    });
+}
+
+/* ---------- Profile Dropdown ---------- */
+function initProfileDropdown() {
+    const pdws = document.querySelectorAll('.profile-dropdown-wrapper');
+    if (pdws.length === 0) return;
+
+    document.addEventListener('click', (e) => {
+        const pdw = e.target.closest('.profile-dropdown-wrapper');
+        
+        // Close all if clicking outside any
+        if (!pdw) {
+            pdws.forEach(p => p.classList.remove('open'));
+            return;
+        }
+
+        // Toggle the clicked one
+        e.stopPropagation();
+        const isOpen = pdw.classList.contains('open');
+        pdws.forEach(p => p.classList.remove('open')); // Close others
+        if (!isOpen) pdw.classList.add('open');
     });
 }
 
@@ -413,10 +441,11 @@ function initNotifications() {
 /* ---------- Init on DOM Ready ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
+    initProfileDropdown();
     initImagePreview();
     initModals();
-    initNotifications(); // Global Notifications init
-    initAIRobot();      // AI Robot Mode init (Admin Only)
+    initNotifications(); 
+    initAIRobot();      
 });
 
 /* ---------- AI Robot System ---------- */

@@ -97,7 +97,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 
             <div class="page-header">
                                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>

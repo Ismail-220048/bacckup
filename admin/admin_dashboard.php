@@ -32,8 +32,9 @@ $recentArr = iterator_to_array($recentComplaints);
 // User Lookup for recent complaints
 $userIds = array_unique(array_map(fn($c) => $c['user_id'] ?? '', $recentArr));
 $userLookup = [];
-if (!empty($userIds)) {
-    $foundUsers = $usersCol->find(['_id' => ['$in' => array_map(fn($id) => new \MongoDB\BSON\ObjectId($id), array_filter($userIds))]]);
+$validUserIds = array_filter($userIds, fn($id) => !empty($id)); // Filter out empty IDs
+if (!empty($validUserIds)) {
+    $foundUsers = $usersCol->find(['_id' => ['$in' => array_map(fn($id) => new \MongoDB\BSON\ObjectId($id), array_values($validUserIds))]]);
     foreach ($foundUsers as $u) {
         $userLookup[(string)$u['_id']] = $u['name'];
     }
@@ -98,7 +99,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
             <!-- Page Header -->
             <div class="page-header">
                                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>

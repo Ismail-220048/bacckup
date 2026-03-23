@@ -23,7 +23,7 @@ $userLookup = [];
 if (!empty($userIds)) {
     $validIds = array_filter($userIds, fn($id) => !empty($id) && preg_match('/^[a-f\d]{24}$/i', $id));
     if (!empty($validIds)) {
-        $foundUsers = $usersCol->find(['_id' => ['$in' => array_map(fn($id) => new \MongoDB\BSON\ObjectId($id), $validIds)]]);
+        $foundUsers = $usersCol->find(['_id' => ['$in' => array_map(fn($id) => new \MongoDB\BSON\ObjectId($id), array_values($validIds)) ] ]);
         foreach ($foundUsers as $u) {
             $userLookup[(string)$u['_id']] = $u['name'];
         }
@@ -82,7 +82,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
         <main class="main-content">
             <div class="page-header">
                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>

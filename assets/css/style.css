@@ -554,7 +554,7 @@ h4 { font-size: 1rem; }
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 2000;
+    z-index: 10000;
     transition: transform var(--transition);
     box-shadow: 4px 0 20px rgba(10,37,88,0.25);
     transform: translateX(-100%);
@@ -858,7 +858,7 @@ h4 { font-size: 1rem; }
     border-top: 3px solid var(--gov-navy);
     border-radius: var(--radius-lg);
     box-shadow: 0 8px 32px rgba(10,37,88,0.18);
-    z-index: 999;
+    z-index: 11000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);
@@ -1748,7 +1748,7 @@ table td:last-child {
     width: 65px;
     height: 65px;
     cursor: grab;
-    z-index: 9999;
+    z-index: 5000;
     display: flex;
     align-items: center;
     justify-content: center;
