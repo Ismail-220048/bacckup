@@ -3,7 +3,7 @@
  * ReportMyCity — Officer: My Assignments
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'officer') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['officer', 'local_officer'])) {
     header('Location: officer_login.php');
     exit;
 }
@@ -24,7 +24,7 @@ $allComplaints = $complaintsCol->find($filter, ['sort' => ['created_at' => -1]])
 $complaintsList = iterator_to_array($allComplaints);
 
 // Build user lookup
-$userIds = array_unique(array_map(fn($c) => $c['user_id'] ?? '', $complaintsList));
+$userIds = array_unique(array_map(fn($c) => (string)($c['user_id'] ?? ''), $complaintsList));
 $userLookup = [];
 foreach ($userIds as $uid) {
     if ($uid) {
@@ -67,17 +67,17 @@ $officerPhoto = $officerDoc['photo'] ?? '';
             <div class="sidebar-gold-stripe"></div>
             <nav class="sidebar-nav">
                 <a href="officer_dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="my_assignments.php" class="active">
-                    <span class="nav-icon">📋</span> My Assignments
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Assignments
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_assignments.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">🚩</span> Flag Improper User
+                    <span class="nav-icon"><i class="fa fa-flag-o"></i></span> Flag Improper User
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -105,7 +105,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
 
             <div class="page-header">
                                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>
@@ -129,10 +129,10 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                                 <span><?php echo htmlspecialchars($officerEmail); ?></span>
                             </div>
                             <a href="profile.php">
-                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                             </a>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -140,7 +140,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
             </div>
             <div class="card">
                     <div class="card-header">
-                        <h3>📋 Assigned Complaints (<?php echo count($complaintsList); ?>)</h3>
+                        <h3><i class="fa fa-list-alt"></i> Assigned Complaints (<?php echo count($complaintsList); ?>)</h3>
                     </div>
 
                     <!-- Toolbar -->
@@ -158,7 +158,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
 
                     <?php if (empty($complaintsList)): ?>
                         <div class="empty-state">
-                            <div class="empty-icon">📭</div>
+                            <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                             <p>No complaints assigned yet.</p>
                         </div>
                     <?php else: ?>
@@ -188,17 +188,28 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                                         <td style="color: var(--text-primary); font-weight: 500;">
                                             <?php echo htmlspecialchars($c['title']); ?>
                                             <?php if (!empty($c['image'])): ?>
-                                                <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);">📷 View Image</a>
+                                                <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);"><i class="fa fa-picture-o"></i> View Image</a>
                                             <?php endif; ?>
                                         </td>
                                         <td>
                                             <?php echo htmlspecialchars($c['category']); ?>
+                                            <?php if (!empty($c['subcategory'])): ?>
+                                                <br><small style="color:var(--primary); font-weight: 500; font-size: 0.75rem;"><?php echo htmlspecialchars($c['subcategory']); ?></small>
+                                            <?php endif; ?>
                                             <br><small style="color:var(--text-muted); font-size: 0.75rem;">Risk: <?php echo htmlspecialchars($c['risk_type'] ?? 'Medium'); ?></small>
                                             <?php if (!empty($c['is_verified_critical'])): ?>
-                                                <br><span style="color:var(--danger); font-size: 0.7rem; font-weight: 700;">🚨 URGENT / FAST-TRACK</span>
+                                                <br><span style="color:var(--danger); font-size: 0.7rem; font-weight: 700;"><i class="fa fa-bell-o"></i> URGENT / FAST-TRACK</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?php echo htmlspecialchars($userLookup[$c['user_id'] ?? ''] ?? 'Unknown'); ?></td>
+                                        <td>
+                                            <?php 
+                                            if (!empty($c['anonymous'])) {
+                                                echo '<span style="color: #ef4444; font-style: italic;"><i class="fa fa-user-secret"></i> Anonymous User</span>';
+                                            } else {
+                                                echo htmlspecialchars($userLookup[$c['user_id'] ?? ''] ?? 'Unknown');
+                                            }
+                                            ?>
+                                        </td>
                                         <td><?php echo htmlspecialchars($c['location'] ?? ''); ?></td>
                                         <td><?php echo htmlspecialchars($c['date'] ?? $c['created_at']); ?></td>
                                         <td><span class="badge <?php echo $bc; ?>"><?php echo htmlspecialchars($status); ?></span></td>
@@ -217,9 +228,9 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                                         <td>
                                             <div class="action-btns">
                                                 <?php if ($status !== 'Resolved' && $status !== 'Officer Completed'): ?>
-                                                    <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['officer_notes'] ?? '')); ?>)">✏️ Update</button>
+                                                    <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['officer_notes'] ?? '')); ?>)"><i class="fa fa-pencil-square-o"></i> Update</button>
                                                 <?php endif; ?>
-                                                <button class="btn btn-outline btn-sm" onclick="viewComplaint('<?php echo $cId; ?>')">👁️ View</button>
+                                                <button class="btn btn-outline btn-sm" onclick="viewComplaint('<?php echo $cId; ?>')"><i class="fa fa-eye"></i> View</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -230,14 +241,13 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                     <?php endif; ?>
                 </div>
         </main>
-        </main>
     </div>
 
     <!-- Update Status Modal -->
     <div class="modal-overlay" id="updateModal">
         <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">✏️ Update Complaint Progress</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-pencil-square-o"></i> Update Complaint Progress</h3>
                 <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <form id="updateForm">
@@ -245,9 +255,9 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                 <div class="form-group">
                     <label for="update-status">Status</label>
                     <select id="update-status" name="status" class="filter-select" style="width: 100%;">
-                        <option value="Pending">⏳ Pending</option>
-                        <option value="In Progress">🔄 In Progress</option>
-                        <option value="Officer Completed">✅ Completed (Awaiting Admin Review)</option>
+                        <option value="Pending"><i class="fa fa-clock-o"></i> Pending</option>
+                        <option value="In Progress"><i class="fa fa-refresh"></i> In Progress</option>
+                        <option value="Officer Completed"><i class="fa fa-check-square-o"></i> Completed (Awaiting Admin Review)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -268,7 +278,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
     <div id="reportUserModal" class="modal-overlay">
         <div class="modal" style="max-width: 500px; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid #fee2e2; background: #fffafb; padding: 1.5rem;">
-                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;">🚩 Audit: Flag as Fake</h3>
+                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;"><i class="fa fa-flag-o"></i> Audit: Flag as Fake</h3>
                 <button class="modal-close" onclick="closeModal('reportUserModal')">&times;</button>
             </div>
             <div class="modal-body" style="padding: 2rem;">
@@ -307,7 +317,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">📋 Task & Issue Details</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-list-alt"></i> Task & Issue Details</h3>
                 <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <div id="viewContent"></div>
@@ -323,10 +333,12 @@ $officerPhoto = $officerDoc['photo'] ?? '';
             document.addEventListener('click', () => pdw.classList.remove('open'));
         }
         const complaintsData = <?php echo json_encode(array_map(function($c) use ($userLookup) {
+            $isAnonymous = !empty($c['anonymous']);
             return [
                 '_id'           => (string) $c['_id'],
                 'title'         => $c['title'],
                 'category'      => $c['category'],
+                'subcategory'   => $c['subcategory'] ?? '',
                 'description'   => $c['description'],
                 'location'      => $c['location'] ?? '',
                 'image'         => $c['image'] ?? '',
@@ -335,7 +347,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                 'status'        => $c['status'],
                 'admin_reply'   => $c['admin_reply'] ?? '',
                 'officer_notes' => $c['officer_notes'] ?? '',
-                'user_name'     => $userLookup[$c['user_id'] ?? ''] ?? 'Unknown',
+                'user_name'     => $isAnonymous ? '<i class="fa fa-user-secret"></i> Anonymous User' : ($userLookup[$c['user_id'] ?? ''] ?? 'Unknown'),
                 'created_at'    => $c['created_at']
             ];
         }, $complaintsList)); ?>;
@@ -356,11 +368,11 @@ $officerPhoto = $officerDoc['photo'] ?? '';
 
             let html = '<div class="complaint-detail-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">';
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Issue Title</label><p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">${c.title}</p></div>`;
-            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category} ${c.subcategory ? '<br><small style="color:var(--primary);">' + c.subcategory + '</small>' : ''}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Location</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.location}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Date Reported</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.date}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Current Status</label><p style="margin-top: 0.4rem;"><span class="badge badge-${c.status === 'Pending' ? 'pending' : c.status === 'In Progress' ? 'progress' : 'resolved'}" style="font-size: 0.95rem; padding: 0.4rem 0.8rem;">${c.status}</span></p></div>`;
-            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Reported By</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">👤 ${c.user_name}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Reported By</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;"><i class="fa fa-user-o"></i> ${c.user_name}</p></div>`;
             html += '</div>';
 
             html += `<div style="margin-top:1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); border-left: 4px solid var(--primary-light);">
@@ -404,7 +416,7 @@ $officerPhoto = $officerDoc['photo'] ?? '';
                     Navigate
                 </button>
                 <button onclick="openReportUserModal('${c._id}', '${c.title.replace(/'/g, "\\'")}')" class="btn" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                    🚩 Flag as Fake
+                    <i class="fa fa-flag-o"></i> Flag as Fake
                 </button>
             </div>`;
 

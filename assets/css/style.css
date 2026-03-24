@@ -538,7 +538,8 @@ h4 { font-size: 1rem; }
 /* ==========================================
    DASHBOARD LAYOUT
    ========================================== */
-.dashboard-layout {
+.dashboard-layout,
+.dashboard-container {
     display: flex;
     min-height: 100vh;
     background: var(--bg-body);
@@ -2039,9 +2040,10 @@ table td:last-child {
 
 /* Completed State */
 .step-item.completed .step-circle {
-    border-color: #10b981;
-    background: #10b981;
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: #fff;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
 }
 
 .step-item.completed .step-label {
@@ -2054,10 +2056,17 @@ table td:last-child {
     top: 25px;
     left: 5%;
     height: 4px;
-    background: #10b981;
+    background: linear-gradient(90deg, var(--gov-navy), #6366f1, #8b5cf6, #10b981);
+    background-size: 200% 200%;
     z-index: 1;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
     width: 0%;
+}
+.step-item:last-child.completed .step-circle {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #059669;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
 }
 
 .tracker-details {

@@ -1,116 +1,136 @@
 <?php
 /**
- * CivicTrack API — Manage Officers (Admin only)
- * 
- * POST JSON body:
- *   action — "add" or "delete"
- *   For add: name, email, phone, password
- *   For delete: officer_id
- *
- * GET: Returns list of all officers
+ * CivicTrack API — Manage Personnel (4-Tier Architecture)
  */
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+$allowedAdminRoles = ['admin', 'national_admin', 'state_admin', 'senior_officer', 'district_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedAdminRoles)) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
     exit;
 }
 
 $db = Database::getInstance();
-$officers = $db->getCollection('officers');
+$adminsCol       = $db->getCollection('admins');
+$stateAdminsCol  = $db->getCollection('state_admins');
+$headOfficersCol = $db->getCollection('head_officers'); // Using original names but logically separated now
+$fieldOfficersCol = $db->getCollection('field_officers');
 
-// GET — list all officers
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $cursor = $officers->find([], ['sort' => ['created_at' => -1]]);
-    $result = [];
-    foreach ($cursor as $o) {
-        $result[] = [
-            '_id'        => (string) $o['_id'],
-            'name'       => $o['name'],
-            'email'      => $o['email'],
-            'phone'      => $o['phone'] ?? '',
-            'created_at' => $o['created_at'] ?? ''
-        ];
-    }
-    echo json_encode(['success' => true, 'data' => $result]);
-    exit;
-}
-
-// POST — add or delete officer
-$input = json_decode(file_get_contents('php://input'), true);
-if (!$input) {
-    // Try form data
-    $input = $_POST;
-}
-
-$action = $input['action'] ?? '';
+$input  = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+$action = $input['action'] ?? $_GET['action'] ?? '';
+$currentUserRole = $_SESSION['role'];
+$currentUserId   = $_SESSION['user_id'];
 
 if ($action === 'add') {
-    $name     = htmlspecialchars(trim($input['name'] ?? ''), ENT_QUOTES, 'UTF-8');
-    $email    = filter_var(trim($input['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-    $department = htmlspecialchars(trim($input['department'] ?? ''), ENT_QUOTES, 'UTF-8');
-    $phone    = htmlspecialchars(trim($input['phone'] ?? ''), ENT_QUOTES, 'UTF-8');
-    $password = $input['password'] ?? '';
+    $name        = htmlspecialchars(trim($input['name'] ?? ''), ENT_QUOTES, 'UTF-8');
+    $email       = filter_var(trim($input['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $password    = $input['password'] ?? '';
+    $role        = $input['role'] ?? '';
+    $department  = $input['department'] ?? 'General';
+    $state       = $input['state'] ?? 'National';
+    $district    = $input['district'] ?? 'All Districts';
+    $subcategory = $input['subcategory'] ?? 'General';
+    $phone       = $input['phone'] ?? '';
+    $designation = htmlspecialchars(trim($input['designation'] ?? ''), ENT_QUOTES, 'UTF-8');
+    $address     = htmlspecialchars(trim($input['office_address'] ?? ''), ENT_QUOTES, 'UTF-8');
 
-    if (empty($name) || empty($email) || empty($password) || empty($department)) {
-        echo json_encode(['success' => false, 'message' => 'Name, email, department, and password are required.']);
+    if (empty($name) || empty($email) || empty($password) || empty($role)) {
+        echo json_encode(['success' => false, 'message' => 'Name, email, password, and role are required.']);
         exit;
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo json_encode(['success' => false, 'message' => 'Invalid email format.']);
+    // Hierarchical Rules Enforcement
+    $targetCol = null;
+    if (in_array($currentUserRole, ['admin', 'national_admin'])) {
+        if ($role !== 'state_admin') {
+            echo json_encode(['success' => false, 'message' => 'Admin can only add State Admins.']);
+            exit;
+        }
+        $targetCol = $stateAdminsCol;
+    } elseif ($currentUserRole === 'state_admin') {
+        if (!in_array($role, ['senior_officer', 'district_admin'])) {
+            echo json_encode(['success' => false, 'message' => 'State Admin can only add Department Heads (Senior Officers).']);
+            exit;
+        }
+        $targetCol = $headOfficersCol;
+    } elseif (in_array($currentUserRole, ['senior_officer', 'district_admin'])) {
+        if (!in_array($role, ['officer', 'local_officer'])) {
+            echo json_encode(['success' => false, 'message' => 'Head Officer can only add Local Officers.']);
+            exit;
+        }
+        $targetCol = $fieldOfficersCol;
+    }
+
+    if (!$targetCol) {
+        echo json_encode(['success' => false, 'message' => 'Hierarchy rule violation or role not allowed to add personnel.']);
         exit;
     }
 
-    // Check duplicate
-    $existing = $officers->findOne(['email' => $email]);
-    if ($existing) {
-        echo json_encode(['success' => false, 'message' => 'Officer with this email already exists.']);
+    // Duplicate Check
+    $query = ['email' => $email];
+    if ($adminsCol->findOne($query) || $stateAdminsCol->findOne($query) || $headOfficersCol->findOne($query) || $fieldOfficersCol->findOne($query)) {
+        echo json_encode(['success' => false, 'message' => 'Email already registered in the system.']);
         exit;
     }
 
-    $officers->insertOne([
-        'name'       => $name,
-        'email'      => $email,
-        'department' => $department,
-        'phone'      => $phone,
-        'password'   => password_hash($password, PASSWORD_BCRYPT),
-        'role'       => 'officer',
-        'created_at' => date('Y-m-d H:i:s')
-    ]);
+    $newUser = [
+        'name'          => $name,
+        'email'         => $email,
+        'password'      => password_hash($password, PASSWORD_BCRYPT),
+        'role'          => $role,
+        'department'    => $department,
+        'state'         => $state,
+        'district'      => $district,
+        'subcategory'   => $subcategory,
+        'phone'         => $phone,
+        'designation'   => $designation,
+        'role' => $role,
+        'office_address' => $input['office_address'] ?? '',
+        'created_by_id' => $currentUserId,
+        'created_at'    => date('Y-m-d H:i:s')
+    ];
 
-    echo json_encode(['success' => true, 'message' => 'Officer added successfully.']);
+    $insertedResult = $targetCol->insertOne($newUser);
+    $newOfficerId = (string) $insertedResult->getInsertedId();
+
+    // Automatic Department Assignment if requested
+    $assignDeptId = $input['assign_dept_id'] ?? '';
+    if (!empty($assignDeptId)) {
+        try {
+            $db->getCollection('departments')->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($assignDeptId)],
+                ['$set' => ['head_id' => $newOfficerId]]
+            );
+        } catch (Exception $e) {
+             // Continue if failed, log error
+        }
+    }
+
+    echo json_encode(['success' => true, 'message' => 'Official added successfully ' . (empty($assignDeptId) ? '' : 'and assigned as Head.'), 'officer_id' => $newOfficerId]);
     exit;
 }
 
 if ($action === 'delete') {
-    $officerId = $input['officer_id'] ?? '';
-    if (empty($officerId)) {
-        echo json_encode(['success' => false, 'message' => 'Officer ID is required.']);
+    $targetId = $input['officer_id'] ?? $input['user_id'] ?? '';
+    if (empty($targetId)) {
+        echo json_encode(['success' => false, 'message' => 'ID required for deletion.']);
         exit;
     }
 
     try {
-        $objectId = new MongoDB\BSON\ObjectId($officerId);
-        $result = $officers->deleteOne(['_id' => $objectId]);
+        $oid = new MongoDB\BSON\ObjectId($targetId);
+        // Sequential deletion attempt (it results in 0 if not found in that col)
+        $adminsCol->deleteOne(['_id' => $oid]);
+        $stateAdminsCol->deleteOne(['_id' => $oid]);
+        $headOfficersCol->deleteOne(['_id' => $oid]);
+        $fieldOfficersCol->deleteOne(['_id' => $oid]);
 
-        // Unassign complaints from this officer
-        $complaintsCol = $db->getCollection('complaints');
-        $complaintsCol->updateMany(
-            ['assigned_officer_id' => $officerId],
-            ['$set' => ['assigned_officer_id' => '', 'assigned_officer_name' => '']]
-        );
-
-        if ($result->getDeletedCount() > 0) {
-            echo json_encode(['success' => true, 'message' => 'Officer deleted successfully.']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Officer not found.']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Personnel record removed successfully.']);
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Invalid officer ID.']);
+        echo json_encode(['success' => false, 'message' => 'Invalid ID format or system error.']);
     }
     exit;
 }

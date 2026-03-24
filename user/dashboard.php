@@ -81,7 +81,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citizen Dashboard — ReportMyCity Official Portal</title>
+    <title>Citizen Dashboard — CivicTrack India National Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -110,7 +110,7 @@ try {
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>ReportMyCity</h2>
+                        <h2>CivicTrack India</h2>
                         <span>Citizen Portal</span>
                     </div>
                 </div>
@@ -119,23 +119,23 @@ try {
             <nav class="sidebar-nav">
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php" class="active">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="leaderboard.php">
-                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                    <span class="nav-icon"><i class="fa fa-trophy"></i></span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php">
-                    <span class="nav-icon">📝</span> Submit Complaint
+                    <span class="nav-icon"><i class="fa fa-pencil-square-o"></i></span> Submit Complaint
                 </a>
                 <a href="my_complaints.php">
-                    <span class="nav-icon">📋</span> My Complaints
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Complaints
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">👮</span> Report Officer Conduct
+                    <span class="nav-icon"><i class="fa fa-shield"></i></span> Report Officer Conduct
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -166,10 +166,10 @@ try {
                     <button class="sidebar-toggle" id="menu-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
-                        <span>ReportMyCity</span>
+                        <span>CivicTrack India</span>
                     </div>
                     <div>
-                        <h1>📊 My Dashboard</h1>
+                        <h1><i class="fa fa-bar-chart-o"></i> My Dashboard</h1>
                         <div class="breadcrumb">
                             <a href="dashboard.php">Home</a>
                             <span>›</span>
@@ -196,10 +196,10 @@ try {
                                 <span><?php echo htmlspecialchars($userEmail); ?></span>
                             </div>
                             <a href="profile.php">
-                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                             </a>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -230,8 +230,8 @@ try {
                     <h3><?php echo htmlspecialchars($userName); ?></h3>
                     <p><?php echo htmlspecialchars($userEmail); ?></p>
                     <div class="profile-meta">
-                        <span>📋 <?php echo $totalComplaints; ?> complaints filed</span>
-                        <span>✅ <?php echo $resolvedComplaints; ?> resolved</span>
+                        <span><i class="fa fa-list-alt"></i> <?php echo $totalComplaints; ?> complaints filed</span>
+                        <span><i class="fa fa-check-square-o"></i> <?php echo $resolvedComplaints; ?> resolved</span>
                         <span style="background: var(--gov-gold-glow); color: var(--gov-gold); padding: 4px 10px; border-radius: 20px; font-weight: 700; border: 1px solid var(--gov-gold);">🎖️ <?php echo $userPoints; ?> Civic Points</span>
                     </div>
                 </div>
@@ -240,22 +240,22 @@ try {
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card purple animate-card">
-                    <div class="stat-icon">📋</div>
+                    <div class="stat-icon"><i class="fa fa-list-alt"></i></div>
                     <div class="stat-value"><?php echo $totalComplaints; ?></div>
                     <div class="stat-label">Total Complaints</div>
                 </div>
                 <div class="stat-card orange animate-card">
-                    <div class="stat-icon">⏳</div>
+                    <div class="stat-icon"><i class="fa fa-clock-o"></i></div>
                     <div class="stat-value"><?php echo $pendingComplaints; ?></div>
                     <div class="stat-label">Pending</div>
                 </div>
                 <div class="stat-card cyan animate-card">
-                    <div class="stat-icon">🔄</div>
+                    <div class="stat-icon"><i class="fa fa-refresh"></i></div>
                     <div class="stat-value"><?php echo $progressComplaints; ?></div>
                     <div class="stat-label">In Progress</div>
                 </div>
                 <div class="stat-card green animate-card">
-                    <div class="stat-icon">✅</div>
+                    <div class="stat-icon"><i class="fa fa-check-square-o"></i></div>
                     <div class="stat-value"><?php echo $resolvedComplaints; ?></div>
                     <div class="stat-label">Resolved</div>
                 </div>
@@ -265,19 +265,19 @@ try {
             <div class="dashboard-widgets" style="margin-bottom: 2rem;">
                 <div class="quick-actions" style="margin-bottom: 0;">
                     <a href="submit_complaint.php" class="quick-action-card">
-                        <span class="action-icon">📝</span>
+                        <span class="action-icon"><i class="fa fa-pencil-square-o"></i></span>
                         <span class="action-label">New Complaint</span>
                     </a>
                     <a href="my_complaints.php" class="quick-action-card">
-                        <span class="action-icon">📋</span>
+                        <span class="action-icon"><i class="fa fa-list-alt"></i></span>
                         <span class="action-label">View All Complaints</span>
                     </a>
                     <a href="my_complaints.php?status=Pending" class="quick-action-card">
-                        <span class="action-icon">⏳</span>
+                        <span class="action-icon"><i class="fa fa-clock-o"></i></span>
                         <span class="action-label">Pending Issues</span>
                     </a>
                     <a href="my_complaints.php?status=Resolved" class="quick-action-card">
-                        <span class="action-icon">✅</span>
+                        <span class="action-icon"><i class="fa fa-check-square-o"></i></span>
                         <span class="action-label">Resolved Issues</span>
                     </a>
                 </div>
@@ -295,7 +295,7 @@ try {
                 $recentArr = iterator_to_array($recentComplaints);
                 if (empty($recentArr)): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">📭</div>
+                        <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                         <p>You haven't filed any complaints yet.<br><a href="submit_complaint.php">Submit your first complaint →</a></p>
                     </div>
                 <?php else: ?>
@@ -318,7 +318,12 @@ try {
                                     <td style="color: var(--text-primary); font-weight: 500;">
                                         <?php echo htmlspecialchars($c['title']); ?>
                                     </td>
-                                    <td><?php echo htmlspecialchars($c['category']); ?></td>
+                                    <td>
+                                        <?php echo htmlspecialchars($c['category']); ?>
+                                        <?php if (!empty($c['subcategory'])): ?>
+                                            <br><small style="color:var(--primary); font-weight: 500; font-size: 0.72rem;"><?php echo htmlspecialchars($c['subcategory']); ?></small>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?php echo htmlspecialchars($c['date'] ?? $c['created_at']); ?></td>
                                     <td>
                                         <?php
@@ -330,7 +335,7 @@ try {
                                         <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewComplaint('<?php echo $cId; ?>')">👁️ View</button>
+                                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewComplaint('<?php echo $cId; ?>')"><i class="fa fa-eye"></i> View</button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -343,7 +348,7 @@ try {
                 <!-- Right: Leaderboard -->
                 <div class="card leaderboard-card" style="margin-top: 0; background: linear-gradient(to bottom, #ffffff, #f8faff); border: 1px solid var(--gov-gold); box-shadow: var(--shadow-gold);">
                     <div class="card-header" style="border-bottom: 2px solid var(--gov-gold-pale);">
-                        <h3 style="color: var(--gov-gold); display: flex; align-items: center; gap: 10px;">🏆 Civic Heroes</h3>
+                        <h3 style="color: var(--gov-gold); display: flex; align-items: center; gap: 10px;"><i class="fa fa-trophy"></i> Civic Heroes</h3>
                         <span style="font-size: 0.75rem; background: var(--gov-gold); color: white; padding: 2px 8px; border-radius: 10px;">TOP 5</span>
                     </div>
                     <div class="leaderboard-list">
@@ -373,7 +378,7 @@ try {
                         <?php endforeach; endif; ?>
                     </div>
                     <div class="leaderboard-footer" style="padding: 1rem; text-align: center; font-size: 0.78rem; border-top: 1px solid var(--gov-gold-pale);">
-                        <p style="margin: 0; color: var(--text-muted);">Points: 💡 10 per Report | ✅ 15 per Solution</p>
+                        <p style="margin: 0; color: var(--text-muted);">Points: <i class="fa fa-lightbulb-o"></i> 10 per Report | <i class="fa fa-check-square-o"></i> 15 per Solution</p>
                     </div>
                 </div>
             </div>
@@ -384,7 +389,7 @@ try {
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">📋 Task & Issue Details</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-list-alt"></i> Task & Issue Details</h3>
                 <button class="modal-close" style="font-size: 1.8rem;" onclick="closeModal('viewModal')">&times;</button>
             </div>
             <div class="modal-body" id="viewContent"></div>
@@ -395,7 +400,7 @@ try {
     <div class="modal-overlay" id="reportOfficerModal">
         <div class="modal" style="max-width: 550px;">
             <div class="modal-header">
-                <h3>🚩 Report Officer Conduct</h3>
+                <h3><i class="fa fa-flag-o"></i> Report Officer Conduct</h3>
                 <button class="modal-close" onclick="closeModal('reportOfficerModal')">&times;</button>
             </div>
             <div class="modal-body">
@@ -403,7 +408,7 @@ try {
                 <form id="reportOfficerForm">
                     <input type="hidden" name="complaint_id" id="report-complaint-id">
                     <div style="background: rgba(10,37,88,0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                        <span id="report-officer-name" style="font-weight: 700; color: var(--gov-navy);">👮 Officer Name</span>
+                        <span id="report-officer-name" style="font-weight: 700; color: var(--gov-navy);"><i class="fa fa-shield"></i> Officer Name</span>
                     </div>
 
                     <div class="form-group">
@@ -428,6 +433,7 @@ try {
                 '_id'                   => (string) $c['_id'],
                 'title'                 => (string) $c['title'],
                 'category'              => (string) $c['category'],
+                'subcategory'           => (string) ($c['subcategory'] ?? ''),
                 'description'           => (string) ($c['description'] ?? ''),
                 'location'              => (string) ($c['location'] ?? ''),
                 'image'                 => (string) ($c['image'] ?? ''),
@@ -438,31 +444,13 @@ try {
                 'admin_reply'           => (string) ($c['admin_reply'] ?? ''),
                 'officer_notes'         => (string) ($c['officer_notes'] ?? ''),
                 'assigned_officer_name' => (string) ($c['assigned_officer_name'] ?? ''),
+                'assigned_timestamp'    => (string) ($c['assigned_timestamp'] ?? ''),
+                'in_progress_timestamp' => (string) ($c['in_progress_timestamp'] ?? ''),
+                'resolved_timestamp'    => (string) ($c['resolved_timestamp'] ?? ''),
             ];
         }, $recentArr), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
-        // Sidebar Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-        if (menuToggle && sidebar) {
-            menuToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-            });
-        }
-
-        // Profile Dropdown
-        const pdw = document.getElementById('profileDropdownWrapper');
-        if (pdw) {
-            pdw.addEventListener('click', function(e) {
-                e.stopPropagation();
-                this.classList.toggle('open');
-            });
-            // Close dropdown when clicking anywhere else
-            document.addEventListener('click', () => {
-                if (pdw) pdw.classList.remove('open');
-            });
-        }
+        // Sidebar toggle and profile dropdown are now handled by main.js standard listeners.
 
         function viewComplaint(id) {
             const c = complaintsData.find(item => item._id === id);
@@ -490,27 +478,31 @@ try {
                     <div class="stepper">
                         <div class="stepper-progress" id="tracker-bar"></div>
                         <div class="step-item ${step1}">
-                            <div class="step-circle">📝</div>
-                            <div class="step-label" style="font-size:0.75rem;">Reported</div>
+                            <div class="step-circle"><i class="fa fa-file-text-o"></i></div>
+                            <div class="step-label" style="font-size:0.75rem;">Submitted</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem;">${c.date}</div>
                         </div>
                         <div class="step-item ${step2}">
-                            <div class="step-circle">👮</div>
-                            <div class="step-label" style="font-size:0.75rem;">Dispatched</div>
+                            <div class="step-circle"><i class="fa fa-user-circle-o"></i></div>
+                            <div class="step-label" style="font-size:0.75rem;">Assigned</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem;">${c.assigned_timestamp || '—'}</div>
                         </div>
                         <div class="step-item ${step3}">
-                            <div class="step-circle">🔧</div>
-                            <div class="step-label" style="font-size:0.75rem;">On-Site</div>
+                            <div class="step-circle"><i class="fa fa-cogs"></i></div>
+                            <div class="step-label" style="font-size:0.75rem;">In Progress</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem;">${c.in_progress_timestamp || '—'}</div>
                         </div>
                         <div class="step-item ${step4}">
-                            <div class="step-circle">✅</div>
+                            <div class="step-circle"><i class="fa fa-check-square-o"></i></div>
                             <div class="step-label" style="font-size:0.75rem;">Resolved</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem;">${c.resolved_timestamp || '—'}</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="complaint-detail-grid" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Tracking ID</label><p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">#${c._id.substr(-6)}</p></div>
-                    <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Category</label><p style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category}</p></div>
+                    <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Category</label><p style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category} ${c.subcategory ? '<br><small style="color:var(--primary);">' + c.subcategory + '</small>' : ''}</p></div>
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Status</label><p style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.status}</p></div>
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Date Reported</label><p style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.date}</p></div>
                 </div>
@@ -550,7 +542,7 @@ try {
                 html += `
                     <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
                         <button class="btn btn-sm" onclick="openReportOfficerModal('${c._id}', '${c.assigned_officer_name}')" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                            🚩 Report Officer Conduct
+                            <i class="fa fa-flag-o"></i> Report Officer Conduct
                         </button>
                     </div>
                 `;
@@ -568,7 +560,7 @@ try {
         // Logic for Reporting Officer
         function openReportOfficerModal(id, officerName) {
             document.getElementById('report-complaint-id').value = id;
-            document.getElementById('report-officer-name').innerText = '👮 ' + officerName;
+            document.getElementById('report-officer-name').innerText = '<i class="fa fa-shield"></i> ' + officerName;
             closeModal('viewModal');
             openModal('reportOfficerModal');
         }

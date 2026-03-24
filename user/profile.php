@@ -261,31 +261,31 @@ $initials = strtoupper(substr($userName, 0, 1));
             <nav class="sidebar-nav">
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="leaderboard.php">
-                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                    <span class="nav-icon"><i class="fa fa-trophy"></i></span> Civic Leaderboard
                 </a>
                 <?php if ($role === 'user'): ?>
                 <a href="submit_complaint.php">
-                    <span class="nav-icon">📝</span> Submit Complaint
+                    <span class="nav-icon"><i class="fa fa-pencil-square-o"></i></span> Submit Complaint
                 </a>
                 <a href="my_complaints.php">
-                    <span class="nav-icon">📋</span> My Complaints
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Complaints
                 </a>
                 <?php endif; ?>
                 <a href="profile.php" class="active">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
                 <?php if ($role === 'user'): ?>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">👮</span> Report Officer Conduct
+                    <span class="nav-icon"><i class="fa fa-shield"></i></span> Report Officer Conduct
                 </a>
                 <?php else: ?>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_assignments.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">🚩</span> Flag Improper User
+                    <span class="nav-icon"><i class="fa fa-flag-o"></i></span> Flag Improper User
                 </a>
                 <?php endif; ?>
             </nav>
@@ -318,7 +318,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                         <span>ReportMyCity</span>
                     </div>
                     <div>
-                        <h1>👤 Profile Settings</h1>
+                        <h1><i class="fa fa-user-o"></i> Profile Settings</h1>
                         <div class="breadcrumb">
                             <a href="dashboard.php">Dashboard</a>
                             <span>›</span>
@@ -345,10 +345,10 @@ $initials = strtoupper(substr($userName, 0, 1));
                             <span><?php echo htmlspecialchars($userEmail); ?></span>
                         </div>
                         <a href="profile.php">
-                            <div class="dropdown-icon">⚙️</div> Profile Settings
+                            <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                         </a>
                         <a href="../logout.php" class="dropdown-logout">
-                            <div class="dropdown-icon">🚪</div> Logout
+                            <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                         </a>
                     </div>
                 </div>
@@ -368,7 +368,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 <?php endif; ?>
                             </div>
                             <label for="photo-input" class="avatar-edit-btn" title="Change Photo">
-                                <i class="fa fa-camera"></i> 📷
+                                <i class="fa fa-camera"></i> <i class="fa fa-picture-o"></i>
                             </label>
                             <input type="file" id="photo-input" accept="image/*">
                         </div>
@@ -376,7 +376,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                             <h2 id="sidebar-display-name"><?php echo htmlspecialchars($userName); ?></h2>
                             <p><?php echo htmlspecialchars($userEmail); ?></p>
                             <div class="account-badge">
-                                🛡️ Verified <?php echo ucfirst($role); ?>
+                                <i class="fa fa-shield"></i> Verified <?php echo ucfirst($role); ?>
                             </div>
                         </div>
                         
@@ -390,7 +390,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                     <div class="profile-main-card">
                         <form id="profileForm">
                             <div class="section-header">
-                                <div class="icon-box">👤</div>
+                                <div class="icon-box"><i class="fa fa-user-o"></i></div>
                                 <div>
                                     <h3>Personal Details</h3>
                                     <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Update your public identity and contact info</p>
@@ -490,7 +490,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>⏳</span> Saving...';
+            submitBtn.innerHTML = '<span><i class="fa fa-clock-o"></i></span> Saving...';
 
             try {
                 const result = await postJSON('../api/update_profile.php', payload);

@@ -53,23 +53,23 @@ $initials = strtoupper(substr($userName, 0, 1));
             <div class="sidebar-section-label">Navigation</div>
             <nav class="sidebar-nav">
                 <a href="dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="leaderboard.php">
-                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                    <span class="nav-icon"><i class="fa fa-trophy"></i></span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php">
-                    <span class="nav-icon">📝</span> Submit Complaint
+                    <span class="nav-icon"><i class="fa fa-pencil-square-o"></i></span> Submit Complaint
                 </a>
                 <a href="my_complaints.php" class="active">
-                    <span class="nav-icon">📋</span> My Complaints
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Complaints
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">👮</span> Report Officer Conduct
+                    <span class="nav-icon"><i class="fa fa-shield"></i></span> Report Officer Conduct
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -121,10 +121,10 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 <span>Citizen Account</span>
                             </div>
                             <a href="profile.php">
-                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                             </a>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 
             <div class="card">
                 <div class="card-header">
-                    <h3>📋 All Complaints (<?php echo count($complaintsList); ?>)</h3>
+                    <h3><i class="fa fa-list-alt"></i> All Complaints (<?php echo count($complaintsList); ?>)</h3>
                     <a href="submit_complaint.php" class="btn btn-primary btn-sm">+ New Complaint</a>
                 </div>
 
@@ -152,7 +152,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 
                 <?php if (empty($complaintsList)): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">📭</div>
+                        <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                         <p>No complaints found.<br><a href="submit_complaint.php">Submit your first complaint →</a></p>
                     </div>
                 <?php else: ?>
@@ -182,11 +182,14 @@ $initials = strtoupper(substr($userName, 0, 1));
                                     <td style="color: var(--text-primary); font-weight: 500;">
                                         <?php echo htmlspecialchars($c['title']); ?>
                                         <?php if (!empty($c['image'])): ?>
-                                            <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);">📷 View Image</a>
+                                            <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);"><i class="fa fa-picture-o"></i> View Image</a>
                                         <?php endif; ?>
                                     </td>
                                      <td>
                                          <?php echo htmlspecialchars($c['category']); ?>
+                                         <?php if (!empty($c['subcategory'])): ?>
+                                             <br><small style="color:var(--primary); font-weight: 500;"><?php echo htmlspecialchars($c['subcategory']); ?></small>
+                                         <?php endif; ?>
                                          <br><small style="color:var(--text-muted);">Priority: <?php echo htmlspecialchars($c['risk_type'] ?? 'Medium'); ?></small>
                                      </td>
                                     <td><?php echo htmlspecialchars($c['date'] ?? $c['created_at']); ?></td>
@@ -202,7 +205,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                     <td>
                                         <?php
                                         $officerName = $c['assigned_officer_name'] ?? '';
-                                        echo $officerName ? '<span style="color: var(--warning); font-weight: 500;">👮 ' . htmlspecialchars($officerName) . '</span>' : '<span style="color: var(--text-muted);">—</span>';
+                                        echo $officerName ? '<span style="color: var(--warning); font-weight: 500;"><i class="fa fa-shield"></i> ' . htmlspecialchars($officerName) . '</span>' : '<span style="color: var(--text-muted);">—</span>';
                                         ?>
                                     </td>
                                     <td>
@@ -224,7 +227,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                                 </div>
                                             <?php else: ?>
                                                 <button class="btn btn-gold btn-sm" onclick="event.stopPropagation(); openFeedbackModal('<?php echo (string)$c['_id']; ?>', '<?php echo htmlspecialchars($c['title'], ENT_QUOTES); ?>')">
-                                                    ⭐ Rate Work
+                                                    <i class="fa fa-star-o"></i> Rate Work
                                                 </button>
                                             <?php endif; ?>
                                         <?php else: ?>
@@ -232,7 +235,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewComplaint('<?php echo $cId; ?>')">👁️ View</button>
+                                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); viewComplaint('<?php echo $cId; ?>')"><i class="fa fa-eye"></i> View</button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -248,7 +251,7 @@ $initials = strtoupper(substr($userName, 0, 1));
     <div id="feedbackModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <h3>⭐ Rate Officer's Work</h3>
+                <h3><i class="fa fa-star-o"></i> Rate Officer's Work</h3>
                 <button class="modal-close" onclick="closeFeedbackModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -285,7 +288,7 @@ $initials = strtoupper(substr($userName, 0, 1));
     <div id="reportOfficerModal" class="modal-overlay">
         <div class="modal" style="max-width: 500px; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid #fee2e2; background: #fffafb; padding: 1.5rem;">
-                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;">🚩 Report Officer Conduct</h3>
+                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px;"><i class="fa fa-flag-o"></i> Report Officer Conduct</h3>
                 <button class="modal-close" onclick="closeModal('reportOfficerModal')">&times;</button>
             </div>
             <div class="modal-body" style="padding: 2rem;">
@@ -318,7 +321,7 @@ $initials = strtoupper(substr($userName, 0, 1));
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">📋 Task & Issue Details</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-list-alt"></i> Task & Issue Details</h3>
                 <button class="modal-close" style="font-size: 1.8rem;" onclick="closeModal('viewModal')">&times;</button>
             </div>
             <div class="modal-body" id="viewContent"></div>
@@ -340,19 +343,23 @@ $initials = strtoupper(substr($userName, 0, 1));
                 '_id'                   => (string) $c['_id'],
                 'title'                 => $c['title'],
                 'category'              => $c['category'],
+                'subcategory'           => $c['subcategory'] ?? '',
                 'description'           => $c['description'],
                 'location'              => $c['location'] ?? '',
                 'image'                 => $c['image'] ?? '',
                 'officer_proof_image'   => $c['officer_proof_image'] ?? '',
                 'date'                  => $c['date'] ?? $c['created_at'],
                 'risk_type'             => $c['risk_type'] ?? 'Medium',
-                'status'                => $c['status'],
-                'admin_reply'           => $c['admin_reply'] ?? '',
-                'officer_notes'         => $c['officer_notes'] ?? '',
-                'assigned_officer_name' => $c['assigned_officer_name'] ?? '',
+                'status'                => (string) ($c['status'] ?? ''),
+                'admin_reply'           => (string) ($c['admin_reply'] ?? ''),
+                'officer_notes'         => (string) ($c['officer_notes'] ?? ''),
+                'assigned_officer_name' => (string) ($c['assigned_officer_name'] ?? ''),
+                'assigned_timestamp'    => (string) ($c['assigned_timestamp'] ?? ''),
+                'in_progress_timestamp' => (string) ($c['in_progress_timestamp'] ?? ''),
+                'resolved_timestamp'    => (string) ($c['resolved_timestamp'] ?? ''),
                 'created_at'            => $c['created_at']
             ];
-        }, $complaintsList)); ?>;
+        }, $complaintsList), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
         initTableSearch('search-input', 'complaints-table');
         initStatusFilter('status-filter', 'complaints-table');
@@ -383,20 +390,24 @@ $initials = strtoupper(substr($userName, 0, 1));
                     <div class="stepper">
                         <div class="stepper-progress" id="tracker-bar"></div>
                         <div class="step-item ${step1}">
-                            <div class="step-circle">📝</div>
-                            <div class="step-label">Reported</div>
+                            <div class="step-circle"><i class="fa fa-file-text-o"></i></div>
+                            <div class="step-label">Submitted</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem; font-weight: 500;">${c.date}</div>
                         </div>
                         <div class="step-item ${step2}">
-                            <div class="step-circle">👮</div>
-                            <div class="step-label">Dispatched</div>
+                            <div class="step-circle"><i class="fa fa-user-circle-o"></i></div>
+                            <div class="step-label">Assigned</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem; font-weight: 500;">${c.assigned_timestamp || '—'}</div>
                         </div>
                         <div class="step-item ${step3}">
-                            <div class="step-circle">🔧</div>
-                            <div class="step-label">On-Site Action</div>
+                            <div class="step-circle"><i class="fa fa-cogs"></i></div>
+                            <div class="step-label">In Progress</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem; font-weight: 500;">${c.in_progress_timestamp || '—'}</div>
                         </div>
                         <div class="step-item ${step4}">
-                            <div class="step-circle">✅</div>
+                            <div class="step-circle"><i class="fa fa-check-square-o"></i></div>
                             <div class="step-label">Resolved</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.4rem; font-weight: 500;">${c.resolved_timestamp || '—'}</div>
                         </div>
                     </div>
 
@@ -414,7 +425,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 
                 <div class="complaint-detail-grid" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Tracking ID</label><p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">#${c._id.substr(-6)}</p></div>
-                    <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category}</p></div>
+                    <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category} ${c.subcategory ? '<br><small style="color:var(--primary);">' + c.subcategory + '</small>' : ''}</p></div>
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Risk Level</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.risk_type}</p></div>
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Location</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.location}</p></div>
                     <div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Date Reported</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.date}</p></div>
@@ -454,7 +465,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                 html += `
                     <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
                         <button class="btn btn-sm" onclick="openReportOfficerModal('${c._id}', '${c.assigned_officer_name}')" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; display: flex; align-items: center; gap: 6px;">
-                            🚩 Report Officer Conduct
+                            <i class="fa fa-flag-o"></i> Report Officer Conduct
                         </button>
                     </div>
                 `;
@@ -511,7 +522,7 @@ $initials = strtoupper(substr($userName, 0, 1));
 
         function openReportOfficerModal(id, officerName) {
             document.getElementById('report-complaint-id').value = id;
-            document.getElementById('report-officer-name').innerText = '👮 ' + officerName;
+            document.getElementById('report-officer-name').innerText = '<i class="fa fa-shield"></i> ' + officerName;
             closeModal('viewModal');
             openModal('reportOfficerModal');
         }

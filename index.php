@@ -6,14 +6,45 @@
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['role'] === 'admin') {
+    $r = $_SESSION['role'] ?? 'user';
+    if ($r === 'national_admin') {
+        header('Location: admin/dashboard.php');
+    } elseif ($r === 'state_admin') {
+        header('Location: admin/../state_admin/dashboard.php');
+    } elseif (in_array($r, ['admin', 'district_admin'])) {
         header('Location: admin/admin_dashboard.php');
-    } elseif ($_SESSION['role'] === 'officer') {
+    } elseif ($r === 'senior_officer') {
+        header('Location: head_officer/dashboard.php');
+    } elseif (in_array($r, ['officer', 'local_officer'])) {
         header('Location: officer/officer_dashboard.php');
     } else {
         header('Location: user/dashboard.php');
     }
     exit;
+}
+
+require_once __DIR__ . '/config/database.php';
+$db = Database::getInstance();
+$complaintsCol = $db->getCollection('complaints');
+$officersCol = $db->getCollection('officers');
+
+$totalComplaints = $complaintsCol->countDocuments([]);
+$resolvedComplaints = $complaintsCol->countDocuments(['status' => 'Resolved']);
+$activeOfficers = $officersCol->countDocuments([]);
+
+// Calculate real-time satisfaction rate
+$satisfactionRate = 98; // default
+$ratingsCursor = $complaintsCol->find(['rating' => ['$exists' => true]]);
+$ratingSum = 0; 
+$ratingCount = 0;
+foreach($ratingsCursor as $c) {
+    if(isset($c['rating'])) { 
+        $ratingSum += (int)$c['rating']; 
+        $ratingCount++; 
+    }
+}
+if ($ratingCount > 0) {
+    $satisfactionRate = round(($ratingSum / ($ratingCount * 5)) * 100);
 }
 ?>
 <!DOCTYPE html>
@@ -22,7 +53,7 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CivicTrack — Official Citizen Services Portal. Submit and track civic complaints with the government authority.">
-    <title>CivicTrack — Official Citizen Services Portal</title>
+    <title>CivicTrack India – Department-Based Complaint Management System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -56,7 +87,7 @@ if (isset($_SESSION['user_id'])) {
             <img src="assets/images/govt_emblem.png" alt="CivicTrack Government Emblem" class="gov-header-emblem" style="height: 58px; width: auto; filter: drop-shadow(0 0 6px rgba(245, 244, 243, 0.3)); transition: filter 0.3s;">
             <div class="gov-brand-divider" style="width: 2px; height: 40px; background: rgba(200,146,42,0.5);"></div>
             <div class="gov-site-title" style="display: flex; flex-direction: column;">
-                <h1 style="font-family: 'Noto Serif', Georgia, serif; font-size: 1.25rem; color: #0a2558; font-weight: 700; margin: 0; line-height: 1.1;">ReportMyCity</h1>
+                <h1 style="font-family: 'Noto Serif', Georgia, serif; font-size: 1.25rem; color: #0a2558; font-weight: 700; margin: 0; line-height: 1.1;">CivicTrack India</h1>
                 <div class="subtitle" style="font-size: 0.65rem; color: #c8922a; letter-spacing: 0.1em; text-transform: uppercase;">Official Portal</div>
             </div>
         </a>
@@ -84,13 +115,10 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <h1 class="hero-title">
                     Welcome to<br>
-                    <span class="gradient-text">CivicTrack.</span>
+                    <span class="gradient-text">CivicTrack India.</span>
                 </h1>
                 <p class="hero-subtitle">
-                    An official government-authorised digital platform connecting citizens with
-                    municipal authorities. Report civic issues — potholes, water leakage, sanitation,
-                    public safety — with GPS location and photographic evidence. Your complaint
-                    is our priority.
+                    The national-level gateway for India's civic governance. A structured, department-led system connecting every state, department head, and team member to resolve your complaints with absolute accountability.
                 </p>
                 <div class="hero-actions">
                     <a href="register.php" class="hero-btn hero-btn-primary" id="hero-register-btn">
@@ -109,19 +137,19 @@ if (isset($_SESSION['user_id'])) {
 
                     <!-- Floating stat card top-right -->
                     <div class="stat-card card-top">
-                        <div class="stat-icon">✅</div>
+                        <div class="stat-icon"><i class="fa fa-check-square-o"></i></div>
                         <div class="stat-info">
-                            <div class="stat-num">4,200+</div>
-                            <div class="stat-label">Issues Resolved</div>
+                            <div class="stat-num"><?php echo number_format($resolvedComplaints); ?></div>
+                            <div class="stat-label">Issues Resolved Live</div>
                         </div>
                     </div>
 
                     <!-- Floating stat card bottom-left -->
                     <div class="stat-card card-bottom">
-                        <div class="stat-icon">⚡</div>
+                        <div class="stat-icon"><i class="fa fa-line-chart"></i></div>
                         <div class="stat-info">
-                            <div class="stat-num">~3 Days</div>
-                            <div class="stat-label">Avg. Response Time</div>
+                            <div class="stat-num"><?php echo htmlspecialchars($satisfactionRate); ?>%</div>
+                            <div class="stat-label">System Efficiency Rating</div>
                         </div>
                     </div>
                 </div>
@@ -133,22 +161,22 @@ if (isset($_SESSION['user_id'])) {
     <div class="stats-bar">
         <div class="stats-inner">
             <div class="stat-item">
-                <span class="s-num" id="stat-1">12,000+</span>
+                <span class="s-num" id="stat-1"><?php echo number_format($totalComplaints); ?></span>
                 <span class="s-label">Complaints Submitted</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="s-num" id="stat-2">4,200+</span>
+                <span class="s-num" id="stat-2"><?php echo number_format($resolvedComplaints); ?></span>
                 <span class="s-label">Issues Resolved</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="s-num" id="stat-3">98%</span>
+                <span class="s-num" id="stat-3"><?php echo htmlspecialchars($satisfactionRate); ?>%</span>
                 <span class="s-label">Citizen Satisfaction</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="s-num" id="stat-4">150+</span>
+                <span class="s-num" id="stat-4"><?php echo number_format($activeOfficers); ?></span>
                 <span class="s-label">Active Field Officers</span>
             </div>
         </div>
@@ -158,7 +186,7 @@ if (isset($_SESSION['user_id'])) {
     <section class="about-section" id="features">
         <div class="section-container">
             <div class="section-header reveal">
-                <div class="section-tag">⚙️ Citizen Services</div>
+                <div class="section-tag"><i class="fa fa-cog"></i> Citizen Services</div>
                 <h2>Our Service Offerings</h2>
                 <p>A Government-authorised digital platform for transparent and efficient civic issue management across all municipal zones.</p>
             </div>
@@ -166,13 +194,13 @@ if (isset($_SESSION['user_id'])) {
             <div class="features-grid" id="about">
 
                 <div class="feature-card reveal">
-                    <span class="feature-icon">📍</span>
+                    <span class="feature-icon"><i class="fa fa-map-marker"></i></span>
                     <h3 class="feature-title">Smart Issue Reporting</h3>
                     <p class="feature-desc">Report civic issues like potholes, garbage accumulation, or water leakage with photos and precise GPS location tagging in under 60 seconds.</p>
                 </div>
 
                 <div class="feature-card reveal">
-                    <span class="feature-icon">📊</span>
+                    <span class="feature-icon"><i class="fa fa-bar-chart-o"></i></span>
                     <h3 class="feature-title">Real-Time Status Tracking</h3>
                     <p class="feature-desc">Track your complaint's progress live with clear status updates — Pending, In Progress, and Resolved — with officer notes attached.</p>
                 </div>
@@ -209,7 +237,7 @@ if (isset($_SESSION['user_id'])) {
     <section class="how-section" id="how-it-works">
         <div class="section-container">
             <div class="section-header reveal">
-                <div class="section-tag">📋 Process</div>
+                <div class="section-tag"><i class="fa fa-list-alt"></i> Process</div>
                 <h2>How CivicTrack Works</h2>
                 <p>A simple, transparent 4-step process to get your civic issue resolved by the responsible authority.</p>
             </div>
@@ -242,20 +270,20 @@ if (isset($_SESSION['user_id'])) {
     <section class="trust-section" id="accountability" style="background: #f8fafc; padding: 100px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
         <div class="section-container">
             <div class="section-header reveal">
-                <div class="section-tag">🛡️ Integrity</div>
+                <div class="section-tag"><i class="fa fa-shield"></i> Integrity</div>
                 <h2>Built on Trust & Transparency</h2>
                 <p>CivicTrack maintains the highest standards of accountability for both citizens and government officials.</p>
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px;">
                 <div class="trust-card reveal" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: transform 0.3s ease;">
-                    <div style="width: 60px; height: 60px; background: #fee2e2; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;">🛡️</div>
+                    <div style="width: 60px; height: 60px; background: #fee2e2; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;"><i class="fa fa-shield"></i></div>
                     <h3 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 15px;">Officer Oversight</h3>
                     <p style="color: #64748b; line-height: 1.7;">Citizens have the direct authority to report unprofessional conduct or negligence from assigned officers, ensuring every complaint is handled with integrity.</p>
                 </div>
 
                 <div class="trust-card reveal" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: transform 0.3s ease;">
-                    <div style="width: 60px; height: 60px; background: #fffbeb; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;">🚩</div>
+                    <div style="width: 60px; height: 60px; background: #fffbeb; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 25px;"><i class="fa fa-flag-o"></i></div>
                     <h3 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 15px;">Fraud Prevention</h3>
                     <p style="color: #64748b; line-height: 1.7;">Advanced side-by-side photographic verification audits protect the system from fake or malicious reporting, maintaining the platform's focus on genuine civic issues.</p>
                 </div>
@@ -278,7 +306,7 @@ if (isset($_SESSION['user_id'])) {
                 🏛️ Register as a Citizen
             </a>
             <a href="login.php" class="cta-btn-gold" id="cta-login-btn">
-                🔐 Already Registered? Sign In
+                <i class="fa fa-lock"></i> Already Registered? Sign In
             </a>
         </div>
     </section>
@@ -290,24 +318,24 @@ if (isset($_SESSION['user_id'])) {
                 <div class="footer-brand">
                     <img src="assets/images/govt_emblem.png" alt="CivicTrack" class="footer-logo-img">
                     <div class="footer-brand-text">
-                        <h4>CivicTrack</h4>
-                        <span class="footer-ministry">Official Citizen Services Portal</span>
-                        <p class="footer-text">Building resilient, connected, and transparent communities — one complaint at a time. An initiative of the Ministry of Urban Development.</p>
+                        <h4>CivicTrack India</h4>
+                        <span class="footer-ministry">Department-Based Complaint Management System</span>
+                        <p class="footer-text">Building a structured, transparent, and department-led India — one complaint at a time. A national-level initiative for modern governance.</p>
                     </div>
                 </div>
 
                 <div class="footer-links">
                     <h4>Portals</h4>
                     <a href="login.php">🏠 Citizen Login</a>
-                    <a href="officer/officer_login.php">👮 Officer Portal</a>
-                    <a href="admin/admin_login.php">🛡️ Admin Console</a>
+                    <a href="officer/officer_login.php"><i class="fa fa-shield"></i> Officer Portal</a>
+                    <a href="admin/admin_login.php"><i class="fa fa-shield"></i> Admin Console</a>
                 </div>
 
                 <div class="footer-links">
                     <h4>Quick Links</h4>
-                    <a href="#">📋 Guidelines</a>
-                    <a href="#features">⚙️ Services</a>
-                    <a href="register.php">✏️ Register</a>
+                    <a href="#"><i class="fa fa-list-alt"></i> Guidelines</a>
+                    <a href="#features"><i class="fa fa-cog"></i> Services</a>
+                    <a href="register.php"><i class="fa fa-pencil-square-o"></i> Register</a>
                     <a href="#">❓ Help &amp; FAQ</a>
                 </div>
 
@@ -321,8 +349,8 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
             <div class="footer-bottom">
-                <p class="copyright">© 2026 CivicTrack — Citizen Services Portal. All rights reserved. | Government of India Initiative.</p>
-                <div class="footer-badge">Best viewed in Chrome, Firefox, Edge · <span>♥</span> Built for citizens</div>
+                <p class="copyright">© 2026 CivicTrack India — National Citizen Services Portal. All rights reserved.</p>
+                <div class="footer-badge">Centralized Departmental Management · <span>♥</span> For the Nation</div>
             </div>
         </div>
     </footer>

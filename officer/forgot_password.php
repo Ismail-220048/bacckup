@@ -41,7 +41,7 @@ session_start();
                     <input type="email" id="email" name="email" placeholder="officer@reportmycity.gov" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" id="submit-btn" style="padding: 0.75rem;">
-                    🚀 Send Reset Link
+                    <i class="fa fa-rocket"></i> Send Reset Link
                 </button>
             </form>
 
@@ -75,18 +75,18 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', functio
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alertBox.innerHTML = `<div class="alert alert-success">✅ ${data.message}</div>`;
+            alertBox.innerHTML = `<div class="alert alert-success"><i class="fa fa-check-square-o"></i> ${data.message}</div>`;
             document.getElementById('forgotPasswordForm').style.display = 'none';
         } else {
             alertBox.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
             btn.disabled = false;
-            btn.innerText = '🚀 Send Reset Link';
+            btn.innerText = '<i class="fa fa-rocket"></i> Send Reset Link';
         }
     })
     .catch(() => {
         alertBox.innerHTML = '<div class="alert alert-error">❌ Connection error. Please try again.</div>';
         btn.disabled = false;
-        btn.innerText = '🚀 Send Reset Link';
+        btn.innerText = '<i class="fa fa-rocket"></i> Send Reset Link';
     });
 });
 </script>

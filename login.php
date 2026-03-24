@@ -14,7 +14,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CivicTrack — Citizen Login. Access the official government civic complaint portal.">
-    <title>Citizen Login — CivicTrack Official Portal</title>
+    <title>Citizen Login — CivicTrack India National Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -27,7 +27,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
         <img src="assets/images/govt_emblem.png" alt="Government Emblem" class="emblem">
     
         <div class="portal-text">
-            <h1>ReportMyCity — Citizen Services Portal</h1>
+            <h1>CivicTrack India — Citizen Services Portal</h1>
             <p>Ministry of Urban Development &amp; Civic Affairs · Government of India</p>
         </div>
     </div>
@@ -42,7 +42,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
             </div>
 
             <?php if (isset($_GET['registered'])): ?>
-                <div class="alert alert-success">✅ Registration successful! Please login with your credentials.</div>
+                <div class="alert alert-success"><i class="fa fa-check-square-o"></i> Registration successful! Please login with your credentials.</div>
             <?php endif; ?>
             <?php if (isset($_GET['error'])): ?>
                 <div class="alert alert-error">❌ <?php echo htmlspecialchars($_GET['error']); ?></div>
@@ -64,7 +64,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                 </div>
                 <div class="auth-buttons-grid">
                     <button type="submit" class="btn btn-primary btn-block">
-                        🔐 Sign In
+                        <i class="fa fa-lock"></i> Sign In
                     </button>
                     <a href="api/google_auth.php" class="btn btn-outline btn-block btn-google" style="margin-bottom:0; font-size: 0.8rem; padding: 0.65rem 0.5rem;">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="auth-icon">
@@ -85,7 +85,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
 
     <!-- Government Footer -->
     <div class="auth-gov-footer">
-        © 2026 CivicTrack — Official Citizen Services Portal. Government of India. All rights reserved. |
+        © 2026 CivicTrack India — Official National Portal. Government of India. All rights reserved. |
         <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a> | <a href="#">Help</a>
     </div>
 

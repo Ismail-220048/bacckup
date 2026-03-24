@@ -5,6 +5,8 @@
 session_start();
 session_unset();
 session_destroy();
+// Clear JWT Token
+setcookie('auth_token', '', time() - 3600, '/');
 ?>
 <!DOCTYPE html>
 <html>

@@ -70,11 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
 </head>
 <body style="background: #f8fafc;">
     <div class="reset-box">
-        <h1>🔐 Reset Password</h1>
+        <h1><i class="fa fa-lock"></i> Reset Password</h1>
         
         <?php if ($success): ?>
             <div class="alert alert-success" style="text-align: center;">
-                ✅ Password updated successfully!
+                <i class="fa fa-check-square-o"></i> Password updated successfully!
                 <br><br>
                 <a href="<?php echo ($role === 'officer') ? 'officer/officer_login.php' : (($role === 'admin') ? 'admin/admin_login.php' : 'login.php'); ?>" class="btn btn-primary btn-sm">Go to Login</a>
             </div>

@@ -22,6 +22,8 @@ $email    = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
 $phone    = htmlspecialchars(trim($_POST['phone'] ?? ''), ENT_QUOTES, 'UTF-8');
 $password = $_POST['password'] ?? '';
 $confirm  = $_POST['confirm_password'] ?? '';
+$state    = htmlspecialchars(trim($_POST['state'] ?? ''), ENT_QUOTES, 'UTF-8');
+$district = htmlspecialchars(trim($_POST['district'] ?? ''), ENT_QUOTES, 'UTF-8');
 
 // Validation
 if (empty($name) || empty($email) || empty($phone) || empty($password) || empty($confirm)) {
@@ -66,8 +68,11 @@ $users->insertOne([
     'name'       => $name,
     'email'      => $email,
     'phone'      => $phone,
+    'state'      => $state,
+    'district'   => $district,
     'password'   => password_hash($password, PASSWORD_BCRYPT),
     'role'       => 'user',
+    'status'     => 'active',
     'created_at' => date('Y-m-d H:i:s')
 ]);
 

@@ -16,8 +16,10 @@ require_once __DIR__ . '/../config/database.php';
 header('Content-Type: application/json');
 
 // Auth check — admin or officer
-if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'officer'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized — admin or officer access required.']);
+// Auth check — any admin or officer role
+$allowedRoles = ['admin', 'national_admin', 'senior_officer', 'district_admin', 'state_admin', 'officer', 'local_officer'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedRoles)) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access.']);
     exit;
 }
 
@@ -51,7 +53,8 @@ try {
 
 // Delete — admin only
 if ($action === 'delete') {
-    if ($_SESSION['role'] !== 'admin') {
+    $adminRoles = ['admin', 'national_admin', 'state_admin', 'district_admin'];
+    if (!in_array($_SESSION['role'], $adminRoles)) {
         echo json_encode(['success' => false, 'message' => 'Only admins can delete complaints.']);
         exit;
     }
@@ -102,7 +105,9 @@ if ($action === 'delete') {
 }
 
 // Officers can only update their assigned complaints
-if ($_SESSION['role'] === 'officer') {
+// Officers can only update their assigned complaints (Standard and Local)
+// Senior officers and Admins can update anything within their scope (handled by dashboard logic, but here we allow general update if they have the ID)
+if (in_array($_SESSION['role'], ['officer', 'local_officer'])) {
     $complaint = $complaints->findOne(['_id' => $objectId]);
     if (!$complaint || ($complaint['assigned_officer_id'] ?? '') !== $_SESSION['user_id']) {
         echo json_encode(['success' => false, 'message' => 'You can only update complaints assigned to you.']);
@@ -111,7 +116,7 @@ if ($_SESSION['role'] === 'officer') {
 }
 
 // Build update fields
-$validStatuses = ['Pending', 'In Progress', 'Resolved', 'Officer Completed'];
+$validStatuses = ['Pending', 'Submitted', 'Assigned', 'Under Review', 'In Progress', 'Escalated', 'Resolved', 'Officer Completed', 'Closed', 'Reopened'];
 $updateFields = [];
 
 if (!empty($input['status'])) {
@@ -121,6 +126,13 @@ if (!empty($input['status'])) {
         exit;
     }
     $updateFields['status'] = $status;
+    
+    // Save Timestamp
+    if ($status === 'In Progress' || $status === 'Officer Completed') {
+        $updateFields['in_progress_timestamp'] = date('d M Y, h:i A');
+    } elseif ($status === 'Resolved') {
+        $updateFields['resolved_timestamp'] = date('d M Y, h:i A');
+    }
 }
 
 if (isset($input['admin_reply'])) {
@@ -131,16 +143,19 @@ if (isset($input['officer_notes'])) {
     $updateFields['officer_notes'] = htmlspecialchars(trim($input['officer_notes']), ENT_QUOTES, 'UTF-8');
 }
 
-// Assign officer — admin only
-if (isset($input['assigned_officer_id']) && $_SESSION['role'] === 'admin') {
+// Assign officer — Admins and Senior Officers can assign
+$canAssign = ['admin', 'national_admin', 'senior_officer', 'district_admin', 'state_admin'];
+if (isset($input['assigned_officer_id']) && in_array($_SESSION['role'], $canAssign)) {
     $officerId = htmlspecialchars(trim($input['assigned_officer_id']), ENT_QUOTES, 'UTF-8');
     $updateFields['assigned_officer_id'] = $officerId;
 
-    // Look up officer name
     if (!empty($officerId)) {
-        $officersCol = $db->getCollection('officers');
+        $updateFields['assigned_timestamp'] = date('d M Y, h:i A');
+        $headOfficersCol = $db->getCollection('head_officers');
+        $fieldOfficersCol = $db->getCollection('field_officers');
         try {
-            $officer = $officersCol->findOne(['_id' => new MongoDB\BSON\ObjectId($officerId)]);
+            $oid = new MongoDB\BSON\ObjectId($officerId);
+            $officer = $headOfficersCol->findOne(['_id' => $oid]) ?? $fieldOfficersCol->findOne(['_id' => $oid]);
             $updateFields['assigned_officer_name'] = $officer ? $officer['name'] : 'Unknown';
         } catch (Exception $e) {
             $updateFields['assigned_officer_name'] = '';
@@ -225,7 +240,7 @@ if ($result->getModifiedCount() > 0 || $result->getMatchedCount() > 0) {
         }
         
         // If Officer updated it, notify Admins
-        if ($_SESSION['role'] === 'officer') {
+        if (in_array($_SESSION['role'], ['officer', 'local_officer', 'senior_officer'])) {
             $notifications->insertOne([
                 'role'       => 'admin',
                 'message'    => "Officer updated complaint: " . ($complaint['title'] ?? 'Unknown'),
@@ -234,8 +249,8 @@ if ($result->getModifiedCount() > 0 || $result->getMatchedCount() > 0) {
             ]);
         }
         
-        // If Admin assigned an officer, notify that officer
-        if ($_SESSION['role'] === 'admin' && !empty($updateFields['assigned_officer_id'])) {
+        // If Admin/Senior assigned an officer, notify that officer
+        if (in_array($_SESSION['role'], $canAssign) && !empty($updateFields['assigned_officer_id'])) {
              $notifications->insertOne([
                 'user_id'    => $updateFields['assigned_officer_id'],
                 'role'       => 'officer',

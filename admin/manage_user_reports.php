@@ -4,7 +4,8 @@
  * Filed by Officers for fake/improper complaints
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+$allowedAdminRoles = ['admin', 'national_admin', 'state_admin', 'district_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedAdminRoles)) {
     header('Location: ../login.php');
     exit;
 }
@@ -13,8 +14,17 @@ $db = Database::getInstance();
 $reportsCol = $db->getCollection('user_reports');
 $usersCol = $db->getCollection('users');
 
+// Regional Filtering Logic
+$role = $_SESSION['role'];
+$filter = [];
+if ($role === 'state_admin') {
+    $filter = ['state' => $_SESSION['state']];
+} elseif ($role === 'district_admin') {
+    $filter = ['state' => $_SESSION['state'], 'district' => $_SESSION['district']];
+}
+
 // Fetch all reports
-$reports = $reportsCol->find([], ['sort' => ['created_at' => -1]]);
+$reports = $reportsCol->find($filter, ['sort' => ['created_at' => -1]]);
 $reportsArr = iterator_to_array($reports);
 
 // Lookup user names
@@ -49,35 +59,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 <body class="admin-theme">
     <div class="dashboard-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-inner">
-                    <img src="../assets/images/govt_emblem.png" alt="ReportMyCity" style="width: 100%; max-width:   250px; height: auto; object-fit: contain; margin: 0 auto;">
-                </div>
-                <div class="sidebar-gold-stripe"></div>
-            </div>
-            <div class="sidebar-nav">
-                <div class="sidebar-section-label">Main Console</div>
-                <a href="admin_dashboard.php">📊 Dashboard</a>
-                <a href="manage_complaints.php">📋 All Complaints</a>
-                <a href="manage_users.php">👥 Manage Citizens</a>
-                <a href="manage_officers.php">👮 Manage Officers</a>
-                <a href="manage_officer_reports.php">🛡️ Officer Reports <?php if($officerReportsCount > 0): ?><span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span><?php endif; ?></a>
-                <a href="manage_user_reports.php" class="active">🚩 Fake Complaints <?php if($userReportsCount > 0): ?><span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span><?php endif; ?></a>
-                <div class="sidebar-section-label">Analytics</div>
-                <a href="heatmap.php">🗺️ Heatmap</a>
-            </div>
-            <div class="sidebar-footer">
-                <div class="sidebar-user">
-                    <div class="user-avatar"><?php echo $initials; ?></div>
-                    <div class="user-info">
-                        <span class="user-name"><?php echo htmlspecialchars($adminName); ?></span>
-                        <span class="sidebar-user-role">🛡️ Administrator</span>
-                    </div>
-                </div>
-                <a href="../logout.php" class="logout-link">🚪 Logout</a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <div class="page-header">
@@ -88,7 +70,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                         <span>ReportMyCity</span>
                     </div>
                     <div>
-                        <h1>🚩 Audit: Fake Complaints</h1>
+                        <h1><i class="fa fa-flag-o"></i> Audit: Fake Complaints</h1>
                         <div class="breadcrumb">
                             <a href="admin_dashboard.php">Home</a>
                             <span>›</span>
@@ -110,7 +92,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                 <span><?php echo htmlspecialchars($adminEmail); ?></span>
                             </div>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -124,7 +106,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                 <?php if (empty($reportsArr)): ?>
                     <div class="card-body">
                         <div class="empty-state">
-                            <div class="empty-icon">🚩</div>
+                            <div class="empty-icon"><i class="fa fa-flag-o"></i></div>
                             <p>No reports against citizens found.</p>
                         </div>
                     </div>
@@ -196,12 +178,16 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                             <?php echo htmlspecialchars($s); ?>
                                         </span>
                                     </td>
-                                    <td>
+                                     <td>
                                         <?php if ($s === 'Audit Requested'): ?>
-                                            <div style="display: flex; gap: 5px;">
-                                                <button class="btn btn-sm" style="background: #10b981; color: white;" onclick="updateReportStatus('<?php echo (string)$r['_id']; ?>', 'Resolved & Dismissed')">✅ Dismiss</button>
-                                                <button class="btn btn-sm" style="background: #ef4444; color: white;" onclick="updateReportStatus('<?php echo (string)$r['_id']; ?>', 'Block User')">🚫 Action Needed</button>
-                                            </div>
+                                            <?php if ($role !== 'district_admin'): ?>
+                                                <div style="display: flex; gap: 5px;">
+                                                    <button class="btn btn-sm" style="background: #10b981; color: white;" onclick="updateReportStatus('<?php echo (string)$r['_id']; ?>', 'Resolved & Dismissed')"><i class="fa fa-check-square-o"></i> Dismiss</button>
+                                                    <button class="btn btn-sm" style="background: #ef4444; color: white;" onclick="updateReportStatus('<?php echo (string)$r['_id']; ?>', 'Block User')">🚫 Action Needed</button>
+                                                </div>
+                                            <?php else: ?>
+                                                <span class="badge" style="background:var(--bg-input); color:var(--text-muted);">Awaiting State Audit</span>
+                                            <?php endif; ?>
                                         <?php else: ?>
                                             <span style="color: var(--text-muted); font-size: 0.8rem;">Reviewed</span>
                                         <?php endif; ?>
@@ -243,12 +229,24 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
             });
         }
     </script>
+    <script src="../assets/js/main.js"></script>
     <script>
-        // Profile Dropdown
-        const pdw = document.getElementById('profileDropdownWrapper');
-        if (pdw) {
-            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
-            document.addEventListener('click', () => pdw.classList.remove('open'));
+        // Note: sidebar toggle & profile dropdown handled by main.js
+        function updateReportStatus(reportId, status) {
+            if (!confirm(`Are you sure you want to mark this audit report as ${status}?`)) return;
+
+            const formData = new FormData();
+            formData.append('report_id', reportId);
+            formData.append('type', 'user');
+            formData.append('status', status);
+
+            fetch('../api/update_report_status.php', { method: 'POST', body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) { showToast(data.message, 'success'); setTimeout(() => location.reload(), 1000); }
+                    else { showToast('Error: ' + data.message, 'error'); }
+                })
+                .catch(() => showToast('A network error occurred.', 'error'));
         }
     </script>
 </body>

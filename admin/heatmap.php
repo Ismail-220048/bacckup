@@ -3,16 +3,20 @@
  * ReportMyCity — Admin: Heatmap
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header('Location: admin_login.php');
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'national_admin', 'district_admin', 'state_admin', 'senior_officer'])) {
+    header('Location: ../login.php');
     exit;
 }
 require_once __DIR__ . '/../config/database.php';
 $db = Database::getInstance();
 
-$adminName = $_SESSION['user_name'] ?? 'Admin';
+$adminName  = $_SESSION['user_name'] ?? 'Admin';
 $adminEmail = $_SESSION['user_email'] ?? 'admin@reportmycity.gov';
-$initials = strtoupper(substr($adminName, 0, 1));
+$adminRole  = $_SESSION['role'] ?? 'admin';
+$adminDistrict = $_SESSION['district'] ?? '';
+$adminState    = $_SESSION['state'] ?? '';
+$adminDept     = $_SESSION['department'] ?? '';
+$initials   = strtoupper(substr($adminName, 0, 1));
 
 // Fetch pending counts for sidebar notification badges
 $officerReportsCount = $db->getCollection('officer_reports')->countDocuments(['status' => 'Pending Admin Review']);
@@ -50,60 +54,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 <body>
     <div class="dashboard-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-inner">
-                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
-                    <div class="sidebar-brand-text">
-                        <h2>ReportMyCity</h2>
-                        <span>Administration Portal</span>
-                    </div>
-                </div>
-            </div>
-            <div class="sidebar-gold-stripe"></div>
-            <nav class="sidebar-nav">
-                <div class="sidebar-section-label">Main Menu</div>
-                <a href="admin_dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
-                </a>
-                <a href="heatmap.php" class="active">
-                    <span class="nav-icon">🗺️</span> Heatmap
-                </a>
-                <a href="manage_complaints.php">
-                    <span class="nav-icon">📋</span> Manage Complaints
-                </a>
-                <a href="manage_users.php">
-                    <span class="nav-icon">👥</span> Manage Users
-                </a>
-                <a href="manage_officers.php">
-                    <span class="nav-icon">👮</span> Manage Officers
-                </a>
-                <a href="manage_officer_reports.php">
-                    <span class="nav-icon">🛡️</span> Officer Reports
-                    <?php if($officerReportsCount > 0): ?>
-                        <span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span>
-                    <?php endif; ?>
-                </a>
-                <a href="manage_user_reports.php">
-                    <span class="nav-icon">🚩</span> Fake Complaints
-                    <?php if($userReportsCount > 0): ?>
-                        <span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span>
-                    <?php endif; ?>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
-                    <div>
-                        <div class="sidebar-user-name"><?php echo htmlspecialchars($adminName); ?></div>
-                        <div class="sidebar-user-role">Administrator</div>
-                    </div>
-                </div>
-                <a href="../logout.php">
-                    <i class="fa fa-sign-out"></i> Logout
-                </a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main -->
         <main class="main-content">
@@ -115,7 +66,11 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>
                     </div>
-                    <h1>Complaint Density Heatmap</h1>
+                    <h1>
+                        <?php echo ($adminDept ? $adminDept . ' - ' : ''); ?>
+                        <?php echo $adminDistrict ? $adminDistrict . ' ' : ($adminState ? $adminState . ' ' : ''); ?>
+                        Complaint Heatmap
+                    </h1>
                 </div>
                 <div class="user-info">
                     <span style="font-size:0.82rem; color:var(--text-muted);"><?php echo date('d M Y'); ?></span>
@@ -131,7 +86,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                 <span><?php echo htmlspecialchars($adminEmail); ?></span>
                             </div>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -166,8 +121,61 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script src="../assets/js/main.js"></script>
     <script>
-        // Init Map
-        const map = L.map('heatmap-container').setView([20.5937, 78.9629], 5); // Default center (e.g., India)
+        // Admin Region Data
+        const adminRole = <?php echo json_encode($adminRole); ?>;
+        const adminDistrict = <?php echo json_encode($adminDistrict); ?>;
+        const adminState = <?php echo json_encode($adminState); ?>;
+
+        // Default: India
+        let defaultCenter = [20.5937, 78.9629];
+        let defaultZoom = 5;
+
+        const map = L.map('heatmap-container').setView(defaultCenter, defaultZoom);
+        
+        // Function to center map on region and restrict bounds
+        async function centerMapOnRegion() {
+            let searchQuery = '';
+            // If they are not national_admin and have a region, center and restrict it.
+            if (adminRole !== 'national_admin') {
+                if (adminDistrict && adminState) {
+                    searchQuery = `${adminDistrict}, ${adminState}, India`;
+                    defaultZoom = 12;
+                } else if (adminState) {
+                    searchQuery = `${adminState}, India`;
+                    defaultZoom = 7;
+                } else {
+                    return; // No region set
+                }
+            } else {
+                return; // National admin sees everything, default center
+            }
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`);
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], defaultZoom);
+                    
+                    // Restrict bounds so they can't pan away from their state/district
+                    if (data[0].boundingbox) {
+                        const bbox = data[0].boundingbox;
+                        const southWest = L.latLng(bbox[0], bbox[2]);
+                        const northEast = L.latLng(bbox[1], bbox[3]);
+                        const bounds = L.latLngBounds(southWest, northEast);
+                        
+                        map.setMaxBounds(bounds.pad(0.5)); // Add padding for better UX
+                        map.setMinZoom(defaultZoom - 2);
+                    }
+                }
+            } catch (error) {
+                console.error('Error geocoding/restricting region:', error);
+            }
+        }
+
+        // Run centering
+        centerMapOnRegion();
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,

@@ -43,8 +43,27 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 $db = Database::getInstance();
 $users = $db->getCollection('users');
-
 $user = $users->findOne(['email' => $email]);
+
+if (!$user) {
+    $admins = $db->getCollection('admins');
+    $user = $admins->findOne(['email' => $email]);
+}
+
+if (!$user) {
+    $stateAdmins = $db->getCollection('state_admins');
+    $user = $stateAdmins->findOne(['email' => $email]);
+}
+
+if (!$user) {
+    $headOfficers = $db->getCollection('head_officers');
+    $user = $headOfficers->findOne(['email' => $email]);
+}
+
+if (!$user) {
+    $fieldOfficers = $db->getCollection('field_officers');
+    $user = $fieldOfficers->findOne(['email' => $email]);
+}
 
 if (!$user || !password_verify($password, $user['password'])) {
     $errorMsg = 'Invalid email or password.';
@@ -56,19 +75,39 @@ if (!$user || !password_verify($password, $user['password'])) {
     exit;
 }
 
+// Load AuthMiddleware
+require_once __DIR__ . '/../config/jwt.php';
+
 // Set session
 $_SESSION['user_id'] = (string) $user['_id'];
 $_SESSION['user_name'] = $user['name'];
 $_SESSION['user_email'] = $user['email'];
 $_SESSION['role'] = $user['role'] ?? 'user';
+$_SESSION['district'] = $user['district'] ?? '';
+$_SESSION['state'] = $user['state'] ?? '';
+$_SESSION['department'] = $user['department'] ?? '';
+
+// Set JWT Token
+$tokenData = [
+    'user_id' => $_SESSION['user_id'],
+    'name' => $_SESSION['user_name'],
+    'role' => $_SESSION['role']
+];
+$jwt = AuthMiddleware::generateToken($tokenData);
+setcookie('auth_token', $jwt, time() + (86400 * 30), '/', '', false, true); // HttpOnly Cookie
 
 if ($input) {
     echo json_encode(['success' => true, 'role' => $_SESSION['role']]);
 } else {
     // Redirect based on role
-    if ($_SESSION['role'] === 'admin') {
-        header('Location: ../admin/admin_dashboard.php');
-    } elseif ($_SESSION['role'] === 'officer') {
+    $r = $_SESSION['role'];
+    if (in_array($r, ['national_admin', 'admin'])) {
+        header('Location: ../admin/dashboard.php');
+    } elseif ($r === 'state_admin') {
+        header('Location: ../state_admin/dashboard.php');
+    } elseif (in_array($r, ['senior_officer', 'district_admin'])) {
+        header('Location: ../head_officer/dashboard.php');
+    } elseif (in_array($r, ['officer', 'local_officer'])) {
         header('Location: ../officer/officer_dashboard.php');
     } else {
         header('Location: ../user/dashboard.php');

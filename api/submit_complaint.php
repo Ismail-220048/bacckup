@@ -19,20 +19,33 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $title       = htmlspecialchars(trim($_POST['title'] ?? ''), ENT_QUOTES, 'UTF-8');
-$category    = htmlspecialchars(trim($_POST['category'] ?? ''), ENT_QUOTES, 'UTF-8');
+$category    = trim($_POST['category'] ?? '');
 $description = htmlspecialchars(trim($_POST['description'] ?? ''), ENT_QUOTES, 'UTF-8');
 $location    = htmlspecialchars(trim($_POST['location'] ?? ''), ENT_QUOTES, 'UTF-8');
+$pincode     = htmlspecialchars(trim($_POST['pincode'] ?? ''), ENT_QUOTES, 'UTF-8');
+$priority    = htmlspecialchars(trim($_POST['priority'] ?? 'Medium'), ENT_QUOTES, 'UTF-8');
 $date        = htmlspecialchars(trim($_POST['date'] ?? date('Y-m-d')), ENT_QUOTES, 'UTF-8');
-$riskType    = htmlspecialchars(trim($_POST['risk_type'] ?? 'Medium'), ENT_QUOTES, 'UTF-8');
+$anonymous   = isset($_POST['anonymous']) && $_POST['anonymous'] === 'true';
+$accusedRole = htmlspecialchars(trim($_POST['accused_role'] ?? ''), ENT_QUOTES, 'UTF-8');
+$subcategory = trim($_POST['subcategory'] ?? '');
+
+require_once __DIR__ . '/../config/Router.php';
 
 // Validation
-if (empty($title) || empty($category) || empty($description) || empty($location)) {
+if (empty($title) || empty($category) || empty($description) || empty($location) || empty($pincode)) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'All required fields must be filled.']);
     exit;
 }
 
-$validCategories = ['Road Damage', 'Garbage', 'Water Leakage', 'Street Light Issue', 'Drainage Problem', 'Other'];
+$validCategories = [
+    'Corruption & Bribery', 'Roads & Infrastructure', 'Water Supply Issues',
+    'Electricity Problems', 'Sanitation & Garbage', 'Public Transport Issues',
+    'Healthcare Complaints', 'Education System Issues', 'Police Misconduct / Law & Order',
+    'Government Scheme Issues', 'Land & Property Disputes', 'Cybercrime / Online Fraud',
+    'Environmental Issues', 'Women & Child Safety', 'Municipal Services',
+    'Tax / Revenue Issues', 'Other'
+];
 if (!in_array($category, $validCategories)) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'Invalid category.']);
@@ -88,6 +101,15 @@ if (isset($_FILES['image']) && $_FILES['image']['name'] !== '') {
 
 $db = Database::getInstance();
 $complaints = $db->getCollection('complaints');
+$actionLogs = $db->getCollection('action_logs');
+$users = $db->getCollection('users');
+
+$currentUser = $users->findOne(['_id' => new \MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
+$userDistrict = $currentUser['district'] ?? null;
+$userState = $currentUser['state'] ?? null;
+
+// Use Router to assign dynamically (Conflict-Aware Routing)
+$assignedOfficerId = Router::assignComplaint($category, $userDistrict, $userState, $accusedRole);
 
 // Check for duplicates
 $duplicateCount = $complaints->countDocuments([
@@ -95,22 +117,48 @@ $duplicateCount = $complaints->countDocuments([
     'category' => $category
 ]);
 
-$result = $complaints->insertOne([
+$targetDept = Router::getDepartment($category);
+
+$insertData = [
     'user_id'             => $_SESSION['user_id'],
+    'anonymous'           => $anonymous,
+    'assigned_officer_id' => $assignedOfficerId,
+    'target_department'   => $targetDept,
     'title'               => $title,
     'category'            => $category,
+    'subcategory'         => $subcategory,
     'description'         => $description,
     'location'            => $location,
+    'pincode'             => $pincode,
     'image'               => $imagePath,
+    'district'            => $userDistrict,
+    'state'               => $userState,
     'date'                => $date,
-    'risk_type'           => $riskType,
+    'priority'            => $priority,
+    'accused_role'        => $accusedRole,
     'status'              => 'Pending',
     'admin_reply'         => '',
     'additional_user_ids' => [],
     'created_at'          => date('Y-m-d H:i:s')
-]);
+];
+
+if ($assignedOfficerId) {
+    $insertData['assigned_timestamp'] = date('d M Y, h:i A');
+}
+
+$result = $complaints->insertOne($insertData);
 
 if ($result->getInsertedCount() > 0) {
+    // Write initial log
+    $actionLogs->insertOne([
+        'complaint_id' => (string) $result->getInsertedId(),
+        'performed_by' => $_SESSION['user_id'],
+        'role'         => 'citizen',
+        'action'       => 'Complaint Filed',
+        'comment'      => 'Sys: Auto-assigned to department.',
+        'timestamp'    => date('Y-m-d H:i:s')
+    ]);
+
     // Notify Admins
     $notifications = $db->getCollection('notifications');
     

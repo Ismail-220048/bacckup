@@ -99,19 +99,19 @@ $totalCivicHeroes = $users->countDocuments(['role' => 'user']);
             <nav class="sidebar-nav">
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="leaderboard.php" class="active">
-                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                    <span class="nav-icon"><i class="fa fa-trophy"></i></span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php">
-                    <span class="nav-icon">📝</span> Submit Complaint
+                    <span class="nav-icon"><i class="fa fa-pencil-square-o"></i></span> Submit Complaint
                 </a>
                 <a href="my_complaints.php">
-                    <span class="nav-icon">📋</span> My Complaints
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Complaints
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -144,7 +144,7 @@ $totalCivicHeroes = $users->countDocuments(['role' => 'user']);
                         <span>ReportMyCity</span>
                     </div>
                     <div>
-                        <h1>🏆 Civic Leaderboard</h1>
+                        <h1><i class="fa fa-trophy"></i> Civic Leaderboard</h1>
                         <div class="breadcrumb">
                             <a href="dashboard.php">Home</a>
                             <span>›</span>
@@ -218,7 +218,7 @@ $totalCivicHeroes = $users->countDocuments(['role' => 'user']);
                                         </div>
                                     </div>
                                 </td>
-                                <td style="font-weight: 600; color: var(--success);">✅ <?php echo $hero['resolved']; ?> Solutions</td>
+                                <td style="font-weight: 600; color: var(--success);"><i class="fa fa-check-square-o"></i> <?php echo $hero['resolved']; ?> Solutions</td>
                                 <td style="text-align: right;">
                                     <div style="font-weight: 800; font-size: 1.25rem; color: var(--gov-gold);"><?php echo number_format($hero['points']); ?></div>
                                     <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">pts</div>

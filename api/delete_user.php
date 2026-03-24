@@ -7,8 +7,9 @@ require_once __DIR__ . '/../config/database.php';
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+$allowedDeleteRoles = ['admin', 'national_admin', 'state_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedDeleteRoles)) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized. Deletion requires State or National level access.']);
     exit;
 }
 

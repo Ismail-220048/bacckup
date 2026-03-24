@@ -40,6 +40,8 @@ try {
         'officer_id'         => $complaint['assigned_officer_id'],
         'report_description' => $description,
         'status'             => 'Pending Admin Review',
+        'district'           => $complaint['district'] ?? '',
+        'state'              => $complaint['state'] ?? '',
         'created_at'         => date('Y-m-d H:i:s')
     ]);
 

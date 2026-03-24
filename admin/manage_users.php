@@ -3,7 +3,8 @@
  * ReportMyCity — Admin: Manage Users
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+$allowedAdminRoles = ['admin', 'national_admin', 'state_admin', 'district_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedAdminRoles)) {
     header('Location: ../login.php');
     exit;
 }
@@ -14,9 +15,40 @@ $db = Database::getInstance();
 $usersCol = $db->getCollection('users');
 $complaintsCol = $db->getCollection('complaints');
 
+// Regional Filtering Logic
+$role = $_SESSION['role'];
+$filter = [];
+if ($role === 'state_admin') {
+    $filter = ['state' => $_SESSION['state']];
+} elseif ($role === 'district_admin') {
+    $filter = ['state' => $_SESSION['state'], 'district' => $_SESSION['district']];
+}
+
+// Additional Filters from GET
+if ($role === 'national_admin' || $role === 'admin') {
+    if (!empty($_GET['state_filter'])) {
+        $filter['state'] = $_GET['state_filter'];
+    }
+    if (!empty($_GET['district_filter'])) {
+        $filter['district'] = $_GET['district_filter'];
+    }
+}
+
 // Get all users
-$allUsers = $usersCol->find([], ['sort' => ['created_at' => -1]]);
+$allUsers = $usersCol->find($filter, ['sort' => ['created_at' => -1]]);
 $usersList = iterator_to_array($allUsers);
+
+// Pre-fetch distinct states/districts for filters (only for National Admin)
+$statesList = [];
+$districtsList = [];
+if ($role === 'national_admin' || $role === 'admin') {
+    $statesList = $usersCol->distinct('state');
+    if (!empty($filter['state'])) {
+        $districtsList = $usersCol->distinct('district', ['state' => $filter['state']]);
+    } else {
+        $districtsList = $usersCol->distinct('district');
+    }
+}
 
 // Get complaint counts per user
 $userComplaintCounts = [];
@@ -46,42 +78,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 <body class="admin-theme">
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-inner">
-                    <img src="../assets/images/govt_emblem.png" class="sidebar-emblem" alt="Gov Emblem">
-                    <div class="sidebar-brand-text">
-                        <span>Republic of India</span>
-                        <h2>ReportMyCity</h2>
-                    </div>
-                </div>
-                <div class="sidebar-gold-stripe"></div>
-            </div>
-
-            <div class="sidebar-nav">
-                <div class="sidebar-section-label">Main Console</div>
-                <a href="admin_dashboard.php">📊 Dashboard</a>
-                <a href="manage_complaints.php">📋 All Complaints</a>
-                <a href="manage_users.php" class="active">👥 Manage Citizens</a>
-                <a href="manage_officers.php">👮 Manage Officers</a>
-                <a href="manage_officer_reports.php">🛡️ Officer Reports <?php if($officerReportsCount > 0): ?><span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span><?php endif; ?></a>
-                <a href="manage_user_reports.php">🚩 Fake Complaints <?php if($userReportsCount > 0): ?><span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span><?php endif; ?></a>
-                
-                <div class="sidebar-section-label">Analytics</div>
-                <a href="heatmap.php">🗺️ Heatmap</a>
-            </div>
-
-            <div class="sidebar-footer">
-                <div class="sidebar-user">
-                    <div class="user-avatar"><?php echo $initials; ?></div>
-                    <div class="user-info">
-                        <span class="user-name"><?php echo htmlspecialchars($adminName); ?></span>
-                        <span class="sidebar-user-role">🛡️ Administrator</span>
-                    </div>
-                </div>
-                <a href="../logout.php" class="logout-link">🚪 Logout</a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main -->
         <main class="main-content">
@@ -109,7 +106,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                 <span><?php echo htmlspecialchars($adminEmail); ?></span>
                             </div>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -117,7 +114,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
             </div>
 
             <?php if (isset($_GET['deleted'])): ?>
-                <div class="alert alert-success">✅ User deleted successfully.</div>
+                <div class="alert alert-success"><i class="fa fa-check-square-o"></i> User deleted successfully.</div>
             <?php endif; ?>
             <?php if (isset($_GET['error'])): ?>
                 <div class="alert alert-error">❌ <?php echo htmlspecialchars($_GET['error']); ?></div>
@@ -129,15 +126,33 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                 </div>
 
                 <!-- Toolbar -->
-                <div class="toolbar">
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search users...">
+                <div class="toolbar" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+                    <div class="search-box" style="flex:1; min-width:250px;">
+                        <input type="text" id="search-input" placeholder="Search citizens by name, email or phone...">
                     </div>
+                    
+                    <?php if ($role === 'national_admin' || $role === 'admin'): ?>
+                    <form method="GET" style="display:flex; gap:0.5rem; align-items:center;">
+                        <select name="state_filter" onchange="this.form.submit()" class="filter-select" style="padding:0.6rem; border-radius:5px; border:1px solid var(--border);">
+                            <option value="">All States</option>
+                            <?php foreach ($statesList as $s): ?>
+                                <option value="<?php echo htmlspecialchars($s); ?>" <?php echo ($_GET['state_filter'] ?? '') === $s ? 'selected' : ''; ?>><?php echo htmlspecialchars($s); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="district_filter" onchange="this.form.submit()" class="filter-select" style="padding:0.6rem; border-radius:5px; border:1px solid var(--border);">
+                            <option value="">All Districts</option>
+                            <?php foreach ($districtsList as $d): ?>
+                                <option value="<?php echo htmlspecialchars($d); ?>" <?php echo ($_GET['district_filter'] ?? '') === $d ? 'selected' : ''; ?>><?php echo htmlspecialchars($d); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <a href="manage_users.php" class="btn btn-outline btn-sm" style="padding:0.6rem;">Reset</a>
+                    </form>
+                    <?php endif; ?>
                 </div>
 
                 <?php if (empty($usersList)): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">👤</div>
+                        <div class="empty-icon"><i class="fa fa-user-o"></i></div>
                         <p>No users registered yet.</p>
                     </div>
                 <?php else: ?>
@@ -179,8 +194,12 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                     <td><?php echo htmlspecialchars($u['created_at'] ?? '—'); ?></td>
                                     <td>
                                         <div class="action-btns">
-                                            <button class="btn btn-outline btn-sm" onclick="viewUserComplaints('<?php echo $uid; ?>')">📋 Complaints</button>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('<?php echo $uid; ?>', '<?php echo htmlspecialchars($u['name']); ?>')">🗑️ Delete</button>
+                                            <button class="btn btn-outline btn-sm" onclick="viewUserComplaints('<?php echo $uid; ?>')"><i class="fa fa-list-alt"></i> Complaints</button>
+                                            <?php if ($role !== 'district_admin'): ?>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('<?php echo $uid; ?>', '<?php echo htmlspecialchars($u['name']); ?>')"><i class="fa fa-trash-o"></i> Delete</button>
+                                            <?php else: ?>
+                                                <span class="badge" style="background:var(--bg-input); color:var(--text-muted);">View Only</span>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -202,7 +221,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
             </div>
             <div id="userComplaintsContent">
                 <div class="empty-state">
-                    <div class="empty-icon">⏳</div>
+                    <div class="empty-icon"><i class="fa fa-clock-o"></i></div>
                     <p>Fetching complaints...</p>
                 </div>
             </div>
@@ -228,7 +247,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 
         async function viewUserComplaints(userId) {
             const container = document.getElementById('userComplaintsContent');
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><p>Fetching complaints...</p></div>';
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fa fa-clock-o"></i></div><p>Fetching complaints...</p></div>';
             openModal('userComplaintsModal');
 
             try {

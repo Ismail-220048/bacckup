@@ -3,7 +3,7 @@
  * ReportMyCity — Officer Profile
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'officer') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['officer', 'local_officer'])) {
     header('Location: officer_login.php');
     exit;
 }
@@ -193,9 +193,9 @@ $initials  = strtoupper(substr($userName, 0, 1));
         <div class="sidebar-gold-stripe"></div>
         <nav class="sidebar-nav">
             <div class="sidebar-section-label">Navigation</div>
-            <a href="officer_dashboard.php"><span class="nav-icon">📊</span> Dashboard</a>
-            <a href="my_assignments.php"><span class="nav-icon">📋</span> My Assignments</a>
-            <a href="profile.php" class="active"><span class="nav-icon">👤</span> My Profile</a>
+            <a href="officer_dashboard.php"><span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard</a>
+            <a href="my_assignments.php"><span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Assignments</a>
+            <a href="profile.php" class="active"><span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile</a>
         </nav>
         <div class="sidebar-footer">
             <div class="sidebar-user-info">
@@ -218,13 +218,13 @@ $initials  = strtoupper(substr($userName, 0, 1));
     <main class="main-content">
         <div class="page-header">
             <div class="header-left">
-                <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
                         <span>ReportMyCity</span>
                     </div>
                 <div>
-                    <h1>👤 Profile Settings</h1>
+                    <h1><i class="fa fa-user-o"></i> Profile Settings</h1>
                     <div class="breadcrumb">
                         <a href="officer_dashboard.php">Dashboard</a>
                         <span>›</span>
@@ -250,10 +250,10 @@ $initials  = strtoupper(substr($userName, 0, 1));
                             <span><?php echo htmlspecialchars($userEmail); ?></span>
                         </div>
                         <a href="profile.php">
-                            <div class="dropdown-icon">⚙️</div> Profile Settings
+                            <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                         </a>
                         <a href="../logout.php" class="dropdown-logout">
-                            <div class="dropdown-icon">🚪</div> Logout
+                            <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                         </a>
                     </div>
                 </div>
@@ -272,13 +272,13 @@ $initials  = strtoupper(substr($userName, 0, 1));
                                 <span><?php echo $initials; ?></span>
                             <?php endif; ?>
                         </div>
-                        <label for="photo-input" class="avatar-edit-btn" title="Change Photo">📷</label>
+                        <label for="photo-input" class="avatar-edit-btn" title="Change Photo"><i class="fa fa-picture-o"></i></label>
                         <input type="file" id="photo-input" accept="image/*">
                     </div>
                     <div class="profile-info-lite">
                         <h2 id="sidebar-display-name"><?php echo htmlspecialchars($userName); ?></h2>
                         <p><?php echo htmlspecialchars($userEmail); ?></p>
-                        <div class="account-badge">🛡️ Field Officer</div>
+                        <div class="account-badge"><i class="fa fa-shield"></i> Field Officer</div>
                     </div>
                     <div style="margin-top: 2rem; text-align: left; padding: 1rem; background: #f8faff; border-radius: 10px; font-size: 0.8rem; color: var(--text-muted);">
                         <div style="margin-bottom: 0.5rem;"><strong>Portal:</strong> Field Officer</div>
@@ -290,7 +290,7 @@ $initials  = strtoupper(substr($userName, 0, 1));
                 <div class="profile-main-card">
                     <form id="profileForm">
                         <div class="section-header">
-                            <div class="icon-box">👤</div>
+                            <div class="icon-box"><i class="fa fa-user-o"></i></div>
                             <div>
                                 <h3>Personal Details</h3>
                                 <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Update your identity and contact info</p>
@@ -382,7 +382,7 @@ $initials  = strtoupper(substr($userName, 0, 1));
         const submitBtn = this.querySelector('button[type="submit"]');
         const origText  = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>⏳</span> Saving...';
+        submitBtn.innerHTML = '<span><i class="fa fa-clock-o"></i></span> Saving...';
 
         try {
             const result = await postJSON('../api/update_profile.php', payload);

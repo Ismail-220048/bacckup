@@ -628,7 +628,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
         <!-- ===== STEP 1: Name + Phone ===== -->
         <div class="step-panel active" id="panel-1">
             <div class="card-header">
-                <span class="step-icon">👤</span>
+                <span class="step-icon"><i class="fa fa-user-o"></i></span>
                 <h2>Create Your Account</h2>
                 <p>Enter your name and mobile number to get started as a citizen.</p>
             </div>
@@ -638,10 +638,28 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
             <div class="form-group">
                 <label for="inp-name">Full Name</label>
                 <div class="input-wrap">
-                    <span class="input-icon">✏️</span>
+                    <span class="input-icon"><i class="fa fa-pencil-square-o"></i></span>
                     <input type="text" id="inp-name" placeholder="e.g. Rahul Sharma" autocomplete="name">
                 </div>
                 <span class="field-error" id="err-name">Please enter your full name.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="inp-state">State / Province</label>
+                <div class="input-wrap">
+                    <span class="input-icon"><i class="fa fa-map-marker"></i></span>
+                    <input type="text" id="inp-state" placeholder="e.g. Maharashtra" autocomplete="address-level1">
+                </div>
+                <span class="field-error" id="err-state">Please enter your state.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="inp-district">District / City</label>
+                <div class="input-wrap">
+                    <span class="input-icon">🏙️</span>
+                    <input type="text" id="inp-district" placeholder="e.g. Mumbai" autocomplete="address-level2">
+                </div>
+                <span class="field-error" id="err-district">Please enter your district or city.</span>
             </div>
 
             <div class="form-group">
@@ -676,7 +694,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
         <!-- ===== STEP 2: OTP Verification ===== -->
         <div class="step-panel" id="panel-2">
             <div class="card-header">
-                <span class="step-icon">🔐</span>
+                <span class="step-icon"><i class="fa fa-lock"></i></span>
                 <h2>Verify Your Mobile</h2>
                 <p class="otp-info">A 6-digit OTP was sent to <span class="phone-highlight" id="otp-phone-display"></span></p>
             </div>
@@ -700,7 +718,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
 
             <button class="btn-next" id="btn-2" style="margin-top:22px;">
                 <span>Verify OTP</span>
-                <span>✅</span>
+                <span><i class="fa fa-check-square-o"></i></span>
                 <div class="spinner" id="spin-2"></div>
             </button>
             <button class="btn-back" onclick="goStep(1)">← Change Mobile Number</button>
@@ -709,7 +727,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
         <!-- ===== STEP 3: Email + Password ===== -->
         <div class="step-panel" id="panel-3">
             <div class="card-header">
-                <span class="step-icon">🔑</span>
+                <span class="step-icon"><i class="fa fa-key"></i></span>
                 <h2>Set Your Credentials</h2>
                 <p>Enter your email address and create a secure password for your account.</p>
             </div>
@@ -730,7 +748,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                 <div class="input-wrap pw-wrap">
                     <span class="input-icon">🔒</span>
                     <input type="password" id="inp-password" placeholder="Min. 6 characters" autocomplete="new-password">
-                    <button class="pw-toggle" type="button" onclick="togglePw('inp-password', this)">👁️</button>
+                    <button class="pw-toggle" type="button" onclick="togglePw('inp-password', this)"><i class="fa fa-eye"></i></button>
                 </div>
                 <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
                 <span class="strength-label" id="strength-label" style="color:#64748b;"></span>
@@ -742,14 +760,14 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                 <div class="input-wrap pw-wrap">
                     <span class="input-icon">🔒</span>
                     <input type="password" id="inp-confirm" placeholder="Re-enter your password" autocomplete="new-password">
-                    <button class="pw-toggle" type="button" onclick="togglePw('inp-confirm', this)">👁️</button>
+                    <button class="pw-toggle" type="button" onclick="togglePw('inp-confirm', this)"><i class="fa fa-eye"></i></button>
                 </div>
                 <span class="field-error" id="err-confirm">Passwords do not match.</span>
             </div>
 
             <button class="btn-next" id="btn-3">
                 <span>Create Account</span>
-                <span>🚀</span>
+                <span><i class="fa fa-rocket"></i></span>
                 <div class="spinner" id="spin-3"></div>
             </button>
             <button class="btn-back" onclick="goStep(2)">← Back</button>
@@ -763,9 +781,9 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
                 <p>Your citizen account has been created successfully, <span class="success-name" id="success-name"></span>. You can now report civic issues and track their resolution.</p>
 
                 <div class="info-chips">
-                    <div class="chip">✅ Verified Mobile</div>
+                    <div class="chip"><i class="fa fa-check-square-o"></i> Verified Mobile</div>
                     <div class="chip">📧 Email Linked</div>
-                    <div class="chip">🛡️ Account Secured</div>
+                    <div class="chip"><i class="fa fa-shield"></i> Account Secured</div>
                 </div>
 
                 <a href="login.php">
@@ -839,26 +857,36 @@ function markField(id, ok) {
 function showAlert(panelId, msg, type='error') {
     const el = document.getElementById('alert-' + panelId);
     if (!msg) { el.innerHTML = ''; return; }
-    const icon = type === 'error' ? '❌' : '✅';
+    const icon = type === 'error' ? '❌' : '<i class="fa fa-check-square-o"></i>';
     el.innerHTML = `<div class="alert alert-${type}">${icon} ${msg}</div>`;
 }
 
 // ========== STEP 1: Send OTP via Twilio ==========
 document.getElementById('btn-1').addEventListener('click', async () => {
-    const name  = document.getElementById('inp-name').value.trim();
-    const phone = document.getElementById('inp-phone').value.trim();
+    const name     = document.getElementById('inp-name').value.trim();
+    const phone    = document.getElementById('inp-phone').value.trim();
+    const state    = document.getElementById('inp-state').value.trim();
+    const district = document.getElementById('inp-district').value.trim();
 
     let valid = true;
     if (!name || name.length < 2) { markField('inp-name', false); showErr('err-name', true); valid = false; }
     else { markField('inp-name', true); showErr('err-name', false); }
+
+    if (!state || state.length < 2) { markField('inp-state', false); showErr('err-state', true); valid = false; }
+    else { markField('inp-state', true); showErr('err-state', false); }
+
+    if (!district || district.length < 2) { markField('inp-district', false); showErr('err-district', true); valid = false; }
+    else { markField('inp-district', true); showErr('err-district', false); }
 
     if (!phone || !/^\d{10}$/.test(phone)) { markField('inp-phone', false); showErr('err-phone', true); valid = false; }
     else { markField('inp-phone', true); showErr('err-phone', false); }
 
     if (!valid) return;
 
-    formData.name  = name;
-    formData.phone = phone;
+    formData.name     = name;
+    formData.phone    = phone;
+    formData.state    = state;
+    formData.district = district;
 
     const btn = document.getElementById('btn-1');
     const sp  = document.getElementById('spin-1');
@@ -1034,7 +1062,7 @@ document.getElementById('inp-password').addEventListener('input', function() {
 function togglePw(inputId, btn) {
     const inp = document.getElementById(inputId);
     if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
-    else { inp.type = 'password'; btn.textContent = '👁️'; }
+    else { inp.type = 'password'; btn.textContent = '<i class="fa fa-eye"></i>'; }
 }
 
 // ========== STEP 3 ==========
@@ -1068,6 +1096,8 @@ document.getElementById('btn-3').addEventListener('click', () => {
     const payload = new FormData();
     payload.append('name',             formData.name);
     payload.append('phone',            '+91' + formData.phone);
+    payload.append('state',            formData.state);
+    payload.append('district',         formData.district);
     payload.append('email',            formData.email);
     payload.append('password',         formData.password);
     payload.append('confirm_password', formData.password);

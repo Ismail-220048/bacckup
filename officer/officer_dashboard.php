@@ -3,7 +3,7 @@
  * ReportMyCity — Officer Dashboard
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'officer') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['officer', 'local_officer'])) {
     header('Location: officer_login.php');
     exit;
 }
@@ -67,7 +67,7 @@ for ($i = 6; $i >= 0; $i--) {
                 <div class="sidebar-brand-inner">
                     <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
                     <div class="sidebar-brand-text">
-                        <h2>ReportMyCity</h2>
+                        <h2>CivicTrack India</h2>
                         <span>Field Officer Portal</span>
                     </div>
                 </div>
@@ -76,17 +76,17 @@ for ($i = 6; $i >= 0; $i--) {
             <nav class="sidebar-nav">
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="officer_dashboard.php" class="active">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="my_assignments.php">
-                    <span class="nav-icon">📋</span> My Assignments
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Assignments
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_assignments.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">🚩</span> Flag Improper User
+                    <span class="nav-icon"><i class="fa fa-flag-o"></i></span> Flag Improper User
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -113,13 +113,13 @@ for ($i = 6; $i >= 0; $i--) {
         <main class="main-content">
             <div class="page-header">
                                 <div class="header-left">
-                    <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+                    <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
-                        <span>ReportMyCity</span>
+                        <span>CivicTrack India</span>
                     </div>
                     <div>
-                        <h1>📊 Officer Dashboard</h1>
+                        <h1><i class="fa fa-bar-chart-o"></i> Officer Dashboard</h1>
                         <div class="breadcrumb">
                             <a href="officer_dashboard.php">Home</a>
                             <span>›</span>
@@ -145,10 +145,10 @@ for ($i = 6; $i >= 0; $i--) {
                                 <span><?php echo htmlspecialchars($officerEmail); ?></span>
                             </div>
                             <a href="profile.php">
-                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                             </a>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -169,8 +169,8 @@ for ($i = 6; $i >= 0; $i--) {
                     <h3><?php echo htmlspecialchars($officerName); ?></h3>
                     <p><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></p>
                     <div class="profile-meta">
-                        <span>📋 <?php echo $assignedTotal; ?> assigned</span>
-                        <span>✅ <?php echo $assignedResolved; ?> resolved</span>
+                        <span><i class="fa fa-list-alt"></i> <?php echo $assignedTotal; ?> assigned</span>
+                        <span><i class="fa fa-check-square-o"></i> <?php echo $assignedResolved; ?> resolved</span>
                     </div>
                 </div>
             </div>
@@ -180,7 +180,7 @@ for ($i = 6; $i >= 0; $i--) {
             <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 2rem;">
                 <!-- Workflow Bar Chart -->
                 <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
-                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📈 Weekly Workflow</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);"><i class="fa fa-line-chart"></i> Weekly Workflow</h3>
                     <div style="width: 100%; height: 220px;">
                         <canvas id="workflowBarChart"></canvas>
                     </div>
@@ -188,7 +188,7 @@ for ($i = 6; $i >= 0; $i--) {
 
                 <!-- Status Distribution Pie Chart -->
                 <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
-                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📊 Complaint Status</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);"><i class="fa fa-bar-chart-o"></i> Complaint Status</h3>
                     <div style="width: 100%; height: 220px;">
                         <canvas id="statusPieChart"></canvas>
                     </div>
@@ -199,19 +199,19 @@ for ($i = 6; $i >= 0; $i--) {
             <div class="dashboard-widgets" style="margin-bottom: 2rem;">
                 <div class="quick-actions" style="margin-bottom: 0;">
                     <a href="my_assignments.php" class="quick-action-card">
-                        <span class="action-icon">📋</span>
+                        <span class="action-icon"><i class="fa fa-list-alt"></i></span>
                         <span class="action-label">All Assignments</span>
                     </a>
                     <a href="my_assignments.php?status=Pending" class="quick-action-card">
-                        <span class="action-icon">⏳</span>
+                        <span class="action-icon"><i class="fa fa-clock-o"></i></span>
                         <span class="action-label">Pending (<?php echo $assignedPending; ?>)</span>
                     </a>
                     <a href="my_assignments.php?status=In Progress" class="quick-action-card">
-                        <span class="action-icon">🔄</span>
+                        <span class="action-icon"><i class="fa fa-refresh"></i></span>
                         <span class="action-label">In Progress (<?php echo $assignedProgress; ?>)</span>
                     </a>
                     <a href="my_assignments.php?status=Resolved" class="quick-action-card">
-                        <span class="action-icon">✅</span>
+                        <span class="action-icon"><i class="fa fa-check-square-o"></i></span>
                         <span class="action-label">Resolved (<?php echo $assignedResolved; ?>)</span>
                     </a>
                 </div>
@@ -220,12 +220,12 @@ for ($i = 6; $i >= 0; $i--) {
             <!-- Recent Assignments -->
             <div class="card">
                 <div class="card-header">
-                    <h3>📋 Recent Assignments</h3>
+                    <h3><i class="fa fa-list-alt"></i> Recent Assignments</h3>
                     <a href="my_assignments.php" class="btn btn-outline btn-sm">View All →</a>
                 </div>
                 <?php if (empty($recentArr)): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">📭</div>
+                        <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                         <p>No complaints assigned to you yet.</p>
                     </div>
                 <?php else: ?>
@@ -244,7 +244,12 @@ for ($i = 6; $i >= 0; $i--) {
                                 <?php foreach ($recentArr as $c): ?>
                                 <tr>
                                     <td style="color: var(--text-primary); font-weight: 500;"><?php echo htmlspecialchars($c['title']); ?></td>
-                                    <td><?php echo htmlspecialchars($c['category']); ?></td>
+                                    <td>
+                                        <?php echo htmlspecialchars($c['category']); ?>
+                                        <?php if (!empty($c['subcategory'])): ?>
+                                            <br><small style="color:var(--primary); font-weight: 500; font-size: 0.72rem;"><?php echo htmlspecialchars($c['subcategory']); ?></small>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?php echo htmlspecialchars($c['location'] ?? ''); ?></td>
                                     <td><?php echo htmlspecialchars($c['date'] ?? $c['created_at']); ?></td>
                                     <td>
@@ -269,12 +274,7 @@ for ($i = 6; $i >= 0; $i--) {
 
     <script src="../assets/js/main.js"></script>
     <script>
-        // Profile Dropdown
-        const pdw = document.getElementById('profileDropdownWrapper');
-        if (pdw) {
-            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
-            document.addEventListener('click', () => pdw.classList.remove('open'));
-        }
+        // Sidebar toggle and profile dropdown are now handled by main.js standard listeners.
         document.addEventListener('DOMContentLoaded', function() {
             const chartOptions = {
                 responsive: true,

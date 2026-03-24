@@ -34,11 +34,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ['upsert' => true]
             );
 
+            // Load AuthMiddleware
+            require_once __DIR__ . '/../config/jwt.php';
+
             $_SESSION['user_id']    = (string) $admin['_id'];
             $_SESSION['user_name']  = $admin['name'];
             $_SESSION['user_email'] = $admin['email'];
-            $_SESSION['role']       = 'admin';
-            header('Location: admin_dashboard.php');
+            $role = $_SESSION['role'] = $admin['role'] ?? 'admin';
+            $_SESSION['district']   = $admin['district'] ?? '';
+            $_SESSION['state']      = $admin['state'] ?? '';
+
+            // Set JWT Token
+            $tokenData = [
+                'user_id' => $_SESSION['user_id'],
+                'name' => $_SESSION['user_name'],
+                'role' => $_SESSION['role']
+            ];
+            $jwt = AuthMiddleware::generateToken($tokenData);
+            setcookie('auth_token', $jwt, time() + (86400 * 30), '/', '', false, true);
+
+            if ($role === 'national_admin') {
+                header('Location: dashboard.php');
+            } elseif ($role === 'state_admin') {
+                header('Location: ../state_admin/dashboard.php');
+            } else {
+                header('Location: admin_dashboard.php');
+            }
             exit;
         } else {
             $error = 'Invalid admin credentials.';
@@ -51,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login — ReportMyCity Official Portal</title>
+    <title>Admin Login — CivicTrack India National Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -63,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-gov-header">
         <img src="../assets/images/govt_emblem.png" alt="Government Emblem" class="emblem">
         <div class="portal-text">
-            <h1>ReportMyCity — Administration Portal</h1>
+            <h1>CivicTrack India — Administration Portal</h1>
             <p>Restricted Area · Authorised Personnel Only</p>
         </div>
     </div>
@@ -72,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="logo">
-                <img src="../assets/images/govt_emblem.png" alt="ReportMyCity Emblem" class="gov-emblem-sm">
+                <img src="../assets/images/govt_emblem.png" alt="CivicTrack India Emblem" class="gov-emblem-sm">
                 <h1>Admin Sign In</h1>
                 <p>Administration &amp; System Management Portal</p>
             </div>
@@ -96,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" style="margin-top:0.5rem; padding: 0.75rem;">
-                    🛡️ Sign In to Admin Console
+                    <i class="fa fa-shield"></i> Sign In to Admin Console
                 </button>
             </form>
 
@@ -112,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Government Footer -->
     <div class="auth-gov-footer">
-        © 2026 ReportMyCity — Official Administration Portal. Authorised Use Only. |
+        © 2026 CivicTrack India — Official Administration Portal. Authorised Use Only. |
         <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
     </div>
 

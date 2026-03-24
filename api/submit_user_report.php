@@ -64,6 +64,8 @@ try {
         'proof_photo'        => $proofPath,
         'original_photo'     => $complaint['image'] ?? '', // Store ref to original
         'status'             => 'Audit Requested',
+        'district'           => $complaint['district'] ?? '',
+        'state'              => $complaint['state'] ?? '',
         'created_at'         => date('Y-m-d H:i:s')
     ]);
 

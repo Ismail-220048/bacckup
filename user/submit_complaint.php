@@ -76,23 +76,23 @@ $initials = strtoupper(substr($userName, 0, 1));
             <nav class="sidebar-nav">
                 <div class="sidebar-section-label">Navigation</div>
                 <a href="dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
+                    <span class="nav-icon"><i class="fa fa-bar-chart-o"></i></span> Dashboard
                 </a>
                 <a href="leaderboard.php">
-                    <span class="nav-icon">🏆</span> Civic Leaderboard
+                    <span class="nav-icon"><i class="fa fa-trophy"></i></span> Civic Leaderboard
                 </a>
                 <a href="submit_complaint.php" class="active">
-                    <span class="nav-icon">📝</span> Submit Complaint
+                    <span class="nav-icon"><i class="fa fa-pencil-square-o"></i></span> Submit Complaint
                 </a>
                 <a href="my_complaints.php">
-                    <span class="nav-icon">📋</span> My Complaints
+                    <span class="nav-icon"><i class="fa fa-list-alt"></i></span> My Complaints
                 </a>
                 <a href="profile.php">
-                    <span class="nav-icon">👤</span> My Profile
+                    <span class="nav-icon"><i class="fa fa-user-o"></i></span> My Profile
                 </a>
-                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;">🛡️ Oversight</div>
+                <div class="sidebar-section-label" style="margin-top:1.5rem; color:#ef4444;"><i class="fa fa-shield"></i> Oversight</div>
                 <a href="my_complaints.php" style="color:#ef4444; background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.2);">
-                    <span class="nav-icon">👮</span> Report Officer Conduct
+                    <span class="nav-icon"><i class="fa fa-shield"></i></span> Report Officer Conduct
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -144,10 +144,10 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 <span>Citizen Account</span>
                             </div>
                             <a href="profile.php">
-                                <div class="dropdown-icon">⚙️</div> Profile Settings
+                                <div class="dropdown-icon"><i class="fa fa-cog"></i></div> Profile Settings
                             </a>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -157,7 +157,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             <div class="page-body">
                 <div class="card">
                     <div class="card-header">
-                        <h3>📝 New Civic Complaint</h3>
+                        <h3><i class="fa fa-pencil-square-o"></i> New Civic Complaint</h3>
                     </div>
 
                     <div class="card-body">
@@ -169,14 +169,31 @@ $initials = strtoupper(substr($userName, 0, 1));
                                 </div>
                                 <div class="form-group">
                                     <label for="category">Category</label>
-                                    <select id="category" name="category" required>
+                                    <select id="category" name="category" required onchange="updateSubcategories()">
                                         <option value="">Select category...</option>
-                                        <option value="Road Damage">🛣️ Road Damage</option>
-                                        <option value="Garbage">🗑️ Garbage</option>
-                                        <option value="Water Leakage">💧 Water Leakage</option>
-                                        <option value="Street Light Issue">💡 Street Light Issue</option>
-                                        <option value="Drainage Problem">🚰 Drainage Problem</option>
-                                        <option value="Other">📌 Other</option>
+                                        <option value="Corruption & Bribery" style="color: #ef4444; font-weight: bold;">Corruption & Bribery</option>
+                                        <option value="Roads & Infrastructure">Roads & Infrastructure</option>
+                                        <option value="Water Supply Issues">Water Supply Issues</option>
+                                        <option value="Electricity Problems">Electricity Problems</option>
+                                        <option value="Sanitation & Garbage">Sanitation & Garbage</option>
+                                        <option value="Public Transport Issues">Public Transport Issues</option>
+                                        <option value="Healthcare Complaints">Healthcare Complaints</option>
+                                        <option value="Education System Issues">Education System Issues</option>
+                                        <option value="Police Misconduct / Law & Order">Police Misconduct / Law & Order</option>
+                                        <option value="Government Scheme Issues">Government Scheme Issues</option>
+                                        <option value="Land & Property Disputes">Land & Property Disputes</option>
+                                        <option value="Cybercrime / Online Fraud">Cybercrime / Online Fraud</option>
+                                        <option value="Environmental Issues">Environmental Issues</option>
+                                        <option value="Women & Child Safety">Women & Child Safety</option>
+                                        <option value="Municipal Services">Municipal Services</option>
+                                        <option value="Tax / Revenue Issues">Tax / Revenue Issues</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="subcategory-group" style="display: none;">
+                                    <label for="subcategory">Sub-category</label>
+                                    <select id="subcategory" name="subcategory">
+                                        <option value="">Select sub-category...</option>
                                     </select>
                                 </div>
                             </div>
@@ -195,7 +212,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                                         <!-- Address Search Overlay -->
                                         <div style="position: absolute; top: 12px; left: 50px; right: 12px; z-index: 50;">
                                             <div style="display: flex; gap: 5px; background: white; padding: 4px; border-radius: 25px; box-shadow: var(--shadow-md); border: 1px solid var(--border);">
-                                                <input type="text" id="map-search-input" placeholder="🔍 Search for address, street or landmark..." 
+                                                <input type="text" id="map-search-input" placeholder="Search for address, street or landmark..." 
                                                     style="flex: 1; border: none; padding: 6px 15px; border-radius: 20px; font-size: 0.85rem; outline: none; background: transparent;">
                                                 <button type="button" id="btn-search-go" class="btn btn-primary" 
                                                     style="padding: 0 15px; height: 32px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap;">Search</button>
@@ -205,8 +222,9 @@ $initials = strtoupper(substr($userName, 0, 1));
                                     </div>
                                     
                                     <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                                        <input type="text" id="location" name="location" placeholder="Select location on map or permit GPS access." required readonly style="background: var(--bg-body); cursor: not-allowed; flex: 1;">
-                                        <button type="button" id="btn-get-location" class="btn btn-info btn-sm">📍 Locate Me</button>
+                                        <input type="text" id="location" name="location" placeholder="Select location on map or permit GPS access." required readonly style="background: var(--bg-body); cursor: not-allowed; flex: 2;">
+                                        <input type="text" id="pincode" name="pincode" placeholder="Pincode" required style="flex: 1; min-width: 100px;">
+                                        <button type="button" id="btn-get-location" class="btn btn-info btn-sm"><i class="fa fa-map-marker"></i> Locate Me</button>
                                     </div>
                                 </div>
                             </div>
@@ -217,14 +235,34 @@ $initials = strtoupper(substr($userName, 0, 1));
                                     <input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="risk_type">Risk Type / Priority</label>
-                                    <select id="risk_type" name="risk_type" required>
-                                        <option value="Low">🟢 Low Risk (General Maintenance)</option>
-                                        <option value="Medium" selected>🟡 Medium Risk (Needs Attention)</option>
-                                        <option value="High">🔴 High Risk (Immediate Danger / Health Hazard)</option>
-                                        <option value="Critical">🆘 Critical (Emergency)</option>
+                                    <label for="priority">Priority Level</label>
+                                    <select id="priority" name="priority" required>
+                                        <option value="Low">Low</option>
+                                        <option value="Medium" selected>Medium</option>
+                                        <option value="High">High</option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="form-row" style="margin-bottom: 1rem;">
+                                <div class="form-group" style="grid-column: 1 / -1; background: rgba(59, 130, 246, 0.05); padding: 15px; border-radius: var(--radius-sm); border: 1px dashed rgba(59, 130, 246, 0.2);">
+                                    <label for="accused_role" style="color: var(--gov-navy); font-weight: 700;">Is this complaint against a specific official? (Conflict-Aware Routing)</label>
+                                    <select id="accused_role" name="accused_role" style="margin-top: 0.5rem;">
+                                        <option value="">No, this is a general complaint</option>
+                                        <option value="Local Officer">Yes, against a Local Field Officer</option>
+                                        <option value="District Admin">Yes, against a District Administrator (e.g. MRO, RDO)</option>
+                                        <option value="State Admin">Yes, against a State Administrator</option>
+                                    </select>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">If selected, the system will bypass the standard chain of command and securely route this case directly to their superiors.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="background: rgba(239, 68, 68, 0.05); padding: 15px; border-radius: var(--radius-sm); border: 1px dashed rgba(239, 68, 68, 0.2);">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; font-weight: 700;">
+                                    <input type="checkbox" name="anonymous" id="anonymous" value="true" style="width: auto; margin:0; transform: scale(1.2);">
+                                    Submit Anonymously (Identity hidden from assigned officers)
+                                </label>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; padding-left: 28px;">Recommended for sensitive issues like corruption. Your details remain confidential to higher authorities only.</div>
                             </div>
 
                             <div class="form-group" style="margin-top: 2rem; padding-top: 2rem; border-top: 1.5px solid var(--border);">
@@ -379,7 +417,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             bestAccuracy = Infinity;
 
             if (showFeedback) {
-                btn.innerHTML = '⏳ Acquiring GPS...';
+                btn.innerHTML = '<i class="fa fa-clock-o"></i> Acquiring GPS...';
                 btn.disabled = true;
             }
 
@@ -409,7 +447,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                     if (accuracy <= 15) {
                         if (showFeedback) {
                             btn.disabled = false;
-                            btn.innerHTML = '📍 Locate Me';
+                            btn.innerHTML = '<i class="fa fa-map-marker"></i> Locate Me';
                             showToast('High-accuracy location locked!', 'success');
                         }
                     }
@@ -417,7 +455,7 @@ $initials = strtoupper(substr($userName, 0, 1));
                 (error) => {
                     if (showFeedback) {
                         btn.disabled = false;
-                        btn.innerHTML = '📍 Locate Me';
+                        btn.innerHTML = '<i class="fa fa-map-marker"></i> Locate Me';
                         showToast('Unable to get precise location. Pin manually.', 'warning');
                     }
                 },
@@ -428,7 +466,7 @@ $initials = strtoupper(substr($userName, 0, 1));
             setTimeout(() => {
                 if (showFeedback && btn.disabled) {
                     btn.disabled = false;
-                    btn.innerHTML = '📍 Locate Me';
+                    btn.innerHTML = '<i class="fa fa-map-marker"></i> Locate Me';
                 }
             }, 20000);
         }
@@ -602,11 +640,49 @@ $initials = strtoupper(substr($userName, 0, 1));
             }
         });
 
-        // Profile Dropdown
-        const pdw = document.getElementById('profileDropdownWrapper');
-        if (pdw) {
-            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
-            document.addEventListener('click', () => pdw.classList.remove('open'));
+        // --- SUBCATEGORY LOGIC ---
+        const subCategories = {
+            "Corruption & Bribery": ["Demand for bribe", "Misuse of official position", "Favoritism/Nepotism", "Embezzlement of funds", "Other"],
+            "Roads & Infrastructure": ["Potholes", "Road damage/Crack", "Incomplete road work", "Poor quality of road construction", "Illegal road blockage/Encroachment", "Other"],
+            "Water Supply Issues": ["No water supply", "Leakage in pipeline", "Contaminated/Dirty water", "Low water pressure", "Unauthorized water connection", "Tanker related issues", "Other"],
+            "Electricity Problems": ["Frequent power outage", "Fluctuating voltage", "Hanging/Dangling wires", "Faulty electricity meter", "Street light not working", "New connection delay", "Other"],
+            "Sanitation & Garbage": ["Garbage not collected", "Overflowing dustbins", "Open drains/Sewage overflow", "Public toilet cleanliness", "Dead animal disposal", "Illegal dumping", "Other"],
+            "Public Transport Issues": ["Bus/Train delay", "Rough driving", "Rude behavior of staff", "Overcrowding", "Lack of proper bus stops", "Auto/Taxi refusal or overcharging", "Other"],
+            "Healthcare Complaints": ["Lack of medicines/facilities", "Rude behavior of medical staff", "Overcharging in hospitals", "Poor cleanliness in health centers", "Long waiting hours", "Ambulance availability", "Other"],
+            "Education System Issues": ["Poor school infrastructure", "Teacher absenteeism", "High/Hidden fees", "Mid-day meal quality", "Harassment/Bullying issues", "Delay in scholarship/certificates", "Other"],
+            "Police Misconduct / Law & Order": ["Refusal to file FIR", "Demand for bribe by police", "Harassment/Threats", "Inaction on complaints", "Traffic police issues", "Lack of patrolling in area", "Other"],
+            "Government Scheme Issues": ["Delay in scheme benefits", "Incorrect eligibility assessment", "Missing names in beneficiary list", "Middlemen interference", "Technical issues in online portal", "Other"],
+            "Land & Property Disputes": ["Illegal encroachment on land", "Property registration issues", "Incorrect land records", "Delay in mutation process", "Property tax dispute", "Other"],
+            "Cybercrime / Online Fraud": ["Online financial fraud", "Identity theft/Phishing", "Hacking of accounts", "Cyber bullying/Harassment", "Fake social media profile", "Other"],
+            "Environmental Issues": ["Illegal tree cutting", "Air/Noise pollution", "Water body pollution", "Plastic waste violation", "Encroachment on forest/park land", "Other"],
+            "Women & Child Safety": ["Harassment in public places", "Domestic violence assistance", "Child labor reporting", "Missing child help", "Safety concerns in specific areas", "Other"],
+            "Municipal Services": ["Birth/Death certificate delay", "Property tax assessment", "Building plan approval issues", "Trade license delay", "Park maintenance", "Animal nuisance (stray dogs/cattle)", "Other"],
+            "Tax / Revenue Issues": ["Income tax related queries", "GST related problems", "Service tax issues", "Customs/Excise delays", "Revenue department inaction", "Other"],
+            "Other": ["General inquiry", "Uncategorized issue", "Miscellaneous"]
+        };
+
+        function updateSubcategories() {
+            const categorySelect = document.getElementById('category');
+            const subcategorySelect = document.getElementById('subcategory');
+            const subcategoryGroup = document.getElementById('subcategory-group');
+            const selectedCategory = categorySelect.value;
+
+            // Clear previous options
+            subcategorySelect.innerHTML = '<option value="">Select sub-category...</option>';
+
+            if (selectedCategory && subCategories[selectedCategory]) {
+                subCategories[selectedCategory].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    subcategorySelect.appendChild(option);
+                });
+                subcategoryGroup.style.display = 'block';
+                subcategorySelect.required = true;
+            } else {
+                subcategoryGroup.style.display = 'none';
+                subcategorySelect.required = false;
+            }
         }
     </script>
 </body>

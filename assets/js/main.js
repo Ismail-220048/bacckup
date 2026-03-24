@@ -30,18 +30,23 @@ function initSidebar() {
     const sidebar = document.querySelector('.sidebar');
     if (!sidebar) return;
 
+    // Use a flag to prevent multiple listeners if called again
+    if (window._sidebarInitialized) return;
+    window._sidebarInitialized = true;
+
     document.addEventListener('click', (e) => {
         const toggleBtn = e.target.closest('.sidebar-toggle');
-        const isSidebar = e.target.closest('.sidebar' );
+        const isSidebar = e.target.closest('.sidebar');
         
-        // Handle Toggle
+        // Handle Toggle Click
         if (toggleBtn) {
+            e.preventDefault();
             e.stopPropagation();
             sidebar.classList.toggle('open');
             return;
         }
 
-        // Close on outside click
+        // Close on outside click if open
         if (sidebar.classList.contains('open') && !isSidebar) {
             sidebar.classList.remove('open');
         }
@@ -50,22 +55,24 @@ function initSidebar() {
 
 /* ---------- Profile Dropdown ---------- */
 function initProfileDropdown() {
-    const pdws = document.querySelectorAll('.profile-dropdown-wrapper');
-    if (pdws.length === 0) return;
+    // Use a flag to prevent multiple listeners
+    if (window._profileInitialized) return;
+    window._profileInitialized = true;
 
     document.addEventListener('click', (e) => {
         const pdw = e.target.closest('.profile-dropdown-wrapper');
+        const allPdws = document.querySelectorAll('.profile-dropdown-wrapper');
         
-        // Close all if clicking outside any
+        // If clicking outside any dropdown, close all
         if (!pdw) {
-            pdws.forEach(p => p.classList.remove('open'));
+            allPdws.forEach(p => p.classList.remove('open'));
             return;
         }
 
-        // Toggle the clicked one
+        // If clicking on a dropdown, toggle it and close others
         e.stopPropagation();
         const isOpen = pdw.classList.contains('open');
-        pdws.forEach(p => p.classList.remove('open')); // Close others
+        allPdws.forEach(p => p.classList.remove('open'));
         if (!isOpen) pdw.classList.add('open');
     });
 }
@@ -237,8 +244,9 @@ function confirmDelete(message = 'Are you sure you want to delete this?') {
 function getApiBase() {
     // Determine the API base relative to the current page
     const path = window.location.pathname;
-    // If we're in a sub-directory like /admin/ or /user/ or /officer/
-    if (path.includes('/admin/') || path.includes('/user/') || path.includes('/officer/')) {
+    // Covers all sub-directories: admin, user, officer, head_officer, state_admin
+    const subDirs = ['/admin/', '/user/', '/officer/', '/head_officer/', '/state_admin/'];
+    if (subDirs.some(d => path.includes(d))) {
         return '../api';
     }
     return 'api';
@@ -458,12 +466,18 @@ function initAIRobot() {
     const roleEl = document.querySelector('.sidebar-user-role');
     const isAdmin = roleEl && roleEl.textContent.includes('Administrator');
 
+    // Compute assets path relative to current page
+    const assetBase = (() => {
+        const subDirs = ['/admin/', '/user/', '/officer/', '/head_officer/', '/state_admin/'];
+        return subDirs.some(d => window.location.pathname.includes(d)) ? '../assets' : 'assets';
+    })();
+
     // Create Robot UI
     const robot = document.createElement('div');
     robot.className = 'ai-robot-float';
     robot.id = 'ai-robot-toggle';
     robot.innerHTML = `
-        <img src="../assets/images/ai_robot.png" alt="AI Agent">
+        <img src="${assetBase}/images/ai_robot.png" alt="AI Agent">
         <div class="ai-status-indicator"></div>
         <div class="ai-robot-tooltip"></div>
     `;
@@ -479,7 +493,7 @@ function initAIRobot() {
     chatWindow.id = 'ai-chat-window';
     chatWindow.innerHTML = `
         <div class="ai-chat-header">
-            <img src="../assets/images/ai_robot.png" alt="AI Agent">
+            <img src="${assetBase}/images/ai_robot.png" alt="AI Agent">
             <div class="ai-chat-header-info">
                 <h4>Civic Assistant</h4>
                 <div style="display: flex; gap: 0.5rem; align-items: center;">

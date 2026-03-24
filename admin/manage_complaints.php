@@ -3,24 +3,79 @@
  * ReportMyCity — Admin: Manage Complaints (with Officer Assignment)
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+$allowedAdminRoles = ['admin', 'national_admin', 'state_admin', 'district_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedAdminRoles)) {
     header('Location: admin_login.php');
     exit;
 }
 require_once __DIR__ . '/../config/database.php';
 
 $db = Database::getInstance();
-$complaintsCol = $db->getCollection('complaints');
-$usersCol      = $db->getCollection('users');
-$officersCol   = $db->getCollection('officers');
+$complaintsCol   = $db->getCollection('complaints');
+$usersCol        = $db->getCollection('users');
+$headOfficersCol = $db->getCollection('head_officers');
+$fieldOfficersCol = $db->getCollection('field_officers');
 
+// Regional Filtering Logic
+$role = $_SESSION['role'];
 $filter = [];
-if (!empty($_GET['status'])) {
-    $filter['status'] = htmlspecialchars(trim($_GET['status']), ENT_QUOTES, 'UTF-8');
+if ($role === 'state_admin') {
+    $filter = ['state' => $_SESSION['state']];
+} elseif ($role === 'district_admin') {
+    $filter = ['state' => $_SESSION['state'], 'district' => $_SESSION['district']];
+}
+
+// Add departmental filter if the admin is assigned to a specific department
+if (!empty($_SESSION['department'])) {
+    $filter['target_department'] = $_SESSION['department'];
+}
+
+// Additional Filters from GET
+if ($role === 'national_admin' || $role === 'admin') {
+    if (!empty($_GET['state_filter'])) {
+        $filter['state'] = $_GET['state_filter'];
+    }
+    if (!empty($_GET['district_filter'])) {
+        $filter['district'] = $_GET['district_filter'];
+    }
+}
+
+// Status filter — group related statuses
+$statusFilter = htmlspecialchars(trim($_GET['status'] ?? ''), ENT_QUOTES, 'UTF-8');
+if ($statusFilter !== '') {
+    $group = [
+        'Pending'          => ['Pending', 'Submitted', 'Assigned', 'Under Review'],
+        'In Progress'      => ['In Progress', 'Escalated'],
+        'Officer Completed'=> ['Officer Completed'],
+        'Resolved'         => ['Resolved', 'Closed'],
+    ];
+    if (isset($group[$statusFilter])) {
+        $filter['status'] = ['$in' => $group[$statusFilter]];
+    } else {
+        $filter['status'] = $statusFilter;
+    }
+}
+
+// User-specific filter (from manage_users link)
+if (!empty($_GET['user_id'])) {
+    $filter['user_id'] = htmlspecialchars(trim($_GET['user_id']), ENT_QUOTES, 'UTF-8');
 }
 
 $allComplaints = $complaintsCol->find($filter, ['sort' => ['created_at' => -1]]);
 $complaintsList = iterator_to_array($allComplaints);
+
+
+// Pre-fetch distinct states/districts for filters (only for National Admin)
+$statesList = [];
+$districtsList = [];
+if ($role === 'national_admin' || $role === 'admin') {
+    $statesList = $complaintsCol->distinct('state');
+    if (!empty($filter['state'])) {
+        $districtsList = $complaintsCol->distinct('district', ['state' => $filter['state']]);
+    } else {
+        $districtsList = $complaintsCol->distinct('district');
+    }
+}
 
 // Build user lookup
 $userIds = array_unique(array_map(fn($c) => $c['user_id'] ?? '', $complaintsList));
@@ -35,9 +90,17 @@ foreach ($userIds as $uid) {
     }
 }
 
-// Get all officers for assignment dropdown
-$allOfficers = $officersCol->find([], ['sort' => ['name' => 1]]);
-$officersList = iterator_to_array($allOfficers);
+// Get all officers for assignment dropdown (Head Officers and Field Officers)
+$officerFilter = [];
+if ($role === 'state_admin') {
+    $officerFilter = ['state' => $_SESSION['state']];
+} elseif ($role === 'district_admin') {
+    $officerFilter = ['state' => $_SESSION['state'], 'district' => $_SESSION['district']];
+}
+
+$heads  = iterator_to_array($headOfficersCol->find($officerFilter, ['sort' => ['name' => 1]]));
+$fields = iterator_to_array($fieldOfficersCol->find($officerFilter, ['sort' => ['name' => 1]]));
+$officersList = array_merge($heads, $fields);
 
 // Get IDs of officers who have active (Pending or In Progress) complaints
 $busyIdsRaw = $complaintsCol->distinct('assigned_officer_id', [
@@ -67,64 +130,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 <body>
     <div class="dashboard-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-inner">
-                    <img src="../assets/images/govt_emblem.png" alt="Emblem" class="sidebar-emblem">
-                    <div class="sidebar-brand-text">
-                        <h2>ReportMyCity</h2>
-                        <span>Administration Portal</span>
-                    </div>
-                </div>
-            </div>
-            <div class="sidebar-gold-stripe"></div>
-            <nav class="sidebar-nav">
-                <div class="sidebar-section-label">Main Menu</div>
-                <a href="admin_dashboard.php">
-                    <span class="nav-icon">📊</span> Dashboard
-                </a>
-                <a href="heatmap.php">
-                    <span class="nav-icon">🗺️</span> Heatmap
-                </a>
-                <a href="manage_complaints.php" class="active">
-                    <span class="nav-icon">📋</span> Manage Complaints
-                </a>
-                <a href="manage_users.php">
-                    <span class="nav-icon">👥</span> Manage Users
-                </a>
-                <a href="manage_officers.php">
-                    <span class="nav-icon">👮</span> Manage Officers
-                </a>
-                <a href="manage_officer_reports.php">
-                    <span class="nav-icon">🛡️</span> Officer Reports
-                    <?php if($officerReportsCount > 0): ?>
-                        <span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span>
-                    <?php endif; ?>
-                </a>
-                <a href="manage_user_reports.php">
-                    <span class="nav-icon">🚩</span> Fake Complaints
-                    <?php if($userReportsCount > 0): ?>
-                        <span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span>
-                    <?php endif; ?>
-                </a>
-                <div class="sidebar-section-label">Analytics</div>
-                <a href="heatmap.php">
-                    <span class="nav-icon">🗺️</span> Heatmap
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-avatar"><?php echo $initials; ?></div>
-                    <div>
-                        <div class="sidebar-user-name"><?php echo htmlspecialchars($adminName); ?></div>
-                        <div class="sidebar-user-role">Administrator</div>
-                    </div>
-                </div>
-                <a href="../logout.php">
-                    <i class="fa fa-sign-out"></i> Logout
-                </a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main -->
         <main class="main-content">
@@ -152,7 +158,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                 <span><?php echo htmlspecialchars($adminEmail); ?></span>
                             </div>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -161,27 +167,45 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 
                 <div class="card">
                     <div class="card-header">
-                        <h3>📋 All Complaints (<?php echo count($complaintsList); ?>)</h3>
+                        <h3><i class="fa fa-list-alt"></i> All Complaints (<?php echo count($complaintsList); ?>)</h3>
                     </div>
 
                     <!-- Toolbar -->
-                    <div class="toolbar">
-                        <div class="search-box">
+                    <div class="toolbar" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+                        <div class="search-box" style="flex:1; min-width:200px;">
                             <input type="text" id="search-input" placeholder="Search complaints...">
                         </div>
+                        
+                        <?php if ($role === 'national_admin' || $role === 'admin'): ?>
+                        <div style="display:flex; gap:0.5rem; align-items:center;">
+                            <select id="state_filter" class="filter-select" onchange="applyFilters()">
+                                <option value="">All States</option>
+                                <?php foreach ($statesList as $s): ?>
+                                    <option value="<?php echo htmlspecialchars($s); ?>" <?php echo ($_GET['state_filter'] ?? '') === $s ? 'selected' : ''; ?>><?php echo htmlspecialchars($s); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <select id="district_filter" class="filter-select" onchange="applyFilters()">
+                                <option value="">All Districts</option>
+                                <?php foreach ($districtsList as $d): ?>
+                                    <option value="<?php echo htmlspecialchars($d); ?>" <?php echo ($_GET['district_filter'] ?? '') === $d ? 'selected' : ''; ?>><?php echo htmlspecialchars($d); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <?php endif; ?>
+
                         <select class="filter-select" id="status-filter">
-                            <option value="">All Status</option>
-                            <option value="Pending" <?php echo (($_GET['status'] ?? '') === 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                            <option value="In Progress" <?php echo (($_GET['status'] ?? '') === 'In Progress') ? 'selected' : ''; ?>>In Progress</option>
-                            <option value="Officer Completed" <?php echo (($_GET['status'] ?? '') === 'Officer Completed') ? 'selected' : ''; ?>>Officer Completed</option>
-                            <option value="Resolved" <?php echo (($_GET['status'] ?? '') === 'Resolved') ? 'selected' : ''; ?>>Resolved</option>
+                            <option value="">All Statuses</option>
+                            <option value="Pending"     <?php echo ($statusFilter === 'Pending')     ? 'selected' : ''; ?>>⏳ Pending (incl. Submitted, Assigned)</option>
+                            <option value="In Progress" <?php echo ($statusFilter === 'In Progress') ? 'selected' : ''; ?>>🔄 In Progress (incl. Escalated)</option>
+                            <option value="Officer Completed" <?php echo ($statusFilter === 'Officer Completed') ? 'selected' : ''; ?>>✅ Officer Completed</option>
+                            <option value="Resolved"    <?php echo ($statusFilter === 'Resolved')    ? 'selected' : ''; ?>>🏁 Resolved / Closed</option>
                         </select>
-                        <button class="btn btn-warning" id="btn-merge-selected" style="margin-left: auto;">🔗 Merge Selected</button>
+                        <button class="btn btn-warning" id="btn-merge-selected">🔗 Merge Selected</button>
                     </div>
 
                     <?php if (empty($complaintsList)): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">📭</div>
+                        <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                         <p>No complaints found.</p>
                     </div>
                 <?php else: ?>
@@ -218,17 +242,20 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                     <td style="color: var(--text-primary); font-weight: 500;">
                                         <?php echo htmlspecialchars($c['title']); ?>
                                         <?php if (!empty($c['image'])): ?>
-                                            <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);">📷 View Image</a>
+                                            <br><a href="../<?php echo htmlspecialchars($c['image']); ?>" target="_blank" style="font-size: 0.78rem; color: var(--accent);"><i class="fa fa-picture-o"></i> View Image</a>
                                         <?php endif; ?>
                                     </td>
                                      <td>
                                          <?php echo htmlspecialchars($c['category']); ?>
+                                         <?php if (!empty($c['subcategory'])): ?>
+                                             <br><small style="color:var(--primary); font-weight: 500; font-size:0.75rem;"><?php echo htmlspecialchars($c['subcategory']); ?></small>
+                                         <?php endif; ?>
                                          <br><small style="color:var(--text-muted); font-size: 0.75rem;">Risk: <?php echo htmlspecialchars($c['risk_type'] ?? 'Medium'); ?></small>
                                      </td>
                                     <td><?php echo htmlspecialchars($userLookup[$c['user_id'] ?? ''] ?? 'Unknown'); ?></td>
                                     <td>
                                         <?php if ($assignedOfficer): ?>
-                                            <span style="color: var(--warning); font-weight: 500;">👮 <?php echo htmlspecialchars($assignedOfficer); ?></span>
+                                            <span style="color: var(--warning); font-weight: 500;"><i class="fa fa-shield"></i> <?php echo htmlspecialchars($assignedOfficer); ?></span>
                                         <?php else: ?>
                                             <span style="color: var(--text-muted);">Not assigned</span>
                                         <?php endif; ?>
@@ -251,13 +278,13 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                                         <div class="action-btns">
                                             <?php if ($status !== 'Resolved'): ?>
                                                 <?php if (($c['risk_type'] ?? '') === 'Critical' && empty($c['is_verified_critical']) && $status === 'Pending'): ?>
-                                                    <button class="btn btn-danger btn-sm" onclick="openVerifyCriticalModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($c['title'], ENT_QUOTES); ?>')">🚨 Verify Critical</button>
+                                                    <button class="btn btn-danger btn-sm" onclick="openVerifyCriticalModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($c['title'], ENT_QUOTES); ?>')"><i class="fa fa-bell-o"></i> Verify Critical</button>
                                                 <?php else: ?>
-                                                    <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['admin_reply'] ?? '')); ?>, '<?php echo htmlspecialchars($assignedOfficerId); ?>')">✏️ Update</button>
+                                                    <button class="btn btn-info btn-sm" onclick="openUpdateModal('<?php echo $cId; ?>', '<?php echo htmlspecialchars($status); ?>', <?php echo htmlspecialchars(json_encode($c['admin_reply'] ?? '')); ?>, '<?php echo htmlspecialchars($assignedOfficerId); ?>')"><i class="fa fa-pencil-square-o"></i> Update</button>
                                                 <?php endif; ?>
                                             <?php endif; ?>
-                                            <button class="btn btn-outline btn-sm" onclick="viewComplaint('<?php echo $cId; ?>')">👁️ View</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteComplaint('<?php echo $cId; ?>')">🗑️</button>
+                                            <button class="btn btn-outline btn-sm" onclick="viewComplaint('<?php echo $cId; ?>')"><i class="fa fa-eye"></i> View</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteComplaint('<?php echo $cId; ?>')"><i class="fa fa-trash-o"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -274,7 +301,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
     <div class="modal-overlay" id="updateModal">
         <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">✏️ Update Complaint</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-pencil-square-o"></i> Update Complaint</h3>
                 <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <form id="updateForm">
@@ -282,10 +309,10 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                 <div class="form-group">
                     <label for="update-status">Status</label>
                     <select id="update-status" class="filter-select" style="width: 100%;">
-                        <option value="Pending">⏳ Pending</option>
-                        <option value="In Progress">🔄 In Progress (or needs rework)</option>
-                        <option value="Officer Completed">✅ Officer Completed (Needs Review)</option>
-                        <option value="Resolved">✅ Resolved (Close Complaint)</option>
+                        <option value="Pending"><i class="fa fa-clock-o"></i> Pending</option>
+                        <option value="In Progress"><i class="fa fa-refresh"></i> In Progress (or needs rework)</option>
+                        <option value="Officer Completed"><i class="fa fa-check-square-o"></i> Officer Completed (Needs Review)</option>
+                        <option value="Resolved"><i class="fa fa-check-square-o"></i> Resolved (Close Complaint)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -297,7 +324,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                             $isBusy = in_array($oId, $busyOfficerIds);
                         ?>
                             <option value="<?php echo $oId; ?>" data-busy="<?php echo $isBusy ? '1' : '0'; ?>">
-                                👮 <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]
+                                <i class="fa fa-shield"></i> <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -315,7 +342,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
     <div class="modal-overlay" id="viewModal">
         <div class="modal" style="width: 100%; max-width: 750px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);">📋 Task & Issue Details</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--gov-navy);"><i class="fa fa-list-alt"></i> Task & Issue Details</h3>
                 <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <div id="viewContent"></div>
@@ -326,7 +353,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
     <div class="modal-overlay" id="verifyCriticalModal">
         <div class="modal" style="width: 100%; max-width: 600px; padding: 2.5rem; border-radius: var(--radius-lg);">
             <div class="modal-header" style="border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--danger);">🚨 Verify Critical Complaint</h3>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--danger);"><i class="fa fa-bell-o"></i> Verify Critical Complaint</h3>
                 <button class="modal-close" style="font-size: 1.8rem;">&times;</button>
             </div>
             <form id="verifyCriticalForm" style="margin-top: 1rem;">
@@ -348,7 +375,7 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
                             $isBusy = in_array($oId, $busyOfficerIds);
                         ?>
                             <option value="<?php echo $oId; ?>">
-                                👮 <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]<?php echo $isBusy ? ' (Busy)' : ''; ?>
+                                <i class="fa fa-shield"></i> <?php echo htmlspecialchars($o['name']); ?> [<?php echo htmlspecialchars($o['department'] ?? 'General'); ?>]<?php echo $isBusy ? ' (Busy)' : ''; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -378,27 +405,35 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 
     <script src="../assets/js/main.js"></script>
     <script>
-        const complaintsData = <?php echo json_encode(array_map(function($c) use ($userLookup) {
-            return [
-                '_id'                   => (string) $c['_id'],
-                'title'                 => $c['title'],
-                'category'              => $c['category'],
-                'description'           => $c['description'],
-                'location'              => $c['location'] ?? '',
-                'image'                 => $c['image'] ?? '',
-                'officer_proof_image'   => $c['officer_proof_image'] ?? '',
-                'date'                  => $c['date'] ?? $c['created_at'],
-                'status'                => $c['status'],
-                'admin_reply'           => $c['admin_reply'] ?? '',
-                'officer_notes'         => $c['officer_notes'] ?? '',
-                'assigned_officer_name' => $c['assigned_officer_name'] ?? '',
-                'user_name'             => $userLookup[$c['user_id'] ?? ''] ?? 'Unknown',
-                'created_at'            => $c['created_at']
-            ];
+        const complaintsData = <?php echo json_encode(array_map(function($c) {
+            $c['_id'] = (string)$c['_id'];
+            if(isset($c['assigned_officer_id'])) $c['assigned_officer_id'] = (string)$c['assigned_officer_id'];
+            if(isset($c['user_id'])) $c['user_id'] = (string)$c['user_id'];
+            return $c;
         }, $complaintsList)); ?>;
 
+        function applyFilters() {
+            const state = document.getElementById('state_filter')?.value || '';
+            const district = document.getElementById('district_filter')?.value || '';
+            const status = document.getElementById('status-filter').value;
+            
+            const params = new URLSearchParams();
+            if (status)   params.set('status', status);
+            if (state)    params.set('state_filter', state);
+            if (district) params.set('district_filter', district);
+            // Preserve user_id filter if it exists
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('user_id')) params.set('user_id', urlParams.get('user_id'));
+
+            location.href = 'manage_complaints.php?' + params.toString();
+        }
+
         initTableSearch('search-input', 'complaints-table');
-        initStatusFilter('status-filter', 'complaints-table');
+        
+        const statusFilter = document.getElementById('status-filter');
+        if (statusFilter) {
+            statusFilter.addEventListener('change', applyFilters);
+        }
 
         function openUpdateModal(id, status, reply, officerId) {
             // Filter officer dropdown to only show free officers
@@ -432,13 +467,13 @@ $userReportsCount = $db->getCollection('user_reports')->countDocuments(['status'
 
             let html = '<div class="complaint-detail-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border);">';
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Issue Title</label><p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">${c.title}</p></div>`;
-            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Category</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.category} ${c.subcategory ? '<br><small style="color:var(--primary);">' + c.subcategory + '</small>' : ''}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Location</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.location}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Date Reported</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">${c.date}</p></div>`;
             html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Current Status</label><p style="margin-top: 0.4rem;"><span class="badge badge-${badgeClass}" style="font-size: 0.95rem; padding: 0.4rem 0.8rem;">${c.status}</span></p></div>`;
-            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Reported By</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;">👤 ${c.user_name}</p></div>`;
+            html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Reported By</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--text-primary); margin-top: 0.2rem;"><i class="fa fa-user-o"></i> ${c.user_name}</p></div>`;
             if (c.assigned_officer_name) {
-                html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Assigned Officer</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--warning); margin-top: 0.2rem;">👮 ${c.assigned_officer_name}</p></div>`;
+                html += `<div class="detail-item"><label style="color:var(--text-muted); font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Assigned Officer</label><p style="font-size: 1.05rem; font-weight: 500; color: var(--warning); margin-top: 0.2rem;"><i class="fa fa-shield"></i> ${c.assigned_officer_name}</p></div>`;
             }
             html += '</div>';
             

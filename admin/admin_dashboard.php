@@ -3,8 +3,18 @@
  * ReportMyCity — Admin Dashboard
  */
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+$allowedAdminRoles = ['admin', 'national_admin', 'state_admin', 'district_admin'];
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], $allowedAdminRoles)) {
     header('Location: ../login.php');
+    exit;
+}
+
+// Redirect to specialized dashboards if applicable
+if ($_SESSION['role'] === 'national_admin') {
+    header('Location: dashboard.php');
+    exit;
+} elseif ($_SESSION['role'] === 'state_admin') {
+    header('Location: ../state_admin/dashboard.php');
     exit;
 }
 require_once __DIR__ . '/../config/database.php';
@@ -14,19 +24,28 @@ $complaintsCol = $db->getCollection('complaints');
 $usersCol = $db->getCollection('users');
 $officersCol = $db->getCollection('officers');
 
-// Stats Calculation
-$totalComplaints = $complaintsCol->countDocuments();
-$pendingCount = $complaintsCol->countDocuments(['status' => 'Pending']);
-$progressCount = $complaintsCol->countDocuments(['status' => 'In Progress']);
-$resolvedCount = $complaintsCol->countDocuments(['status' => 'Resolved']);
+// Regional Filtering Logic
+$role = $_SESSION['role'];
+$baseFilter = [];
+if ($role === 'state_admin') {
+    $baseFilter = ['state' => $_SESSION['state']];
+} elseif ($role === 'district_admin') {
+    $baseFilter = ['state' => $_SESSION['state'], 'district' => $_SESSION['district']];
+}
 
-$totalUsers = $usersCol->countDocuments();
-$totalOfficers = $officersCol->countDocuments();
-$officerReportsCount = $db->getCollection('officer_reports')->countDocuments(['status' => 'Pending Review']);
-$userReportsCount = $db->getCollection('user_reports')->countDocuments(['status' => 'Audit Requested']);
+// Stats Calculation
+$totalComplaints = $complaintsCol->countDocuments($baseFilter);
+$pendingCount = $complaintsCol->countDocuments(array_merge($baseFilter, ['status' => ['$in' => ['Pending', 'Submitted', 'Assigned', 'Under Review']]]));
+$progressCount = $complaintsCol->countDocuments(array_merge($baseFilter, ['status' => ['$in' => ['In Progress', 'Escalated']]]));
+$resolvedCount = $complaintsCol->countDocuments(array_merge($baseFilter, ['status' => ['$in' => ['Resolved', 'Closed', 'Officer Completed']]]));
+
+$totalUsers = $usersCol->countDocuments($baseFilter);
+$totalOfficers = $officersCol->countDocuments($baseFilter);
+$officerReportsCount = $db->getCollection('officer_reports')->countDocuments($baseFilter); // Assuming region field exists in these
+$userReportsCount = $db->getCollection('user_reports')->countDocuments($baseFilter);
 
 // Recent Complaints
-$recentComplaints = $complaintsCol->find([], ['limit' => 5, 'sort' => ['created_at' => -1]]);
+$recentComplaints = $complaintsCol->find($baseFilter, ['limit' => 5, 'sort' => ['created_at' => -1]]);
 $recentArr = iterator_to_array($recentComplaints);
 
 // User Lookup for recent complaints
@@ -49,49 +68,14 @@ $initials = strtoupper(substr($adminName, 0, 1));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | ReportMyCity</title>
+    <title>Admin Dashboard | CivicTrack India</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="admin-theme">
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-inner">
-                    <img src="../assets/images/govt_emblem.png" class="sidebar-emblem" alt="Gov Emblem">
-                    <div class="sidebar-brand-text">
-                        <span>Republic of India</span>
-                        <h2>ReportMyCity</h2>
-                    </div>
-                </div>
-                <div class="sidebar-gold-stripe"></div>
-            </div>
-
-            <div class="sidebar-nav">
-                <div class="sidebar-section-label">Main Console</div>
-                <a href="admin_dashboard.php" class="active">📊 Dashboard</a>
-                <a href="manage_complaints.php">📋 All Complaints</a>
-                <a href="manage_users.php">👥 Manage Citizens</a>
-                <a href="manage_officers.php">👮 Manage Officers</a>
-                <a href="manage_officer_reports.php">🛡️ Officer Reports <?php if($officerReportsCount > 0): ?><span style="background:var(--danger); color:white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $officerReportsCount; ?></span><?php endif; ?></a>
-                <a href="manage_user_reports.php">🚩 Fake Complaints <?php if($userReportsCount > 0): ?><span style="background:var(--warning); color:var(--gov-navy); padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; margin-left: 5px;"><?php echo $userReportsCount; ?></span><?php endif; ?></a>
-                
-                <div class="sidebar-section-label">Analytics</div>
-                <a href="heatmap.php">🗺️ Heatmap</a>
-            </div>
-
-            <div class="sidebar-footer">
-                <div class="sidebar-user">
-                    <div class="user-avatar"><?php echo $initials; ?></div>
-                    <div class="user-info">
-                        <span class="user-name"><?php echo htmlspecialchars($adminName); ?></span>
-                        <span class="sidebar-user-role">🛡️ Administrator</span>
-                    </div>
-                </div>
-                <a href="../logout.php" class="logout-link">🚪 Logout</a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -102,10 +86,10 @@ $initials = strtoupper(substr($adminName, 0, 1));
                     <button class="sidebar-toggle">☰</button>
                     <div class="header-logo-group">
                         <img src="../assets/images/govt_emblem.png" alt="Emblem" style="height: 35px; width: auto; filter: drop-shadow(0 0 4px rgba(250, 249, 248, 0.3));">
-                        <span>ReportMyCity</span>
+                        <span>CivicTrack India</span>
                     </div>
                     <div>
-                        <h1>📊 Admin Dashboard</h1>
+                        <h1><i class="fa fa-bar-chart-o"></i> Admin Dashboard</h1>
                         <div class="breadcrumb">
                             <a href="admin_dashboard.php">Home</a>
                             <span>›</span>
@@ -127,7 +111,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
                                 <span><?php echo htmlspecialchars($adminEmail); ?></span>
                             </div>
                             <a href="../logout.php" class="dropdown-logout">
-                                <div class="dropdown-icon">🚪</div> Logout
+                                <div class="dropdown-icon"><i class="fa fa-sign-out"></i></div> Logout
                             </a>
                         </div>
                     </div>
@@ -138,11 +122,11 @@ $initials = strtoupper(substr($adminName, 0, 1));
             <div class="profile-card">
                 <div class="profile-avatar"><?php echo $initials; ?></div>
                 <div class="profile-info">
-                    <h3><?php echo htmlspecialchars($adminName); ?> — Administrator</h3>
+                    <h3><?php echo htmlspecialchars($adminName); ?> — <?php echo ($role === 'national_admin') ? 'Super Admin' : (($role === 'state_admin') ? 'State Admin' : 'Administrator'); ?></h3>
                     <p>System Management &amp; Oversight · CivicTrack Administration Console</p>
                     <div class="profile-meta">
                         <span>🏛️ Admin Panel</span>
-                        <span>📅 <?php echo date('d M Y, H:i'); ?></span>
+                        <span><i class="fa fa-calendar"></i> <?php echo date('d M Y, H:i'); ?></span>
                     </div>
                 </div>
             </div>
@@ -163,7 +147,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
                 <!-- Complaint Breakdown Chart -->
                 <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
-                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📋 Complaint Lifecycle</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);"><i class="fa fa-list-alt"></i> Complaint Lifecycle</h3>
                     <div style="width: 100%; height: 220px;">
                         <canvas id="complaintStatusChart"></canvas>
                     </div>
@@ -174,11 +158,11 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
                 <!-- NEW: Audit & Reports Mini-Stats -->
                 <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
-                    <h3 style="margin-bottom: 1.25rem; font-size: 1rem; color: var(--text-primary);">🛡️ Oversight & Audits</h3>
+                    <h3 style="margin-bottom: 1.25rem; font-size: 1rem; color: var(--text-primary);"><i class="fa fa-shield"></i> Oversight & Audits</h3>
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <a href="manage_officer_reports.php" style="text-decoration:none; display:flex; justify-content:space-between; align-items:center; padding: 0.8rem; background: #fef2f2; border-radius: 8px; border: 1px solid #fee2e2;">
                             <div style="display:flex; align-items:center; gap: 0.8rem;">
-                                <span style="font-size: 1.2rem;">👮</span>
+                                <span style="font-size: 1.2rem;"><i class="fa fa-shield"></i></span>
                                 <div style="display:flex; flex-direction:column;">
                                     <span style="font-size:0.85rem; font-weight:700; color:#991b1b;">Officer Conduct</span>
                                     <span style="font-size:0.7rem; color:#b91c1c;">Pending Review</span>
@@ -189,7 +173,7 @@ $initials = strtoupper(substr($adminName, 0, 1));
 
                         <a href="manage_user_reports.php" style="text-decoration:none; display:flex; justify-content:space-between; align-items:center; padding: 0.8rem; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7;">
                             <div style="display:flex; align-items:center; gap: 0.8rem;">
-                                <span style="font-size: 1.2rem;">🚩</span>
+                                <span style="font-size: 1.2rem;"><i class="fa fa-flag-o"></i></span>
                                 <div style="display:flex; flex-direction:column;">
                                     <span style="font-size:0.85rem; font-weight:700; color:#92400e;">Fake Complaints</span>
                                     <span style="font-size:0.7rem; color:#b45309;">System Audits</span>
@@ -213,15 +197,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                 </div>
                 <div class="quick-actions" style="margin-bottom: 0;">
                     <a href="manage_complaints.php" class="quick-action-card">
-                        <span class="action-icon">📋</span>
+                        <span class="action-icon"><i class="fa fa-list-alt"></i></span>
                         <span class="action-label">All Complaints</span>
                     </a>
                     <a href="manage_complaints.php?status=Pending" class="quick-action-card">
-                        <span class="action-icon">⏳</span>
+                        <span class="action-icon"><i class="fa fa-clock-o"></i></span>
                         <span class="action-label">Pending Cases</span>
                     </a>
                     <a href="manage_complaints.php?status=In Progress" class="quick-action-card">
-                        <span class="action-icon">🔄</span>
+                        <span class="action-icon"><i class="fa fa-refresh"></i></span>
                         <span class="action-label">In Progress</span>
                     </a>
                     <a href="manage_users.php" class="quick-action-card">
@@ -229,15 +213,15 @@ $initials = strtoupper(substr($adminName, 0, 1));
                         <span class="action-label">Manage Citizens</span>
                     </a>
                     <a href="manage_officers.php" class="quick-action-card">
-                        <span class="action-icon">👮</span>
+                        <span class="action-icon"><i class="fa fa-shield"></i></span>
                         <span class="action-label">Manage Officers</span>
                     </a>
                     <a href="manage_officer_reports.php" class="quick-action-card">
-                        <span class="action-icon">🛡️</span>
+                        <span class="action-icon"><i class="fa fa-shield"></i></span>
                         <span class="action-label">Officer Reports</span>
                     </a>
                     <a href="manage_user_reports.php" class="quick-action-card">
-                        <span class="action-icon">🚩</span>
+                        <span class="action-icon"><i class="fa fa-flag-o"></i></span>
                         <span class="action-label">Fake Complaints</span>
                     </a>
                     <a href="heatmap.php" class="quick-action-card">
@@ -250,13 +234,13 @@ $initials = strtoupper(substr($adminName, 0, 1));
             <!-- Recent Complaints Table -->
             <div class="card">
                 <div class="card-header">
-                    <h3>📋 Recent Complaints</h3>
+                    <h3><i class="fa fa-list-alt"></i> Recent Complaints</h3>
                     <a href="manage_complaints.php" class="btn btn-outline btn-sm">View All →</a>
                 </div>
                 <?php if (empty($recentArr)): ?>
                     <div class="card-body">
                         <div class="empty-state">
-                            <div class="empty-icon">📭</div>
+                            <div class="empty-icon"><i class="fa fa-folder-open-o"></i></div>
                             <p>No complaints submitted yet.</p>
                         </div>
                     </div>
@@ -361,13 +345,6 @@ $initials = strtoupper(substr($adminName, 0, 1));
             });
         });
     </script>
-    <script>
-        // Profile Dropdown
-        const pdw = document.getElementById('profileDropdownWrapper');
-        if (pdw) {
-            pdw.addEventListener('click', function(e) { e.stopPropagation(); this.classList.toggle('open'); });
-            document.addEventListener('click', () => pdw.classList.remove('open'));
-        }
-    </script>
+    <!-- Sidebar toggle and profile dropdown are now handled by main.js -->
 </body>
 </html>
